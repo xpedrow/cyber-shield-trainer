@@ -13,7 +13,9 @@ export declare enum AttackEventType {
     SOCIAL_ENGINEERING = "social_engineering",
     BRUTE_FORCE = "brute_force",
     RANSOMWARE_SIMULATED = "ransomware_simulated",
-    SQL_INJECTION = "sql_injection"
+    SQL_INJECTION = "sql_injection",
+    DOS_ATTACK = "dos_attack",
+    PORT_SCAN = "port_scan"
 }
 export declare class AttackEvent {
     id: string;

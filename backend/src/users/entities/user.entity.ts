@@ -35,10 +35,10 @@ export class User {
   @Column()
   passwordHash: string;
 
-  @Column({ type: 'enum', enum: UserRole, default: UserRole.TRAINEE })
+  @Column({ enum: UserRole, default: UserRole.TRAINEE })
   role: UserRole;
 
-  @Column({ type: 'enum', enum: UserLevel, default: UserLevel.BEGINNER })
+  @Column({ enum: UserLevel, default: UserLevel.BEGINNER })
   level: UserLevel;
 
   @Column({ type: 'integer', default: 0 })

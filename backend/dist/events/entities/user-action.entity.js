@@ -29,6 +29,8 @@ var ActionType;
     ActionType["SCENARIO_COMPLETED"] = "scenario_completed";
     ActionType["SCENARIO_ABANDONED"] = "scenario_abandoned";
     ActionType["HINT_REQUESTED"] = "hint_requested";
+    ActionType["GENERAL_INTERACTION"] = "general_interaction";
+    ActionType["WAF_RULE_CREATED"] = "waf_rule_created";
 })(ActionType || (exports.ActionType = ActionType = {}));
 var ActionRisk;
 (function (ActionRisk) {
@@ -62,11 +64,11 @@ __decorate([
     __metadata("design:type", scenario_entity_1.Scenario)
 ], UserAction.prototype, "scenario", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'enum', enum: ActionType }),
+    (0, typeorm_1.Column)({ enum: ActionType }),
     __metadata("design:type", String)
 ], UserAction.prototype, "actionType", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'enum', enum: ActionRisk, default: ActionRisk.SAFE }),
+    (0, typeorm_1.Column)({ enum: ActionRisk, default: ActionRisk.SAFE }),
     __metadata("design:type", String)
 ], UserAction.prototype, "risk", void 0);
 __decorate([
@@ -74,7 +76,7 @@ __decorate([
     __metadata("design:type", Number)
 ], UserAction.prototype, "pointsDelta", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'jsonb', nullable: true }),
+    (0, typeorm_1.Column)({ type: 'simple-json', nullable: true }),
     __metadata("design:type", Object)
 ], UserAction.prototype, "metadata", void 0);
 __decorate([

@@ -24,17 +24,12 @@ import { SimulationsModule } from './simulations/simulations.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (cfg: ConfigService) => ({
-        type: 'postgres',
-        host: cfg.get('DB_HOST', 'localhost'),
-        port: cfg.get<number>('DB_PORT', 5432),
-        username: cfg.get('DB_USER', 'postgres'),
-        password: cfg.get('DB_PASSWORD', 'postgres'),
-        database: cfg.get('DB_NAME', 'cyber_shield'),
+        type: 'sqlite',
+        database: 'database.sqlite',
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
-        synchronize: cfg.get('NODE_ENV') !== 'production',
+        synchronize: true, // Auto-create tables for easier training setup
         logging: cfg.get('NODE_ENV') === 'development',
-        ssl: cfg.get('DB_SSL') === 'true' ? { rejectUnauthorized: false } : false,
       }),
     }),
 

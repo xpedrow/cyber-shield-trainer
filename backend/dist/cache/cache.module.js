@@ -8,9 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CacheModule = void 0;
 const common_1 = require("@nestjs/common");
-const config_1 = require("@nestjs/config");
 const cache_manager_1 = require("@nestjs/cache-manager");
-const redisStore = require("cache-manager-redis-store");
 let CacheModule = class CacheModule {
 };
 exports.CacheModule = CacheModule;
@@ -18,15 +16,9 @@ exports.CacheModule = CacheModule = __decorate([
     (0, common_1.Global)(),
     (0, common_1.Module)({
         imports: [
-            cache_manager_1.CacheModule.registerAsync({
-                imports: [config_1.ConfigModule],
-                inject: [config_1.ConfigService],
-                useFactory: (cfg) => ({
-                    store: redisStore,
-                    host: cfg.get('REDIS_HOST', 'localhost'),
-                    port: cfg.get('REDIS_PORT', 6379),
-                    ttl: cfg.get('CACHE_TTL', 600),
-                }),
+            cache_manager_1.CacheModule.register({
+                isGlobal: true,
+                ttl: 600,
             }),
         ],
         exports: [cache_manager_1.CacheModule],

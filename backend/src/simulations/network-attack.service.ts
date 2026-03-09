@@ -58,7 +58,7 @@ export class NetworkAttackService {
     }
   ];
 
-  constructor(private readonly eventsService: EventsService) {}
+  constructor(private readonly eventsService: EventsService) { }
 
   async getAttacks() {
     return this.attacks;
@@ -98,7 +98,7 @@ export class NetworkAttackService {
   }
 
   private mapAttackType(type: string): AttackEventType {
-    switch(type) {
+    switch (type) {
       case 'brute-force': return AttackEventType.BRUTE_FORCE;
       case 'ddos-flood': return AttackEventType.DOS_ATTACK;
       default: return AttackEventType.PORT_SCAN;
@@ -113,7 +113,7 @@ export class NetworkAttackService {
   }
 
   private getActionJustification(action: string) {
-    switch(action) {
+    switch (action) {
       case 'block': return 'Bloquear o IP é essencial para mitigar ataques ativos que tentam comprometer o sistema ou causar indisponibilidade.';
       case 'monitor': return 'Monitorar é ideal para escaneamentos vindos de redes internas, onde o IP pode ser de um colega ou dispositivo legítimo fazendo varreduras por engano.';
       case 'ignore': return 'Ignorar só é aceitável para alertas de baixo risco já conhecidos, o que não era o caso aqui.';

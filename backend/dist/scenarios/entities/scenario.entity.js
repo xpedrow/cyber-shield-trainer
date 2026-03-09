@@ -46,11 +46,11 @@ __decorate([
     __metadata("design:type", String)
 ], Scenario.prototype, "description", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'enum', enum: ScenarioType }),
+    (0, typeorm_1.Column)({ enum: ScenarioType }),
     __metadata("design:type", String)
 ], Scenario.prototype, "type", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'enum', enum: ScenarioDifficulty }),
+    (0, typeorm_1.Column)({ enum: ScenarioDifficulty }),
     __metadata("design:type", String)
 ], Scenario.prototype, "difficulty", void 0);
 __decorate([
@@ -66,11 +66,11 @@ __decorate([
     __metadata("design:type", Number)
 ], Scenario.prototype, "durationSeconds", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'jsonb', nullable: true }),
+    (0, typeorm_1.Column)({ type: 'simple-json', nullable: true }),
     __metadata("design:type", Object)
 ], Scenario.prototype, "config", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'text', array: true, default: '{}' }),
+    (0, typeorm_1.Column)({ type: 'simple-array', default: '' }),
     __metadata("design:type", Array)
 ], Scenario.prototype, "tags", void 0);
 __decorate([

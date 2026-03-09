@@ -17,8 +17,33 @@ const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const phishing_service_1 = require("./phishing.service");
 const password_security_service_1 = require("./password-security.service");
+const social_engineering_service_1 = require("./social-engineering.service");
+const network_attack_service_1 = require("./network-attack.service");
 const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
 const class_validator_1 = require("class-validator");
+class SocialActionDto {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], SocialActionDto.prototype, "scenarioId", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], SocialActionDto.prototype, "optionId", void 0);
+class NetworkActionDto {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], NetworkActionDto.prototype, "attackId", void 0);
+__decorate([
+    (0, class_validator_1.IsEnum)(['block', 'monitor', 'ignore']),
+    __metadata("design:type", String)
+], NetworkActionDto.prototype, "action", void 0);
 class PhishingActionDto {
 }
 __decorate([
@@ -43,9 +68,11 @@ __decorate([
     __metadata("design:type", String)
 ], TestPasswordDto.prototype, "password", void 0);
 let SimulationsController = class SimulationsController {
-    constructor(phishingService, passwordService) {
+    constructor(phishingService, passwordService, socialService, networkService) {
         this.phishingService = phishingService;
         this.passwordService = passwordService;
+        this.socialService = socialService;
+        this.networkService = networkService;
     }
     getEmails() {
         return this.phishingService.getTemplates();
@@ -55,6 +82,18 @@ let SimulationsController = class SimulationsController {
     }
     testPassword(dto) {
         return this.passwordService.analyze(dto.password);
+    }
+    getSocialScenarios() {
+        return this.socialService.getScenarios();
+    }
+    playSocial(req, dto) {
+        return this.socialService.playScenario(req.user.userId, dto.scenarioId, dto.optionId);
+    }
+    getNetworkAttacks() {
+        return this.networkService.getAttacks();
+    }
+    handleNetwork(req, dto) {
+        return this.networkService.handleAttack(req.user.userId, dto.attackId, dto.action);
     }
 };
 exports.SimulationsController = SimulationsController;
@@ -82,12 +121,46 @@ __decorate([
     __metadata("design:paramtypes", [TestPasswordDto]),
     __metadata("design:returntype", void 0)
 ], SimulationsController.prototype, "testPassword", null);
+__decorate([
+    (0, common_1.Get)('social/scenarios'),
+    (0, swagger_1.ApiOperation)({ summary: 'List social engineering scenarios' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], SimulationsController.prototype, "getSocialScenarios", null);
+__decorate([
+    (0, common_1.Post)('social/play'),
+    (0, swagger_1.ApiOperation)({ summary: 'Play a social engineering scenario' }),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, SocialActionDto]),
+    __metadata("design:returntype", void 0)
+], SimulationsController.prototype, "playSocial", null);
+__decorate([
+    (0, common_1.Get)('network/attacks'),
+    (0, swagger_1.ApiOperation)({ summary: 'List network attack simulations' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], SimulationsController.prototype, "getNetworkAttacks", null);
+__decorate([
+    (0, common_1.Post)('network/handle'),
+    (0, swagger_1.ApiOperation)({ summary: 'Handle a network attack simulation' }),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, NetworkActionDto]),
+    __metadata("design:returntype", void 0)
+], SimulationsController.prototype, "handleNetwork", null);
 exports.SimulationsController = SimulationsController = __decorate([
     (0, swagger_1.ApiTags)('simulations'),
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Controller)({ path: 'simulations', version: '1' }),
     __metadata("design:paramtypes", [phishing_service_1.PhishingService,
-        password_security_service_1.PasswordSecurityService])
+        password_security_service_1.PasswordSecurityService,
+        social_engineering_service_1.SocialEngineeringService,
+        network_attack_service_1.NetworkAttackService])
 ], SimulationsController);
 //# sourceMappingURL=simulations.controller.js.map

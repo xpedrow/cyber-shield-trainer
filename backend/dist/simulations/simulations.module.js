@@ -10,6 +10,8 @@ exports.SimulationsModule = void 0;
 const common_1 = require("@nestjs/common");
 const phishing_service_1 = require("./phishing.service");
 const password_security_service_1 = require("./password-security.service");
+const social_engineering_service_1 = require("./social-engineering.service");
+const network_attack_service_1 = require("./network-attack.service");
 const simulations_controller_1 = require("./simulations.controller");
 const events_module_1 = require("../events/events.module");
 let SimulationsModule = class SimulationsModule {
@@ -19,8 +21,18 @@ exports.SimulationsModule = SimulationsModule = __decorate([
     (0, common_1.Module)({
         imports: [events_module_1.EventsModule],
         controllers: [simulations_controller_1.SimulationsController],
-        providers: [phishing_service_1.PhishingService, password_security_service_1.PasswordSecurityService],
-        exports: [phishing_service_1.PhishingService, password_security_service_1.PasswordSecurityService],
+        providers: [
+            phishing_service_1.PhishingService,
+            password_security_service_1.PasswordSecurityService,
+            social_engineering_service_1.SocialEngineeringService,
+            network_attack_service_1.NetworkAttackService
+        ],
+        exports: [
+            phishing_service_1.PhishingService,
+            password_security_service_1.PasswordSecurityService,
+            social_engineering_service_1.SocialEngineeringService,
+            network_attack_service_1.NetworkAttackService
+        ],
     })
 ], SimulationsModule);
 //# sourceMappingURL=simulations.module.js.map

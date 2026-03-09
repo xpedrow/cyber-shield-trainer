@@ -58,10 +58,10 @@ export class UserAction {
   @JoinColumn({ name: 'scenarioId' })
   scenario: Scenario;
 
-  @Column({ type: 'enum', enum: ActionType })
+  @Column({ enum: ActionType })
   actionType: ActionType;
 
-  @Column({ type: 'enum', enum: ActionRisk, default: ActionRisk.SAFE })
+  @Column({ enum: ActionRisk, default: ActionRisk.SAFE })
   risk: ActionRisk;
 
   /** Points gained or lost from this specific action */
@@ -69,7 +69,7 @@ export class UserAction {
   pointsDelta: number;
 
   /** Extra context: e.g. which email ID, which URL was clicked */
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ type: 'simple-json', nullable: true })
   metadata: Record<string, any>;
 
   /** Time user took to make decision (ms) */

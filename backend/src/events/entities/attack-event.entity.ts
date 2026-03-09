@@ -38,10 +38,10 @@ export class AttackEvent {
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @Column({ type: 'enum', enum: AttackEventType })
+  @Column({ enum: AttackEventType })
   eventType: AttackEventType;
 
-  @Column({ type: 'enum', enum: EventSeverity, default: EventSeverity.INFO })
+  @Column({ enum: EventSeverity, default: EventSeverity.INFO })
   severity: EventSeverity;
 
   @Column({ length: 200 })
@@ -62,7 +62,7 @@ export class AttackEvent {
   @Column({ type: 'integer', nullable: true })
   detectionTimeMs: number;
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ type: 'simple-json', nullable: true })
   payload: Record<string, any>;
 
   @Column({ nullable: true })

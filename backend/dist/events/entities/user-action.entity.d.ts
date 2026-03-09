@@ -14,7 +14,9 @@ export declare enum ActionType {
     SCENARIO_STARTED = "scenario_started",
     SCENARIO_COMPLETED = "scenario_completed",
     SCENARIO_ABANDONED = "scenario_abandoned",
-    HINT_REQUESTED = "hint_requested"
+    HINT_REQUESTED = "hint_requested",
+    GENERAL_INTERACTION = "general_interaction",
+    WAF_RULE_CREATED = "waf_rule_created"
 }
 export declare enum ActionRisk {
     SAFE = "safe",

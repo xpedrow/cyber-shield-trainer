@@ -48,11 +48,11 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "passwordHash", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'enum', enum: UserRole, default: UserRole.TRAINEE }),
+    (0, typeorm_1.Column)({ enum: UserRole, default: UserRole.TRAINEE }),
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'enum', enum: UserLevel, default: UserLevel.BEGINNER }),
+    (0, typeorm_1.Column)({ enum: UserLevel, default: UserLevel.BEGINNER }),
     __metadata("design:type", String)
 ], User.prototype, "level", void 0);
 __decorate([

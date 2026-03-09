@@ -34,10 +34,10 @@ export class Scenario {
   @Column({ type: 'text' })
   description: string;
 
-  @Column({ type: 'enum', enum: ScenarioType })
+  @Column({ enum: ScenarioType })
   type: ScenarioType;
 
-  @Column({ type: 'enum', enum: ScenarioDifficulty })
+  @Column({ enum: ScenarioDifficulty })
   difficulty: ScenarioDifficulty;
 
   @Column({ type: 'integer' })
@@ -50,10 +50,10 @@ export class Scenario {
   durationSeconds: number;
 
   /** JSON blob of scenario-specific simulation data */
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ type: 'simple-json', nullable: true })
   config: Record<string, any>;
 
-  @Column({ type: 'text', array: true, default: '{}' })
+  @Column({ type: 'simple-array', default: '' })
   tags: string[];
 
   @Column({ default: true })

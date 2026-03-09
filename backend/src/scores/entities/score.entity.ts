@@ -46,7 +46,7 @@ export class Score {
   completionTimeSeconds: number;
 
   /** Breakdown by category */
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ type: 'simple-json', nullable: true })
   breakdown: {
     phishingDetection?: number;
     responseTime?: number;

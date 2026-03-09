@@ -29,6 +29,8 @@ var AttackEventType;
     AttackEventType["BRUTE_FORCE"] = "brute_force";
     AttackEventType["RANSOMWARE_SIMULATED"] = "ransomware_simulated";
     AttackEventType["SQL_INJECTION"] = "sql_injection";
+    AttackEventType["DOS_ATTACK"] = "dos_attack";
+    AttackEventType["PORT_SCAN"] = "port_scan";
 })(AttackEventType || (exports.AttackEventType = AttackEventType = {}));
 let AttackEvent = class AttackEvent {
 };
@@ -47,11 +49,11 @@ __decorate([
     __metadata("design:type", user_entity_1.User)
 ], AttackEvent.prototype, "user", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'enum', enum: AttackEventType }),
+    (0, typeorm_1.Column)({ enum: AttackEventType }),
     __metadata("design:type", String)
 ], AttackEvent.prototype, "eventType", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'enum', enum: EventSeverity, default: EventSeverity.INFO }),
+    (0, typeorm_1.Column)({ enum: EventSeverity, default: EventSeverity.INFO }),
     __metadata("design:type", String)
 ], AttackEvent.prototype, "severity", void 0);
 __decorate([
@@ -75,7 +77,7 @@ __decorate([
     __metadata("design:type", Number)
 ], AttackEvent.prototype, "detectionTimeMs", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'jsonb', nullable: true }),
+    (0, typeorm_1.Column)({ type: 'simple-json', nullable: true }),
     __metadata("design:type", Object)
 ], AttackEvent.prototype, "payload", void 0);
 __decorate([
