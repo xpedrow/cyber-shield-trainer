@@ -18,7 +18,7 @@ export class PasswordSecurityService {
   analyze(password: string): PasswordAnalysis {
     const entropy = this.calculateEntropy(password);
     const hasDictMatch = this.checkDictionary(password);
-    
+
     let score = Math.min(100, (entropy / 80) * 100);
     if (hasDictMatch) score = Math.max(10, score - 40);
     if (password.length < 8) score = Math.max(5, score - 30);
@@ -104,6 +104,6 @@ export class PasswordSecurityService {
   }
 
   private maskPassword(password: string): string {
-     return password[0] + '*'.repeat(password.length - 1);
+    return password[0] + '*'.repeat(password.length - 1);
   }
 }

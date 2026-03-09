@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const navItems = [
   {
@@ -71,6 +71,17 @@ const navItems = [
     ),
   },
   {
+    href: "/password-simulator",
+    label: "Simulador de Senha",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        <circle cx="12" cy="16" r="1" />
+      </svg>
+    ),
+  },
+  {
     href: "/feedback",
     label: "Feedback & Score",
     icon: (
@@ -86,6 +97,23 @@ const navItems = [
 export default function Sidebar() {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const [userData, setUserData] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch("http://localhost:3001/api/v1/users/me", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setUserData(data);
+        }
+      } catch (e) {}
+    };
+    fetchUser();
+  }, []);
 
   return (
     <aside
@@ -96,7 +124,7 @@ export default function Sidebar() {
         borderRight: "1px solid var(--border-subtle)",
         display: "flex",
         flexDirection: "column",
-        transition: "width 0.3s ease",
+        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
         flexShrink: 0,
         position: "sticky",
         top: 0,
@@ -133,7 +161,7 @@ export default function Sidebar() {
           </svg>
         </div>
         {!collapsed && (
-          <div>
+          <div style={{ transition: "opacity 0.2s" }}>
             <div style={{ fontWeight: 700, fontSize: "15px", color: "var(--text-primary)" }}>
               Cyber Shield
             </div>
@@ -216,14 +244,16 @@ export default function Sidebar() {
             flexShrink: 0,
           }}
         >
-          U
+          {userData?.name ? userData.name[0].toUpperCase() : "U"}
         </div>
         {!collapsed && (
           <div style={{ overflow: "hidden" }}>
             <div style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-primary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-              Trainee User
+              {userData?.name || "Trainee User"}
             </div>
-            <div style={{ fontSize: "11px", color: "var(--text-muted)" }}>Nível Iniciante</div>
+            <div style={{ fontSize: "11px", color: "var(--text-muted)" }}>
+              {userData?.level || "Nível Iniciante"}
+            </div>
           </div>
         )}
       </div>

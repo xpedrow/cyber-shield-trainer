@@ -1,7 +1,7 @@
 "use client";
 
 import AppLayout from "@/components/AppLayout";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const emails = [
   {
@@ -91,6 +91,159 @@ Loteria Federal Oficial`,
       "Se suspeitar de golpe, registre na Polícia Civil",
     ],
   },
+  {
+    id: 4,
+    from: "suporte@mercadolivre-seguranca.com",
+    fromDisplay: "Mercado Livre Segurança",
+    subject: "🔒 Atividade incomum detectada na sua conta",
+    preview: "Detectamos um acesso de um novo dispositivo. Confirme agora...",
+    time: "10:21",
+    isPhishing: true,
+    redFlags: [
+      "Domínio suspeito: '@mercadolivre-seguranca.com' não é o domínio oficial",
+      "Pedido para confirmar dados pessoais",
+      "Link de verificação externo",
+      "Mensagem genérica sem seu nome",
+    ],
+    body: `Olá,
+
+Detectamos um acesso à sua conta a partir de um novo dispositivo.
+
+Por segurança, precisamos que você confirme seus dados imediatamente para evitar a suspensão da sua conta.
+
+[ CONFIRMAR ACESSO AGORA ]
+
+Caso não realize a verificação em até 12 horas, seu acesso poderá ser bloqueado.
+
+Equipe de Segurança Mercado Livre`,
+    safeActions: [
+      "Não clicar em links recebidos por e-mail",
+      "Acessar mercadolivre.com.br diretamente no navegador",
+      "Verificar a atividade recente na conta",
+      "Reportar o e-mail como phishing",
+    ],
+  },
+  {
+    id: 5,
+    from: "no-reply@amazon.com",
+    fromDisplay: "Amazon",
+    subject: "Seu pedido foi enviado",
+    preview: "Seu pacote foi despachado e está a caminho...",
+    time: "07:58",
+    isPhishing: false,
+    redFlags: [],
+    body: `Hello,
+
+Your order has been shipped and is on the way.
+
+Order number: #782-3341982-2219384
+
+You can track your package using the link below:
+
+https://www.amazon.com/your-orders
+
+Thank you for shopping with us.
+
+Amazon Customer Service`,
+    safeActions: [
+      "O domínio do e-mail é legítimo (@amazon.com)",
+      "O link aponta para o domínio oficial da Amazon",
+      "Você pode acessar sua conta diretamente pelo site oficial para conferir",
+    ],
+  },
+  {
+    id: 6,
+    from: "faturamento@netflix-support.co",
+    fromDisplay: "Netflix Billing",
+    subject: "Problema com seu pagamento",
+    preview: "Não conseguimos processar seu pagamento mensal...",
+    time: "11:47",
+    isPhishing: true,
+    redFlags: [
+      "Domínio falso: '@netflix-support.co'",
+      "Pedido para atualizar dados de pagamento",
+      "Tentativa de gerar urgência",
+      "Link externo para página falsa de login",
+    ],
+    body: `Prezado cliente,
+
+Não conseguimos processar seu pagamento mensal da Netflix.
+
+Para evitar a suspensão da sua conta, atualize suas informações de pagamento imediatamente.
+
+[ ATUALIZAR PAGAMENTO ]
+
+Caso não realize a atualização nas próximas 24 horas, seu acesso será interrompido.
+
+Netflix Billing Department`,
+    safeActions: [
+      "Não clicar no link do e-mail",
+      "Acessar netflix.com diretamente",
+      "Verificar suas informações de pagamento na conta oficial",
+      "Reportar o e-mail como phishing",
+    ],
+  },
+  {
+    id: 7,
+    from: "security@google.com",
+    fromDisplay: "Google Security",
+    subject: "Novo login na sua Conta Google",
+    preview: "Detectamos um login a partir de um novo dispositivo...",
+    time: "06:33",
+    isPhishing: false,
+    redFlags: [],
+    body: `Hello,
+
+We detected a new sign-in to your Google Account from a Windows device.
+
+Location: São Paulo, Brazil
+Time: Today, 06:30
+
+If this was you, no action is required.
+
+If you don't recognize this activity, please secure your account immediately.
+
+https://myaccount.google.com/security
+
+Google Security Team`,
+    safeActions: [
+      "E-mail enviado do domínio legítimo @google.com",
+      "Link aponta para o domínio oficial do Google",
+      "Se você não reconhece o login, acesse sua conta e revise a atividade",
+    ],
+  },
+  {
+    id: 8,
+    from: "suporte@paypal-verification.net",
+    fromDisplay: "PayPal Support",
+    subject: "⚠️ Sua conta foi limitada temporariamente",
+    preview: "Precisamos verificar suas informações para restaurar...",
+    time: "12:04",
+    isPhishing: true,
+    redFlags: [
+      "Domínio falso '@paypal-verification.net'",
+      "Tentativa de assustar o usuário com limitação de conta",
+      "Solicitação de confirmação de dados",
+      "Link externo que pode levar a página falsa",
+    ],
+    body: `Dear customer,
+
+Your PayPal account has been temporarily limited due to unusual activity.
+
+To restore full access, please confirm your identity.
+
+[ RESTORE ACCOUNT ACCESS ]
+
+Failure to verify your account may result in permanent suspension.
+
+PayPal Security Team`,
+    safeActions: [
+      "Não clicar em links recebidos por e-mail",
+      "Acessar paypal.com diretamente",
+      "Verificar notificações dentro da conta oficial",
+      "Reportar o e-mail como phishing",
+    ],
+  }
 ];
 
 type EmailStatus = Record<number, "phishing" | "safe" | null>;
@@ -103,14 +256,39 @@ export default function EmailSimulator() {
 
   const selectedEmail = emails.find((e) => e.id === selected);
 
-  const handleAnswer = (emailId: number, answer: "phishing" | "safe") => {
+  const handleAnswer = async (emailId: number, answer: "phishing" | "safe") => {
     if (answers[emailId]) return;
     const email = emails.find((e) => e.id === emailId);
     if (!email) return;
-    const correct = (answer === "phishing") === email.isPhishing;
-    setAnswers((prev) => ({ ...prev, [emailId]: answer }));
-    setScore((prev) => (correct ? prev + 100 : Math.max(0, prev - 30)));
-    setShowResult(emailId);
+
+    const action = answer === "phishing" ? "report" : "click";
+
+    try {
+      const response = await fetch("http://localhost:3001/api/v1/simulations/phishing/action", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          emailId: email.id.toString(),
+          action,
+        }),
+      });
+      const data = await response.json();
+
+      const correct = (answer === "phishing") === email.isPhishing;
+      setAnswers((prev) => ({ ...prev, [emailId]: answer }));
+      setScore((prev) => (correct ? prev + 100 : Math.max(0, prev - 30)));
+      setShowResult(emailId);
+    } catch (error) {
+      console.error("Error logging phishing action:", error);
+      // Fallback for demo
+      const correct = (answer === "phishing") === email.isPhishing;
+      setAnswers((prev) => ({ ...prev, [emailId]: answer }));
+      setScore((prev) => (correct ? prev + 100 : Math.max(0, prev - 30)));
+      setShowResult(emailId);
+    }
   };
 
   const getResultForEmail = (email: (typeof emails)[0]) => {
@@ -246,14 +424,12 @@ export default function EmailSimulator() {
                 <button
                   className="btn-cyber btn-danger"
                   onClick={() => handleAnswer(selectedEmail.id, "phishing")}
-                  id={`btn-phishing-${selectedEmail.id}`}
                 >
                   🚨 Phishing!
                 </button>
                 <button
                   className="btn-cyber btn-success"
                   onClick={() => handleAnswer(selectedEmail.id, "safe")}
-                  id={`btn-safe-${selectedEmail.id}`}
                 >
                   ✅ Legítimo
                 </button>
@@ -270,11 +446,10 @@ export default function EmailSimulator() {
                       background: selectedEmail.isPhishing
                         ? (answers[selectedEmail.id] === "phishing" ? "rgba(0,255,136,0.06)" : "rgba(255,68,68,0.06)")
                         : (answers[selectedEmail.id] === "safe" ? "rgba(0,255,136,0.06)" : "rgba(255,68,68,0.06)"),
-                      border: `1px solid ${
-                        getResultForEmail(selectedEmail)
+                      border: `1px solid ${getResultForEmail(selectedEmail)
                           ? "rgba(0,255,136,0.2)"
                           : "rgba(255,68,68,0.2)"
-                      }`,
+                        }`,
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "14px" }}>

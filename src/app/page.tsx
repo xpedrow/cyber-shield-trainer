@@ -2,20 +2,13 @@
 
 import AppLayout from "@/components/AppLayout";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
-const stats = [
-  { label: "Score de Segurança", value: "742", unit: "/1000", color: "var(--accent-cyan)", icon: "🛡️" },
-  { label: "Cenários Completados", value: "12", unit: "/20", color: "var(--accent-green)", icon: "✅" },
-  { label: "Ameaças Identificadas", value: "48", unit: "", color: "var(--accent-orange)", icon: "⚡" },
-  { label: "Taxa de Acerto", value: "87", unit: "%", color: "var(--accent-purple)", icon: "🎯" },
-];
-
-const recentActivity = [
-  { type: "success", message: "Identificou phishing em e-mail suspeito", time: "2 min atrás", scenario: "Simulador de E-mail" },
-  { type: "warning", message: "Tentou login em site falso detectado", time: "15 min atrás", scenario: "Simulador de Login" },
-  { type: "success", message: "Bloqueou ataque de força bruta", time: "1h atrás", scenario: "Cenário: Banco" },
-  { type: "error", message: "Clicou em link malicioso — revise", time: "2h atrás", scenario: "Simulador de E-mail" },
-  { type: "success", message: "Relatou incidente de segurança corretamente", time: "3h atrás", scenario: "Cenário: Empresa" },
+const statsDefault = [
+  { label: "Score de Segurança", value: "0", unit: "/1000", color: "var(--accent-cyan)", icon: "🛡️", key: 'totalScore' },
+  { label: "XP Total", value: "0", unit: "", color: "var(--accent-green)", icon: "✅", key: 'xp' },
+  { label: "Sequência", value: "0", unit: " dias", color: "var(--accent-orange)", icon: "⚡", key: 'streak' },
+  { label: "Cenários", value: "0", unit: "", color: "var(--accent-purple)", icon: "🎯", key: 'scenarios' },
 ];
 
 const scenarios = [
@@ -27,7 +20,7 @@ const scenarios = [
     difficultyClass: "threat-medium",
     icon: "📧",
     href: "/email-simulator",
-    progress: 60,
+    progress: 0,
   },
   {
     id: "fake-login",
@@ -37,7 +30,7 @@ const scenarios = [
     difficultyClass: "threat-high",
     icon: "🔐",
     href: "/login-simulator",
-    progress: 30,
+    progress: 0,
   },
   {
     id: "social",
@@ -47,7 +40,7 @@ const scenarios = [
     difficultyClass: "threat-critical",
     icon: "🕵️",
     href: "/social-engineering",
-    progress: 10,
+    progress: 0,
   },
   {
     id: "network",
@@ -64,7 +57,7 @@ const scenarios = [
 function ScoreRing({ score }: { score: number }) {
   const radius = 54;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (score / 1000) * circumference;
+  const offset = circumference - (Math.min(score, 1000) / 1000) * circumference;
 
   return (
     <div style={{ position: "relative", width: "140px", height: "140px" }}>
@@ -104,6 +97,43 @@ function ScoreRing({ score }: { score: number }) {
 }
 
 export default function Dashboard() {
+  const [userData, setUserData] = useState<any>(null);
+  const [activities, setActivities] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        // For development, we'll try to fetch but stay graceful if it fails
+        const userRes = await fetch("http://localhost:3001/api/v1/users/me", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (userRes.ok) {
+          const data = await userRes.json();
+          setUserData(data);
+        }
+
+        const statsRes = await fetch("http://localhost:3001/api/v1/scores/me/stats", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (statsRes.ok) {
+           // update stats logic here if needed
+        }
+      } catch (e) {
+        console.log("Fetch error, using mock data for demo");
+      }
+    };
+    fetchData();
+  }, []);
+
+  const currentStats = statsDefault.map(s => {
+    if (!userData) return s;
+    if (s.key === 'totalScore') return { ...s, value: userData.totalScore || "0" };
+    if (s.key === 'xp') return { ...s, value: userData.xp || "0" };
+    if (s.key === 'streak') return { ...s, value: userData.streak || "0" };
+    return s;
+  });
+
   return (
     <AppLayout>
       {/* Header */}
@@ -114,7 +144,7 @@ export default function Dashboard() {
               Dashboard de Segurança
             </h1>
             <p style={{ color: "var(--text-secondary)", fontSize: "15px" }}>
-              Bem-vindo de volta, Trainee. Seus treinos aguardam.
+              Bem-vindo de volta{userData ? `, ${userData.name}` : ', Trainee'}. Seus treinos aguardam.
             </p>
           </div>
           <div
@@ -134,7 +164,7 @@ export default function Dashboard() {
 
       {/* Stats grid */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px", marginBottom: "32px" }}>
-        {stats.map((stat, i) => (
+        {currentStats.map((stat, i) => (
           <div
             key={stat.label}
             className="card animate-fade-in-up"
@@ -157,7 +187,7 @@ export default function Dashboard() {
         {/* Scenarios */}
         <div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
-            <h2 style={{ fontSize: "18px", fontWeight: 700, color: "var(--text-primary)" }}>Cenários de Treino</h2>
+            <h2 style={{ fontSize: "18px", fontWeight: 700, color: "var(--text-primary)" }}>Atividades Práticas</h2>
             <Link href="/scenarios" style={{ fontSize: "13px", color: "var(--accent-cyan)", textDecoration: "none" }}>Ver todos →</Link>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -218,10 +248,10 @@ export default function Dashboard() {
           {/* Score panel */}
           <div className="card" style={{ padding: "24px", textAlign: "center" }}>
             <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-muted)", marginBottom: "20px", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-              Score de Segurança
+              Nível do Agente
             </h3>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: "16px" }}>
-              <ScoreRing score={742} />
+              <ScoreRing score={userData?.totalScore || 0} />
             </div>
             <div
               style={{
@@ -236,36 +266,23 @@ export default function Dashboard() {
                 marginBottom: "16px",
               }}
             >
-              Nível Intermediário
+              {userData?.level?.toUpperCase() || "RECRUTA"}
             </div>
             <p style={{ fontSize: "12px", color: "var(--text-muted)" }}>
-              +58 pontos para o nível Avançado
+              Aumente seu score completando novos desafios
             </p>
           </div>
 
-          {/* Recent activity */}
+          {/* Tips panel */}
           <div className="card" style={{ padding: "20px" }}>
             <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-muted)", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-              Atividade Recente
+              Dica de Segurança
             </h3>
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              {recentActivity.map((item, i) => (
-                <div key={i} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                  <div
-                    style={{
-                      width: "8px", height: "8px",
-                      borderRadius: "50%",
-                      background: item.type === "success" ? "var(--accent-green)" : item.type === "warning" ? "var(--accent-orange)" : "var(--accent-red)",
-                      marginTop: "5px",
-                      flexShrink: 0,
-                    }}
-                  />
-                  <div style={{ minWidth: 0 }}>
-                    <p style={{ fontSize: "12px", color: "var(--text-primary)", lineHeight: 1.4 }}>{item.message}</p>
-                    <p style={{ fontSize: "11px", color: "var(--text-muted)", marginTop: "2px" }}>{item.time} · {item.scenario}</p>
-                  </div>
-                </div>
-              ))}
+            <div style={{ background: 'var(--bg-secondary)', borderRadius: '8px', padding: '16px', border: '1px solid var(--border-subtle)' }}>
+              <p style={{ fontSize: "13px", color: "var(--text-primary)", lineHeight: 1.6 }}>
+                 "Sempre verifique o remetente de e-mails que pedem ações urgentes. O domínio deve ser exatamente o oficial da empresa."
+              </p>
+              <p style={{ fontSize: "11px", color: "var(--accent-cyan)", marginTop: "12px", fontWeight: 600 }}>#CiberHigiene</p>
             </div>
           </div>
         </div>
