@@ -20,6 +20,8 @@ export enum AttackEventType {
   BRUTE_FORCE = 'brute_force',
   RANSOMWARE_SIMULATED = 'ransomware_simulated',
   SQL_INJECTION = 'sql_injection',
+  DOS_ATTACK = 'dos_attack',
+  PORT_SCAN = 'port_scan',
 }
 
 @Entity('attack_events')

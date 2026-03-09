@@ -25,6 +25,10 @@ export enum ActionType {
   SCENARIO_COMPLETED = 'scenario_completed',
   SCENARIO_ABANDONED = 'scenario_abandoned',
   HINT_REQUESTED = 'hint_requested',
+  GENERAL_INTERACTION = 'general_interaction',
+
+  // Network
+  WAF_RULE_CREATED = 'waf_rule_created',
 }
 
 export enum ActionRisk {

@@ -46,8 +46,18 @@ const scenarios = [
     difficulty: "Crítico",
     difficultyClass: "threat-critical",
     icon: "🕵️",
-    href: "/scenarios",
+    href: "/social-engineering",
     progress: 10,
+  },
+  {
+    id: "network",
+    title: "Ataque de Rede",
+    description: "Analise logs e tome decisões contra invasões em tempo real.",
+    difficulty: "Médio",
+    difficultyClass: "threat-medium",
+    icon: "🛰️",
+    href: "/network-attack",
+    progress: 0,
   },
 ];
 
