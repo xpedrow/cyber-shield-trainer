@@ -43,7 +43,7 @@ export default function InsiderThreatPage() {
 
   const fetchThreats = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/v1/simulations/insider-threat/threats', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/simulations/insider-threat/threats`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -62,7 +62,7 @@ export default function InsiderThreatPage() {
 
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/api/v1/simulations/insider-threat/handle', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/simulations/insider-threat/handle`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

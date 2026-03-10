@@ -105,7 +105,7 @@ export default function Dashboard() {
       try {
         const token = localStorage.getItem("token");
         // Fetch user data
-        const userRes = await fetch("http://localhost:3001/api/v1/users/me", {
+        const userRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/me`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (userRes.ok) {
@@ -114,16 +114,16 @@ export default function Dashboard() {
         }
 
         // Fetch stats
-        const statsRes = await fetch("http://localhost:3001/api/v1/scores/me/stats", {
+        const statsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/scores/me/stats`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (statsRes.ok) {
           const statsData = await statsRes.json();
-          setUserData(prev => ({ ...prev, ...statsData }));
+          setUserData((prev: Record<string, unknown> | null) => ({ ...prev, ...statsData }));
         }
 
         // Fetch progress data
-        const progressRes = await fetch("http://localhost:3001/api/v1/reports/my-progress", {
+        const progressRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/my-progress`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (progressRes.ok) {

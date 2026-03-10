@@ -224,7 +224,7 @@ export default function SocialEngineeringPage() {
   useEffect(() => {
     const fetchScenarios = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/v1/simulations/social/scenarios", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/simulations/social/scenarios`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -255,7 +255,7 @@ export default function SocialEngineeringPage() {
     if (!option) return;
 
     try {
-      const response = await fetch("http://localhost:3001/api/v1/simulations/social/play", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/simulations/social/play`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

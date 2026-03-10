@@ -1,154 +1,150 @@
-# Cyber Shield Trainer
+# 🛡️ Cyber Shield Trainer
 
-Um laboratório virtual de segurança onde você enfrenta simulações realistas de ataques cibernéticos. Aprenda a identificar ameaças, reagir corretamente e entender vulnerabilidades comuns.
+Um laboratório virtual de segurança onde você enfrenta simulações realistas de ataques cibernéticos. Aprenda a identificar ameaças, reagir corretamente e entender vulnerabilidades comuns — de forma segura e interativa.
 
-## 🚀 Iniciando
+## ✨ Funcionalidades
+
+| Simulador | Descrição |
+|-----------|-----------|
+| 📧 **Phishing** | Analise e-mails para identificar tentativas de phishing |
+| 🔐 **Login Falso** | Detecte páginas de login falsas |
+| 🕵️ **Engenharia Social** | Reconheça manipulações psicológicas |
+| 🛰️ **Ataque de Rede** | Responda a incidentes de rede em tempo real (IDS) |
+| 🔑 **Senhas** | Teste a resistência de senhas contra brute force |
+| 🕵️ **Ameaça Interna** | Identifique e responda a ameaças internas |
+| 💉 **SQL Injection** | Aprenda sobre vulnerabilidades de banco de dados |
+
+## 🏗️ Stack
+
+```
+Frontend                   Backend
+─────────────────────      ─────────────────────────────
+Next.js 16 (App Router)    NestJS 10
+TypeScript 5               TypeScript 5
+Tailwind CSS 4             TypeORM + SQLite / PostgreSQL
+Framer Motion              JWT + Refresh Tokens
+                           Swagger / OpenAPI
+                           bcrypt + Rate Limiting
+```
+
+## 🚀 Desenvolvimento local
 
 ### Pré-requisitos
-
 - Node.js 18+
-- npm ou yarn
 
-### Instalação e Execução
+### Configuração
 
-1. **Clone o repositório:**
-   ```bash
-   git clone <repository-url>
-   cd cyber-shield-trainer
-   ```
+```bash
+# 1. Clone o repositório
+git clone <repository-url>
+cd cyber-shield-trainer
 
-2. **Instale as dependências:**
-   ```bash
-   # Frontend
-   npm install
+# 2. Instale as dependências do frontend
+npm install
 
-   # Backend
-   cd backend
-   npm install
-   cd ..
-   ```
+# 3. Configure as variáveis de ambiente
+cp .env.example .env.local
+# Edite .env.local com a URL do seu backend
 
-3. **Inicie o backend:**
-   ```bash
-   cd backend
-   npm run start:dev
-   ```
+# 4. Instale as dependências do backend
+cd backend && npm install && cd ..
+```
 
-4. **Inicie o frontend (em outro terminal):**
-   ```bash
-   npm run dev
-   ```
+### Executando
 
-5. **Acesse o sistema:**
-   - Abra [http://localhost:3000](http://localhost:3000)
-   - Você será redirecionado para a página de login
+```bash
+# Terminal 1 — Backend (porta 3001)
+cd backend
+npm run start:dev
 
-## 📋 Como Usar
+# Terminal 2 — Frontend (porta 3000)
+npm run dev
+```
 
-### Primeiro Acesso - Cadastro
+Acesse [http://localhost:3000](http://localhost:3000).
 
-1. **Acesse a página de login** em `http://localhost:3000/login`
-2. **Clique em "Não tem conta? Criar conta"**
-3. **Preencha os dados:**
-   - Nome completo
-   - E-mail válido
-   - Senha (mínimo 8 caracteres)
-   - Confirmação da senha
-4. **Clique em "Criar Conta"**
-5. **Após o cadastro, você será logado automaticamente**
-
-### Login
-
-1. **Na página de login**, insira seu e-mail e senha
-2. **Clique em "Entrar"**
-3. **Você será redirecionado para o dashboard**
-
-### Simuladores Disponíveis
-
-- **🕵️ Simulador de Ameaça Interna** - Identifique e responda a ameaças de dentro da organização
-- **💉 Simulador de SQL Injection** - Pratique defesa contra injeções SQL
-- **📧 Simulador de E-mail** - Identifique phishing e emails maliciosos
-- **🔐 Simulador de Login** - Reconheça páginas falsas de login
-- **🌐 Simulador de Rede** - Entenda ataques de rede
-- **🔑 Simulador de Senha** - Aprenda sobre segurança de senhas
-- **🎭 Engenharia Social** - Pratique defesa contra manipulação social
-
-## 🏗️ Arquitetura
-
-### Frontend (Next.js + TypeScript)
-- **Framework:** Next.js 14 com App Router
-- **Linguagem:** TypeScript
-- **Styling:** CSS Variables + Tailwind CSS
-- **Animações:** Framer Motion
-- **Estado:** React Hooks
-
-### Backend (NestJS + TypeORM)
-- **Framework:** NestJS
-- **Banco:** SQLite (desenvolvimento) / PostgreSQL (produção)
-- **Autenticação:** JWT
-- **Cache:** Redis
-- **Documentação:** Swagger
-
-## 🔧 Desenvolvimento
-
-### Scripts Disponíveis
+### Scripts
 
 ```bash
 # Frontend
-npm run dev          # Inicia servidor de desenvolvimento
-npm run build        # Build para produção
-npm run start        # Inicia servidor de produção
-npm run lint         # Executa linting
+npm run dev       # Servidor de desenvolvimento
+npm run build     # Build de produção
+npm run start     # Servidor de produção
+npm run lint      # Linting
 
-# Backend
-cd backend
-npm run start:dev    # Inicia em modo desenvolvimento
-npm run build        # Build para produção
-npm run test         # Executa testes
+# Backend (dentro de /backend)
+npm run start:dev # Desenvolvimento com watch
+npm run build     # Build
+npm run test      # Testes
 ```
 
-### Estrutura do Projeto
+## ☁️ Deploy
+
+### Frontend → Vercel
+
+1. Importe o repositório no [Vercel](https://vercel.com)
+2. Adicione a variável de ambiente:
+   ```
+   NEXT_PUBLIC_API_URL=https://sua-api.exemplo.com
+   ```
+3. Deploy!
+
+### Backend → Railway / Render / Fly.io
+
+O backend NestJS **não pode ser hospedado na Vercel** (requer processo persistente). Use:
+- [Railway](https://railway.app)
+- [Render](https://render.com)
+- [Fly.io](https://fly.io)
+
+Certifique-se de configurar as variáveis de ambiente do backend (banco de dados PostgreSQL, JWT secret, etc.) no serviço escolhido.
+
+## 📁 Estrutura
 
 ```
 cyber-shield-trainer/
 ├── src/
-│   ├── app/                 # Páginas Next.js
-│   ├── components/          # Componentes reutilizáveis
-│   └── ...
+│   ├── app/                    # Rotas e páginas (Next.js App Router)
+│   │   ├── email-simulator/
+│   │   ├── feedback/
+│   │   ├── insider-threat/
+│   │   ├── login/
+│   │   ├── login-simulator/
+│   │   ├── network-attack/
+│   │   ├── password-simulator/
+│   │   ├── scenarios/
+│   │   ├── social-engineering/
+│   │   ├── sql-injection/
+│   │   ├── layout.tsx
+│   │   └── page.tsx            # Dashboard principal
+│   └── components/
+│       ├── AppLayout.tsx
+│       └── Sidebar.tsx
 ├── backend/
-│   ├── src/
-│   │   ├── auth/           # Autenticação
-│   │   ├── simulations/    # Lógica dos simuladores
-│   │   ├── users/          # Gestão de usuários
-│   │   └── ...
-│   └── ...
-└── ...
+│   └── src/
+│       ├── auth/               # JWT, login, registro
+│       ├── users/              # Gestão de usuários
+│       ├── simulations/        # Lógica dos simuladores
+│       ├── scores/             # Sistema de pontuação
+│       └── reports/            # Relatórios de progresso
+├── .env.example                # Template de variáveis de ambiente
+├── next.config.ts
+└── docker-compose.yml          # Ambiente completo com Docker
 ```
 
-## 🔒 Segurança
+## 🐳 Docker (opcional)
 
-- **Autenticação JWT** com refresh tokens
-- **Rate limiting** nas APIs
-- **Validação de entrada** em todos os endpoints
-- **Hash de senhas** com bcrypt
-- **CORS configurado** para desenvolvimento
-
-## 📚 Aprendizado
-
-Cada simulador inclui:
-- **Cenários realistas** baseados em ameaças reais
-- **Feedback educacional** explicando o que aconteceu
-- **Pontuação** para acompanhar o progresso
-- **Dicas e explicações** sobre melhores práticas
+```bash
+docker-compose up --build
+```
 
 ## 🤝 Contribuição
 
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
-3. Commit suas mudanças (`git commit -am 'Adiciona nova feature'`)
-4. Push para a branch (`git push origin feature/nova-feature`)
+1. Faça um fork do projeto
+2. Crie uma branch (`git checkout -b feature/minha-feature`)
+3. Commit suas mudanças (`git commit -m 'feat: adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/minha-feature`)
 5. Abra um Pull Request
 
 ## 📄 Licença
 
-Este projeto está sob a licença MIT.
+Distribuído sob a licença MIT. Veja [LICENSE](LICENSE) para mais informações.

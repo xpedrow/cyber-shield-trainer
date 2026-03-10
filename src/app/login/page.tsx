@@ -28,7 +28,7 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:3001/api/v1/auth/login", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -74,7 +74,7 @@ export default function LoginPage() {
     }
 
     try {
-      const response = await fetch("http://localhost:3001/api/v1/auth/register", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,7 +89,7 @@ export default function LoginPage() {
       if (response.ok) {
         const data = await response.json();
         // Após cadastro bem-sucedido, faz login automático
-        const loginResponse = await fetch("http://localhost:3001/api/v1/auth/login", {
+        const loginResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

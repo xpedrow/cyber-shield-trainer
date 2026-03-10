@@ -29,7 +29,8 @@ export default function PasswordSimulator() {
     await new Promise(r => setTimeout(r, 1500));
 
     try {
-      const response = await fetch("http://localhost:3001/api/v1/simulations/password/test", {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/simulations/password/test`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

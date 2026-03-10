@@ -33,7 +33,7 @@ export default function SqlInjectionPage() {
 
   const fetchScenarios = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/v1/simulations/sql-injection/scenarios', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/simulations/sql-injection/scenarios`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -57,7 +57,7 @@ export default function SqlInjectionPage() {
     setAttempts(prev => prev + 1);
 
     try {
-      const response = await fetch('http://localhost:3001/api/v1/simulations/sql-injection/test', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/simulations/sql-injection/test`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

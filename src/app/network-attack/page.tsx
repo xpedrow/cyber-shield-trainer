@@ -57,7 +57,7 @@ export default function NetworkAttackPage() {
       try {
         const token = localStorage.getItem("token");
 
-        const response = await fetch("http://localhost:3001/api/v1/simulations/network", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/simulations/network`, {
           headers: {
             "Content-Type": "application/json",
             ...(token && { Authorization: `Bearer ${token}` }),
@@ -111,7 +111,7 @@ export default function NetworkAttackPage() {
     };
 
     try {
-      const response = await fetch("http://localhost:3001/api/v1/simulations/network/handle", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/simulations/network/handle`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
