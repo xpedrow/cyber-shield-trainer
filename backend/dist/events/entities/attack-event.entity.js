@@ -31,6 +31,7 @@ var AttackEventType;
     AttackEventType["SQL_INJECTION"] = "sql_injection";
     AttackEventType["DOS_ATTACK"] = "dos_attack";
     AttackEventType["PORT_SCAN"] = "port_scan";
+    AttackEventType["INSIDER_THREAT"] = "insider_threat";
 })(AttackEventType || (exports.AttackEventType = AttackEventType = {}));
 let AttackEvent = class AttackEvent {
 };

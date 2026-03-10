@@ -16,11 +16,15 @@ export declare enum ActionType {
     SCENARIO_ABANDONED = "scenario_abandoned",
     HINT_REQUESTED = "hint_requested",
     GENERAL_INTERACTION = "general_interaction",
-    WAF_RULE_CREATED = "waf_rule_created"
+    WAF_RULE_CREATED = "waf_rule_created",
+    SECURITY_DECISION = "security_decision",
+    SECURITY_TEST = "security_test"
 }
 export declare enum ActionRisk {
     SAFE = "safe",
+    LOW = "low",
     WARNING = "warning",
+    HIGH = "high",
     DANGEROUS = "dangerous"
 }
 export declare class UserAction {

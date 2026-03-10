@@ -12,6 +12,8 @@ const phishing_service_1 = require("./phishing.service");
 const password_security_service_1 = require("./password-security.service");
 const social_engineering_service_1 = require("./social-engineering.service");
 const network_attack_service_1 = require("./network-attack.service");
+const insider_threat_service_1 = require("./insider-threat.service");
+const sql_injection_service_1 = require("./sql-injection.service");
 const simulations_controller_1 = require("./simulations.controller");
 const events_module_1 = require("../events/events.module");
 let SimulationsModule = class SimulationsModule {
@@ -25,13 +27,17 @@ exports.SimulationsModule = SimulationsModule = __decorate([
             phishing_service_1.PhishingService,
             password_security_service_1.PasswordSecurityService,
             social_engineering_service_1.SocialEngineeringService,
-            network_attack_service_1.NetworkAttackService
+            network_attack_service_1.NetworkAttackService,
+            insider_threat_service_1.InsiderThreatService,
+            sql_injection_service_1.SqlInjectionService
         ],
         exports: [
             phishing_service_1.PhishingService,
             password_security_service_1.PasswordSecurityService,
             social_engineering_service_1.SocialEngineeringService,
-            network_attack_service_1.NetworkAttackService
+            network_attack_service_1.NetworkAttackService,
+            insider_threat_service_1.InsiderThreatService,
+            sql_injection_service_1.SqlInjectionService
         ],
     })
 ], SimulationsModule);

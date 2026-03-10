@@ -4,6 +4,8 @@ import { PhishingService } from './phishing.service';
 import { PasswordSecurityService } from './password-security.service';
 import { SocialEngineeringService } from './social-engineering.service';
 import { NetworkAttackService } from './network-attack.service';
+import { InsiderThreatService } from './insider-threat.service';
+import { SqlInjectionService } from './sql-injection.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { IsString, IsNotEmpty, IsEnum, IsObject, IsOptional } from 'class-validator';
 
@@ -45,6 +47,25 @@ class TestPasswordDto {
   password: string;
 }
 
+class InsiderThreatActionDto {
+  @IsString()
+  @IsNotEmpty()
+  threatId: string;
+
+  @IsEnum(['investigate', 'block-access', 'report', 'monitor'])
+  action: 'investigate' | 'block-access' | 'report' | 'monitor';
+}
+
+class SqlInjectionTestDto {
+  @IsString()
+  @IsNotEmpty()
+  scenarioId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  injection: string;
+}
+
 @ApiTags('simulations')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -55,6 +76,8 @@ export class SimulationsController {
     private readonly passwordService: PasswordSecurityService,
     private readonly socialService: SocialEngineeringService,
     private readonly networkService: NetworkAttackService,
+    private readonly insiderThreatService: InsiderThreatService,
+    private readonly sqlInjectionService: SqlInjectionService,
   ) {}
 
   @Get('phishing/emails')
@@ -97,5 +120,29 @@ export class SimulationsController {
   @ApiOperation({ summary: 'Handle a network attack simulation' })
   handleNetwork(@Request() req: any, @Body() dto: NetworkActionDto) {
     return this.networkService.handleAttack(req.user.userId, dto.attackId, dto.action);
+  }
+
+  @Get('insider-threat/threats')
+  @ApiOperation({ summary: 'List insider threat scenarios' })
+  getInsiderThreats() {
+    return this.insiderThreatService.getThreats();
+  }
+
+  @Post('insider-threat/handle')
+  @ApiOperation({ summary: 'Handle an insider threat scenario' })
+  handleInsiderThreat(@Request() req: any, @Body() dto: InsiderThreatActionDto) {
+    return this.insiderThreatService.handleThreat(req.user.userId, dto.threatId, dto.action);
+  }
+
+  @Get('sql-injection/scenarios')
+  @ApiOperation({ summary: 'List SQL injection scenarios' })
+  getSqlInjectionScenarios() {
+    return this.sqlInjectionService.getScenarios();
+  }
+
+  @Post('sql-injection/test')
+  @ApiOperation({ summary: 'Test an SQL injection attempt' })
+  testSqlInjection(@Request() req: any, @Body() dto: SqlInjectionTestDto) {
+    return this.sqlInjectionService.testInjection(req.user.userId, dto.scenarioId, dto.injection);
   }
 }

@@ -104,7 +104,7 @@ export default function Dashboard() {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        // For development, we'll try to fetch but stay graceful if it fails
+        // Fetch user data
         const userRes = await fetch("http://localhost:3001/api/v1/users/me", {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -113,14 +113,25 @@ export default function Dashboard() {
           setUserData(data);
         }
 
+        // Fetch stats
         const statsRes = await fetch("http://localhost:3001/api/v1/scores/me/stats", {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (statsRes.ok) {
-           // update stats logic here if needed
+          const statsData = await statsRes.json();
+          setUserData(prev => ({ ...prev, ...statsData }));
+        }
+
+        // Fetch progress data
+        const progressRes = await fetch("http://localhost:3001/api/v1/reports/my-progress", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (progressRes.ok) {
+          const progressData = await progressRes.json();
+          setActivities(progressData.history || []);
         }
       } catch (e) {
-        console.log("Fetch error, using mock data for demo");
+        console.log("Fetch error, using mock data for demo", e);
       }
     };
     fetchData();
@@ -128,9 +139,10 @@ export default function Dashboard() {
 
   const currentStats = statsDefault.map(s => {
     if (!userData) return s;
-    if (s.key === 'totalScore') return { ...s, value: userData.totalScore || "0" };
-    if (s.key === 'xp') return { ...s, value: userData.xp || "0" };
-    if (s.key === 'streak') return { ...s, value: userData.streak || "0" };
+    if (s.key === 'totalScore') return { ...s, value: userData.totalPoints?.toString() || "0" };
+    if (s.key === 'xp') return { ...s, value: userData.xp?.toString() || "0" };
+    if (s.key === 'streak') return { ...s, value: userData.streak?.toString() || "0" };
+    if (s.key === 'scenarios') return { ...s, value: userData.scenariosCompleted?.toString() || "0" };
     return s;
   });
 

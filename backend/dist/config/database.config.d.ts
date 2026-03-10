@@ -5,6 +5,7 @@ declare const _default: (() => {
     username: string;
     password: string;
     name: string;
+    database: string;
     synchronize: boolean;
     logging: boolean;
 }) & import("@nestjs/config").ConfigFactoryKeyHost<{
@@ -14,6 +15,7 @@ declare const _default: (() => {
     username: string;
     password: string;
     name: string;
+    database: string;
     synchronize: boolean;
     logging: boolean;
 }>;

@@ -3,6 +3,8 @@ import { PhishingService } from './phishing.service';
 import { PasswordSecurityService } from './password-security.service';
 import { SocialEngineeringService } from './social-engineering.service';
 import { NetworkAttackService } from './network-attack.service';
+import { InsiderThreatService } from './insider-threat.service';
+import { SqlInjectionService } from './sql-injection.service';
 import { SimulationsController } from './simulations.controller';
 import { EventsModule } from '../events/events.module';
 
@@ -13,13 +15,17 @@ import { EventsModule } from '../events/events.module';
     PhishingService, 
     PasswordSecurityService, 
     SocialEngineeringService, 
-    NetworkAttackService
+    NetworkAttackService,
+    InsiderThreatService,
+    SqlInjectionService
   ],
   exports: [
     PhishingService, 
     PasswordSecurityService, 
     SocialEngineeringService, 
-    NetworkAttackService
+    NetworkAttackService,
+    InsiderThreatService,
+    SqlInjectionService
   ],
 })
 export class SimulationsModule {}

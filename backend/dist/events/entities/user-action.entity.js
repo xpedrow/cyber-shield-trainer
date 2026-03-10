@@ -31,11 +31,15 @@ var ActionType;
     ActionType["HINT_REQUESTED"] = "hint_requested";
     ActionType["GENERAL_INTERACTION"] = "general_interaction";
     ActionType["WAF_RULE_CREATED"] = "waf_rule_created";
+    ActionType["SECURITY_DECISION"] = "security_decision";
+    ActionType["SECURITY_TEST"] = "security_test";
 })(ActionType || (exports.ActionType = ActionType = {}));
 var ActionRisk;
 (function (ActionRisk) {
     ActionRisk["SAFE"] = "safe";
+    ActionRisk["LOW"] = "low";
     ActionRisk["WARNING"] = "warning";
+    ActionRisk["HIGH"] = "high";
     ActionRisk["DANGEROUS"] = "dangerous";
 })(ActionRisk || (exports.ActionRisk = ActionRisk = {}));
 let UserAction = class UserAction {

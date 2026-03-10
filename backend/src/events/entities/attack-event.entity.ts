@@ -22,6 +22,7 @@ export enum AttackEventType {
   SQL_INJECTION = 'sql_injection',
   DOS_ATTACK = 'dos_attack',
   PORT_SCAN = 'port_scan',
+  INSIDER_THREAT = 'insider_threat',
 }
 
 @Entity('attack_events')

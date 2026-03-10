@@ -1,13 +1,56 @@
 "use client";
 
 import AppLayout from "@/components/AppLayout";
+import { useState, useEffect } from "react";
 
-const metrics = [
-  { label: "Score Total", value: 742, max: 1000, color: "var(--accent-cyan)", unit: "pts" },
-  { label: "Phishing Detectado", value: 87, max: 100, color: "var(--accent-green)", unit: "%" },
-  { label: "Resposta a Incidentes", value: 73, max: 100, color: "var(--accent-orange)", unit: "%" },
-  { label: "Segurança de Senha", value: 90, max: 100, color: "var(--accent-purple)", unit: "%" },
-];
+export default function Feedback() {
+  const [userData, setUserData] = useState<any>(null);
+  const [progressData, setProgressData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        // Fetch user stats
+        const statsRes = await fetch("http://localhost:3001/api/v1/scores/me/stats", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (statsRes.ok) {
+          const stats = await statsRes.json();
+          setUserData(stats);
+        }
+
+        // Fetch progress data
+        const progressRes = await fetch("http://localhost:3001/api/v1/reports/my-progress", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (progressRes.ok) {
+          const progress = await progressRes.json();
+          setProgressData(progress);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const metrics = userData ? [
+    { label: "Score Total", value: userData.totalPoints || 0, max: 1000, color: "var(--accent-cyan)", unit: "pts" },
+    { label: "Cenários Completados", value: userData.scenariosCompleted || 0, max: 10, color: "var(--accent-green)", unit: "" },
+    { label: "Precisão Média", value: userData.avgAccuracy || 0, max: 100, color: "var(--accent-orange)", unit: "%" },
+    { label: "XP Ganho", value: userData.xp || 0, max: 1000, color: "var(--accent-purple)", unit: "xp" },
+  ] : [
+    { label: "Score Total", value: 742, max: 1000, color: "var(--accent-cyan)", unit: "pts" },
+    { label: "Cenários Completados", value: 5, max: 10, color: "var(--accent-green)", unit: "" },
+    { label: "Precisão Média", value: 78, max: 100, color: "var(--accent-orange)", unit: "%" },
+    { label: "XP Ganho", value: 450, max: 1000, color: "var(--accent-purple)", unit: "xp" },
+  ];
 
 const achievements = [
   { icon: "🎯", title: "Olho de Falcão", desc: "Detectou 10 e-mails de phishing", earned: true },
@@ -93,8 +136,6 @@ function RadarChart() {
     </svg>
   );
 }
-
-export default function Feedback() {
   return (
     <AppLayout>
       <div className="animate-fade-in-up" style={{ marginBottom: "28px" }}>

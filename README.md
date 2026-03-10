@@ -1,36 +1,154 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cyber Shield Trainer
 
-## Getting Started
+Um laboratório virtual de segurança onde você enfrenta simulações realistas de ataques cibernéticos. Aprenda a identificar ameaças, reagir corretamente e entender vulnerabilidades comuns.
 
-First, run the development server:
+## 🚀 Iniciando
+
+### Pré-requisitos
+
+- Node.js 18+
+- npm ou yarn
+
+### Instalação e Execução
+
+1. **Clone o repositório:**
+   ```bash
+   git clone <repository-url>
+   cd cyber-shield-trainer
+   ```
+
+2. **Instale as dependências:**
+   ```bash
+   # Frontend
+   npm install
+
+   # Backend
+   cd backend
+   npm install
+   cd ..
+   ```
+
+3. **Inicie o backend:**
+   ```bash
+   cd backend
+   npm run start:dev
+   ```
+
+4. **Inicie o frontend (em outro terminal):**
+   ```bash
+   npm run dev
+   ```
+
+5. **Acesse o sistema:**
+   - Abra [http://localhost:3000](http://localhost:3000)
+   - Você será redirecionado para a página de login
+
+## 📋 Como Usar
+
+### Primeiro Acesso - Cadastro
+
+1. **Acesse a página de login** em `http://localhost:3000/login`
+2. **Clique em "Não tem conta? Criar conta"**
+3. **Preencha os dados:**
+   - Nome completo
+   - E-mail válido
+   - Senha (mínimo 8 caracteres)
+   - Confirmação da senha
+4. **Clique em "Criar Conta"**
+5. **Após o cadastro, você será logado automaticamente**
+
+### Login
+
+1. **Na página de login**, insira seu e-mail e senha
+2. **Clique em "Entrar"**
+3. **Você será redirecionado para o dashboard**
+
+### Simuladores Disponíveis
+
+- **🕵️ Simulador de Ameaça Interna** - Identifique e responda a ameaças de dentro da organização
+- **💉 Simulador de SQL Injection** - Pratique defesa contra injeções SQL
+- **📧 Simulador de E-mail** - Identifique phishing e emails maliciosos
+- **🔐 Simulador de Login** - Reconheça páginas falsas de login
+- **🌐 Simulador de Rede** - Entenda ataques de rede
+- **🔑 Simulador de Senha** - Aprenda sobre segurança de senhas
+- **🎭 Engenharia Social** - Pratique defesa contra manipulação social
+
+## 🏗️ Arquitetura
+
+### Frontend (Next.js + TypeScript)
+- **Framework:** Next.js 14 com App Router
+- **Linguagem:** TypeScript
+- **Styling:** CSS Variables + Tailwind CSS
+- **Animações:** Framer Motion
+- **Estado:** React Hooks
+
+### Backend (NestJS + TypeORM)
+- **Framework:** NestJS
+- **Banco:** SQLite (desenvolvimento) / PostgreSQL (produção)
+- **Autenticação:** JWT
+- **Cache:** Redis
+- **Documentação:** Swagger
+
+## 🔧 Desenvolvimento
+
+### Scripts Disponíveis
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Frontend
+npm run dev          # Inicia servidor de desenvolvimento
+npm run build        # Build para produção
+npm run start        # Inicia servidor de produção
+npm run lint         # Executa linting
+
+# Backend
+cd backend
+npm run start:dev    # Inicia em modo desenvolvimento
+npm run build        # Build para produção
+npm run test         # Executa testes
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Estrutura do Projeto
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+cyber-shield-trainer/
+├── src/
+│   ├── app/                 # Páginas Next.js
+│   ├── components/          # Componentes reutilizáveis
+│   └── ...
+├── backend/
+│   ├── src/
+│   │   ├── auth/           # Autenticação
+│   │   ├── simulations/    # Lógica dos simuladores
+│   │   ├── users/          # Gestão de usuários
+│   │   └── ...
+│   └── ...
+└── ...
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔒 Segurança
 
-## Learn More
+- **Autenticação JWT** com refresh tokens
+- **Rate limiting** nas APIs
+- **Validação de entrada** em todos os endpoints
+- **Hash de senhas** com bcrypt
+- **CORS configurado** para desenvolvimento
 
-To learn more about Next.js, take a look at the following resources:
+## 📚 Aprendizado
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Cada simulador inclui:
+- **Cenários realistas** baseados em ameaças reais
+- **Feedback educacional** explicando o que aconteceu
+- **Pontuação** para acompanhar o progresso
+- **Dicas e explicações** sobre melhores práticas
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🤝 Contribuição
 
-## Deploy on Vercel
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
+3. Commit suas mudanças (`git commit -am 'Adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📄 Licença
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Este projeto está sob a licença MIT.

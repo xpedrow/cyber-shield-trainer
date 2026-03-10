@@ -29,11 +29,15 @@ export enum ActionType {
 
   // Network
   WAF_RULE_CREATED = 'waf_rule_created',
+  SECURITY_DECISION = 'security_decision',
+  SECURITY_TEST = 'security_test',
 }
 
 export enum ActionRisk {
   SAFE = 'safe',
+  LOW = 'low',
   WARNING = 'warning',
+  HIGH = 'high',
   DANGEROUS = 'dangerous',
 }
 

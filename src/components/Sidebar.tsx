@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const navItems = [
   {
@@ -96,24 +97,55 @@ const navItems = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
   const [userData, setUserData] = useState<any>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem("token");
+        if (!token) {
+          setIsAuthenticated(false);
+          // Só redireciona se não estiver na página de login
+          if (pathname !== "/login") {
+            router.push("/login");
+          }
+          return;
+        }
+
         const res = await fetch("http://localhost:3001/api/v1/users/me", {
           headers: { Authorization: `Bearer ${token}` }
         });
+
         if (res.ok) {
           const data = await res.json();
           setUserData(data);
+          setIsAuthenticated(true);
+        } else if (res.status === 401) {
+          // Token inválido ou expirado
+          localStorage.removeItem("token");
+          setIsAuthenticated(false);
+          if (pathname !== "/login") {
+            router.push("/login");
+          }
+        } else {
+          setIsAuthenticated(false);
+          if (pathname !== "/login") {
+            router.push("/login");
+          }
         }
-      } catch (e) {}
+      } catch (e) {
+        console.error("Erro ao buscar dados do usuário:", e);
+        setIsAuthenticated(false);
+        if (pathname !== "/login") {
+          router.push("/login");
+        }
+      }
     };
     fetchUser();
-  }, []);
+  }, [pathname, router]);
 
   return (
     <aside

@@ -76,7 +76,7 @@ const allScenarios = [
     topics: ["DLP", "Monitoramento de logs", "Política de acesso"],
     duration: "15 min",
     xp: 220,
-    href: "#",
+    href: "/insider-threat",
   },
   {
     id: "sql-injection",
@@ -88,7 +88,7 @@ const allScenarios = [
     topics: ["Validação de entrada", "Prepared statements", "OWASP Top 10"],
     duration: "18 min",
     xp: 280,
-    href: "#",
+    href: "/sql-injection",
   },
 ];
 
