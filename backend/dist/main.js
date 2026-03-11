@@ -40,9 +40,9 @@ async function bootstrap() {
     swagger_1.SwaggerModule.setup('api/docs', app, document, {
         swaggerOptions: { persistAuthorization: true },
     });
-    await app.listen(port);
-    console.log(`🚀 Cyber Shield API running on http://localhost:${port}`);
-    console.log(`📚 Swagger docs at http://localhost:${port}/api/docs`);
+    await app.listen(port, '0.0.0.0');
+    console.log(`🚀 Cyber Shield API running on http://0.0.0.0:${port}`);
+    console.log(`📚 Swagger docs at http://0.0.0.0:${port}/api/docs`);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

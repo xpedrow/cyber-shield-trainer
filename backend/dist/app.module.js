@@ -34,7 +34,7 @@ exports.AppModule = AppModule = __decorate([
                 inject: [config_1.ConfigService],
                 useFactory: (cfg) => ({
                     type: 'sqlite',
-                    database: 'database.sqlite',
+                    database: cfg.get('DATABASE_PATH') || 'database.sqlite',
                     entities: [__dirname + '/**/*.entity{.ts,.js}'],
                     migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
                     synchronize: true,
