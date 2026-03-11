@@ -25,7 +25,7 @@ import { SimulationsModule } from './simulations/simulations.module';
       inject: [ConfigService],
       useFactory: (cfg: ConfigService) => ({
         type: 'sqlite',
-        database: 'database.sqlite',
+        database: cfg.get<string>('DATABASE_PATH') || 'database.sqlite',
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
         synchronize: true, // Auto-create tables for easier training setup
