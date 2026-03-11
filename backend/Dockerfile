@@ -7,6 +7,7 @@ COPY package*.json ./
 RUN npm install --legacy-peer-deps
 
 COPY . .
+RUN chmod +x ./node_modules/.bin/* || true
 RUN npm run build
 
 # Production stage
