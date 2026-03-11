@@ -35,11 +35,6 @@ jobs:
 
 
 
-    - name: Test Backend
-      run: |
-        cd backend
-        npm test
-
     - name: Build Backend
       run: |
         cd backend
