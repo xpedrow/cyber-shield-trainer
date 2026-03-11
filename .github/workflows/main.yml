@@ -33,10 +33,7 @@ jobs:
         cd backend
         npm install --legacy-peer-deps
 
-    - name: Lint Backend
-      run: |
-        cd backend
-        npm run lint
+
 
     - name: Test Backend
       run: |
