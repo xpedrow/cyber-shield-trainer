@@ -3,6 +3,8 @@
 import AppLayout from "@/components/AppLayout";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { apiFetch } from "@/lib/api";
+
 
 const statsDefault = [
   { label: "Score de Segurança", value: "0", unit: "/1000", color: "var(--accent-cyan)", icon: "🛡️", key: 'totalScore' },
@@ -105,7 +107,7 @@ export default function Dashboard() {
       try {
         const token = localStorage.getItem("token");
         // Fetch user data
-        const userRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/me`, {
+        const userRes = await apiFetch("users/me", {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (userRes.ok) {
@@ -114,7 +116,7 @@ export default function Dashboard() {
         }
 
         // Fetch stats
-        const statsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/scores/me/stats`, {
+        const statsRes = await apiFetch("scores/me/stats", {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (statsRes.ok) {
@@ -123,7 +125,7 @@ export default function Dashboard() {
         }
 
         // Fetch progress data
-        const progressRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/my-progress`, {
+        const progressRes = await apiFetch("reports/my-progress", {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (progressRes.ok) {

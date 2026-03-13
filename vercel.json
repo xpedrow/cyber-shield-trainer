@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://cyber-shield-trainer-production-6b51.up.railway.app/api/:path*"
+    }
+  ]
+}
