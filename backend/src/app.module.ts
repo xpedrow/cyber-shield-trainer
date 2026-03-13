@@ -24,7 +24,8 @@ import { SimulationsModule } from './simulations/simulations.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (cfg: ConfigService) => {
-        const databaseUrl = cfg.get<string>('DATABASE_URL');
+        // 1. Tenta DATABASE_URL ou POSTGRES_URL (Padrão Railway/Vercel)
+        const databaseUrl = cfg.get<string>('DATABASE_URL') || cfg.get<string>('POSTGRES_URL');
         
         if (databaseUrl) {
           return {
@@ -33,24 +34,38 @@ import { SimulationsModule } from './simulations/simulations.module';
             entities: [__dirname + '/**/*.entity{.ts,.js}'],
             migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
             synchronize: true,
-            ssl: {
-              rejectUnauthorized: false,
-            },
+            ssl: { rejectUnauthorized: false },
           };
         }
 
+        // 2. Tenta variáveis individuais (Padrão Railway: PGHOST, PGUSER, etc.)
+        const host = cfg.get<string>('PGHOST') || cfg.get<string>('DB_HOST');
+        const username = cfg.get<string>('PGUSER') || cfg.get<string>('DB_USER');
+        const password = cfg.get<string>('PGPASSWORD') || cfg.get<string>('DB_PASSWORD');
+        const database = cfg.get<string>('PGDATABASE') || cfg.get<string>('DB_NAME') || 'cyber_shield';
+        const port = cfg.get<number>('PGPORT') || cfg.get<number>('DB_PORT') || 5432;
+
+        if (host && username) {
+          return {
+            type: 'postgres',
+            host,
+            port,
+            username,
+            password,
+            database,
+            entities: [__dirname + '/**/*.entity{.ts,.js}'],
+            migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
+            synchronize: true,
+            ssl: { rejectUnauthorized: false },
+          };
+        }
+
+        // 3. Fallback para SQLite se nada for encontrado
         return {
-          type: cfg.get<'sqlite' | 'postgres'>('DB_TYPE', 'sqlite'),
-          host: cfg.get<string>('DB_HOST'),
-          port: cfg.get<number>('DB_PORT'),
-          username: cfg.get<string>('DB_USER'),
-          password: cfg.get<string>('DB_PASSWORD'),
-          database: cfg.get<string>('DB_NAME') || cfg.get<string>('DATABASE_PATH') || 'database.sqlite',
+          type: 'sqlite',
+          database: cfg.get<string>('DATABASE_PATH') || 'database.sqlite',
           entities: [__dirname + '/**/*.entity{.ts,.js}'],
-          migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
           synchronize: true,
-          logging: cfg.get('NODE_ENV') === 'development',
-          ...(cfg.get('DB_TYPE') === 'postgres' ? { ssl: { rejectUnauthorized: false } } : {}),
         };
       },
     }),
