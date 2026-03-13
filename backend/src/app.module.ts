@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
@@ -23,7 +23,7 @@ import { SimulationsModule } from './simulations/simulations.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (cfg: ConfigService) => {
+      useFactory: (cfg: ConfigService): TypeOrmModuleOptions => {
         // 1. Tenta DATABASE_URL ou POSTGRES_URL (Padrão Railway/Vercel)
         const databaseUrl = cfg.get<string>('DATABASE_URL') || cfg.get<string>('POSTGRES_URL');
         
