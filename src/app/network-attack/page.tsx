@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import AppLayout from "@/components/AppLayout";
 import { motion, AnimatePresence } from "framer-motion";
+import { apiFetch } from "@/lib/api";
 
 interface NetworkAttack {
   id: string;
@@ -57,7 +58,7 @@ export default function NetworkAttackPage() {
       try {
         const token = localStorage.getItem("token");
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/simulations/network`, {
+        const response = await apiFetch("simulations/network", {
           headers: {
             "Content-Type": "application/json",
             ...(token && { Authorization: `Bearer ${token}` }),
@@ -111,7 +112,7 @@ export default function NetworkAttackPage() {
     };
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/simulations/network/handle`, {
+      const response = await apiFetch("simulations/network/handle", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

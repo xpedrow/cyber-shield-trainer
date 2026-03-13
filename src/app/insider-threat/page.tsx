@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import AppLayout from "@/components/AppLayout";
 import { motion, AnimatePresence } from "framer-motion";
+import { apiFetch } from "@/lib/api";
 
 interface InsiderThreat {
   id: string;
@@ -43,7 +44,7 @@ export default function InsiderThreatPage() {
 
   const fetchThreats = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/simulations/insider-threat/threats`, {
+      const response = await apiFetch("simulations/insider-threat/threats", {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -62,7 +63,7 @@ export default function InsiderThreatPage() {
 
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/simulations/insider-threat/handle`, {
+      const response = await apiFetch("simulations/insider-threat/handle", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -13,11 +13,12 @@ export class UsersService {
   ) {}
 
   async create(dto: CreateUserDto): Promise<User> {
-    const exists = await this.userRepo.findOne({ where: { email: dto.email } });
+    const email = dto.email.toLowerCase();
+    const exists = await this.userRepo.findOne({ where: { email } });
     if (exists) throw new ConflictException('Email already in use');
 
     const passwordHash = await bcrypt.hash(dto.password, 12);
-    const user = this.userRepo.create({ ...dto, passwordHash });
+    const user = this.userRepo.create({ ...dto, email, passwordHash });
     return this.userRepo.save(user);
   }
 
@@ -37,7 +38,7 @@ export class UsersService {
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    return this.userRepo.findOne({ where: { email } });
+    return this.userRepo.findOne({ where: { email: email.toLowerCase() } });
   }
 
   async update(id: string, dto: UpdateUserDto): Promise<User> {

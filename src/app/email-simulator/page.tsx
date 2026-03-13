@@ -2,6 +2,7 @@
 
 import AppLayout from "@/components/AppLayout";
 import { useState, useEffect } from "react";
+import { apiFetch } from "@/lib/api";
 
 const emails = [
   {
@@ -264,7 +265,7 @@ export default function EmailSimulator() {
     const action = answer === "phishing" ? "report" : "click";
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/simulations/phishing/action`, {
+      const response = await apiFetch("simulations/phishing/action", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
