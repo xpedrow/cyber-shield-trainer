@@ -7,94 +7,28 @@ import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
 
 
+import { 
+  LayoutDashboard, 
+  ShieldAlert, 
+  Mail, 
+  Lock, 
+  Users, 
+  Network, 
+  KeyRound, 
+  BarChart3,
+  ChevronLeft,
+  ShieldCheck
+} from "lucide-react";
+
 const navItems = [
-  {
-    href: "/",
-    label: "Dashboard",
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <rect x="3" y="3" width="7" height="7" rx="1" />
-        <rect x="14" y="3" width="7" height="7" rx="1" />
-        <rect x="3" y="14" width="7" height="7" rx="1" />
-        <rect x="14" y="14" width="7" height="7" rx="1" />
-      </svg>
-    ),
-  },
-  {
-    href: "/scenarios",
-    label: "Cenários",
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-      </svg>
-    ),
-  },
-  {
-    href: "/email-simulator",
-    label: "Simulador de E-mail",
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-        <polyline points="22,6 12,13 2,6" />
-      </svg>
-    ),
-  },
-  {
-    href: "/login-simulator",
-    label: "Simulador de Login",
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-      </svg>
-    ),
-  },
-  {
-    href: "/social-engineering",
-    label: "Engenharia Social",
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-      </svg>
-    ),
-  },
-  {
-    href: "/network-attack",
-    label: "Ataque de Rede",
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
-        <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
-        <line x1="6" y1="6" x2="6" y2="6" />
-        <line x1="6" y1="18" x2="6" y2="18" />
-      </svg>
-    ),
-  },
-  {
-    href: "/password-simulator",
-    label: "Simulador de Senha",
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-        <circle cx="12" cy="16" r="1" />
-      </svg>
-    ),
-  },
-  {
-    href: "/feedback",
-    label: "Feedback & Score",
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <line x1="18" y1="20" x2="18" y2="10" />
-        <line x1="12" y1="20" x2="12" y2="4" />
-        <line x1="6" y1="20" x2="6" y2="14" />
-      </svg>
-    ),
-  },
+  { href: "/", label: "Dashboard", icon: <LayoutDashboard size={18} /> },
+  { href: "/scenarios", label: "Cenários", icon: <ShieldAlert size={18} /> },
+  { href: "/email-simulator", label: "Simulador de E-mail", icon: <Mail size={18} /> },
+  { href: "/login-simulator", label: "Simulador de Login", icon: <Lock size={18} /> },
+  { href: "/social-engineering", label: "Engenharia Social", icon: <Users size={18} /> },
+  { href: "/network-attack", label: "Ataque de Rede", icon: <Network size={18} /> },
+  { href: "/password-simulator", label: "Simulador de Senha", icon: <KeyRound size={18} /> },
+  { href: "/feedback", label: "Feedback & Score", icon: <BarChart3 size={18} /> },
 ];
 
 export default function Sidebar() {
@@ -181,26 +115,24 @@ export default function Sidebar() {
           style={{
             width: "36px",
             height: "36px",
-            borderRadius: "8px",
-            background: "linear-gradient(135deg, #0099cc, #0044ff)",
+            borderRadius: "10px",
+            background: "linear-gradient(135deg, var(--accent-blue), var(--accent-cyan))",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             flexShrink: 0,
+            boxShadow: "var(--glow-cyan)"
           }}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="white" opacity="0.9" />
-            <path d="M9 12l2 2 4-4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <ShieldCheck size={22} color="white" />
         </div>
         {!collapsed && (
-          <div style={{ transition: "opacity 0.2s" }}>
-            <div style={{ fontWeight: 700, fontSize: "15px", color: "var(--text-primary)" }}>
-              Cyber Shield
+          <div style={{ transition: "opacity 0.2s", userSelect: "none" }}>
+            <div style={{ fontWeight: 800, fontSize: "16px", color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+              CyberShield
             </div>
-            <div style={{ fontSize: "11px", color: "var(--text-muted)", fontWeight: 500 }}>
-              Trainer
+            <div style={{ fontSize: "10px", color: "var(--accent-cyan)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px" }}>
+              Trainer v2.0
             </div>
           </div>
         )}
@@ -208,29 +140,25 @@ export default function Sidebar() {
           onClick={() => setCollapsed(!collapsed)}
           style={{
             marginLeft: "auto",
-            background: "none",
-            border: "none",
+            background: "var(--bg-card)",
+            border: "1px solid var(--border-subtle)",
             color: "var(--text-muted)",
             cursor: "pointer",
-            padding: "4px",
-            borderRadius: "4px",
+            padding: "5px",
+            borderRadius: "6px",
             display: "flex",
             alignItems: "center",
-            transition: "color 0.2s",
+            transition: "all 0.2s",
             flexShrink: 0,
           }}
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            style={{ transform: collapsed ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.3s" }}
-          >
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
+          <ChevronLeft 
+            size={16} 
+            style={{ 
+              transform: collapsed ? "rotate(180deg)" : "rotate(0deg)", 
+              transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)" 
+            }} 
+          />
         </button>
       </div>
 

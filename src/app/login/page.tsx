@@ -1,9 +1,8 @@
 "use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
-
+import { ShieldCheck, Mail, Lock, User, ArrowRight } from "lucide-react";
 
 export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -32,9 +31,7 @@ export default function LoginPage() {
     try {
       const response = await apiFetch("auth/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: formData.email,
           password: formData.password
@@ -48,10 +45,10 @@ export default function LoginPage() {
         router.push("/");
       } else {
         const errorData = await response.json();
-        setError(errorData.message || "Erro ao fazer login");
+        setError(errorData.message || "Credenciais inválidas");
       }
     } catch (err) {
-      setError("Erro de conexão. Verifique se o backend está rodando.");
+      setError("Erro de conexão. Verifique se o servidor está ativo.");
     } finally {
       setLoading(false);
     }
@@ -62,15 +59,8 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    // Validações básicas
     if (formData.password !== formData.confirmPassword) {
       setError("As senhas não coincidem");
-      setLoading(false);
-      return;
-    }
-
-    if (formData.password.length < 8) {
-      setError("A senha deve ter pelo menos 8 caracteres");
       setLoading(false);
       return;
     }
@@ -78,9 +68,7 @@ export default function LoginPage() {
     try {
       const response = await apiFetch("auth/register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
@@ -89,13 +77,9 @@ export default function LoginPage() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        // Após cadastro bem-sucedido, faz login automático
         const loginResponse = await apiFetch("auth/login", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             email: formData.email,
             password: formData.password
@@ -108,16 +92,15 @@ export default function LoginPage() {
           localStorage.setItem("refreshToken", loginData.refreshToken);
           router.push("/");
         } else {
-          setError("Conta criada com sucesso! Faça login para continuar.");
+          setError("Conta criada! Faça login para continuar.");
           setIsLogin(true);
-          setFormData(prev => ({ ...prev, password: "", confirmPassword: "" }));
         }
       } else {
         const errorData = await response.json();
         setError(errorData.message || "Erro ao criar conta");
       }
     } catch (err) {
-      setError("Erro de conexão. Verifique se o backend está rodando.");
+      setError("Erro de conexão. Tente novamente.");
     } finally {
       setLoading(false);
     }
@@ -126,12 +109,7 @@ export default function LoginPage() {
   const toggleMode = () => {
     setIsLogin(!isLogin);
     setError("");
-    setFormData({
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: ""
-    });
+    setFormData({ name: "", email: "", password: "", confirmPassword: "" });
   };
 
   return (
@@ -142,64 +120,78 @@ export default function LoginPage() {
         alignItems: "center",
         justifyContent: "center",
         background: "var(--bg-primary)",
+        backgroundImage: "radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.05), transparent 80%)",
         padding: "20px",
       }}
     >
       <div
-        className="card"
+        className="cyber-card"
         style={{
           width: "100%",
-          maxWidth: "400px",
-          padding: "32px",
+          maxWidth: "420px",
+          padding: "48px 40px",
           textAlign: "center",
+          background: "rgba(16, 25, 40, 0.8)",
+          backdropFilter: "blur(20px)",
         }}
       >
-        <div style={{ fontSize: "48px", marginBottom: "16px" }}>🛡️</div>
-        <h1
-          style={{
-            fontSize: "24px",
-            fontWeight: 800,
-            color: "var(--text-primary)",
-            marginBottom: "8px",
+        <div 
+          style={{ 
+            width: '64px', 
+            height: '64px', 
+            background: 'linear-gradient(135deg, var(--accent-blue), var(--accent-cyan))',
+            borderRadius: '16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 24px',
+            boxShadow: 'var(--glow-cyan)'
           }}
         >
-          Cyber Shield Trainer
+          <ShieldCheck size={32} color="white" />
+        </div>
+        
+        <h1
+          style={{
+            fontSize: "28px",
+            fontWeight: 900,
+            color: "var(--text-primary)",
+            marginBottom: "8px",
+            letterSpacing: "-0.04em"
+          }}
+        >
+          Nexus Shield
         </h1>
         <p
           style={{
             color: "var(--text-secondary)",
-            fontSize: "14px",
-            marginBottom: "32px",
+            fontSize: "15px",
+            marginBottom: "40px",
+            fontWeight: 500
           }}
         >
-          {isLogin ? "Faça login para acessar os simuladores" : "Crie sua conta para começar"}
+          {isLogin ? "Identifique-se para acessar o sistema" : "Inicie sua jornada na cibersegurança"}
         </p>
 
         <form onSubmit={isLogin ? handleLogin : handleRegister}>
           {!isLogin && (
-            <div style={{ marginBottom: "16px" }}>
+            <div style={{ marginBottom: "16px", position: "relative" }}>
+              <User size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--text-muted)" }} />
               <input
                 type="text"
                 name="name"
-                placeholder="Nome completo"
+                placeholder="Seu nome"
                 value={formData.name}
                 onChange={handleInputChange}
                 required
-                style={{
-                  width: "100%",
-                  padding: "12px 16px",
-                  border: "1px solid var(--border-subtle)",
-                  borderRadius: "8px",
-                  background: "var(--bg-secondary)",
-                  color: "var(--text-primary)",
-                  fontSize: "14px",
-                  marginBottom: "12px",
-                }}
+                className="cyber-input"
+                style={{ paddingLeft: "36px" }}
               />
             </div>
           )}
 
-          <div style={{ marginBottom: "16px" }}>
+          <div style={{ marginBottom: "16px", position: "relative" }}>
+            <Mail size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--text-muted)" }} />
             <input
               type="email"
               name="email"
@@ -207,19 +199,13 @@ export default function LoginPage() {
               value={formData.email}
               onChange={handleInputChange}
               required
-              style={{
-                width: "100%",
-                padding: "12px 16px",
-                border: "1px solid var(--border-subtle)",
-                borderRadius: "8px",
-                background: "var(--bg-secondary)",
-                color: "var(--text-primary)",
-                fontSize: "14px",
-              }}
+              className="cyber-input"
+              style={{ paddingLeft: "36px" }}
             />
           </div>
 
-          <div style={{ marginBottom: "16px" }}>
+          <div style={{ marginBottom: "20px", position: "relative" }}>
+            <Lock size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--text-muted)" }} />
             <input
               type="password"
               name="password"
@@ -227,20 +213,14 @@ export default function LoginPage() {
               value={formData.password}
               onChange={handleInputChange}
               required
-              style={{
-                width: "100%",
-                padding: "12px 16px",
-                border: "1px solid var(--border-subtle)",
-                borderRadius: "8px",
-                background: "var(--bg-secondary)",
-                color: "var(--text-primary)",
-                fontSize: "14px",
-              }}
+              className="cyber-input"
+              style={{ paddingLeft: "36px" }}
             />
           </div>
 
           {!isLogin && (
-            <div style={{ marginBottom: "24px" }}>
+            <div style={{ marginBottom: "24px", position: "relative" }}>
+              <Lock size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--text-muted)" }} />
               <input
                 type="password"
                 name="confirmPassword"
@@ -248,15 +228,8 @@ export default function LoginPage() {
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
                 required
-                style={{
-                  width: "100%",
-                  padding: "12px 16px",
-                  border: "1px solid var(--border-subtle)",
-                  borderRadius: "8px",
-                  background: "var(--bg-secondary)",
-                  color: "var(--text-primary)",
-                  fontSize: "14px",
-                }}
+                className="cyber-input"
+                style={{ paddingLeft: "36px" }}
               />
             </div>
           )}
@@ -265,12 +238,13 @@ export default function LoginPage() {
             <div
               style={{
                 padding: "12px",
-                background: "rgba(255, 0, 0, 0.1)",
-                border: "1px solid rgba(255, 0, 0, 0.2)",
+                background: "rgba(255, 51, 102, 0.1)",
+                border: "1px solid rgba(255, 51, 102, 0.2)",
                 borderRadius: "8px",
-                color: "#ff6b6b",
+                color: "var(--accent-red)",
                 fontSize: "14px",
-                marginBottom: "16px",
+                marginBottom: "20px",
+                fontWeight: 600
               }}
             >
               {error}
@@ -283,14 +257,15 @@ export default function LoginPage() {
             className="btn-cyber btn-primary"
             style={{
               width: "100%",
-              padding: "12px",
+              padding: "14px",
               justifyContent: "center",
               fontSize: "16px",
-              fontWeight: 600,
-              marginBottom: "16px",
+              fontWeight: 800,
+              marginBottom: "24px",
+              letterSpacing: "0.5px"
             }}
           >
-            {loading ? (isLogin ? "Entrando..." : "Criando conta...") : (isLogin ? "Entrar" : "Criar Conta")}
+            {loading ? "PROCESSANDO..." : (isLogin ? "ENTRAR NO SISTEMA" : "CRIAR ACESSO")}
           </button>
         </form>
 
@@ -301,11 +276,20 @@ export default function LoginPage() {
             border: "none",
             color: "var(--accent-cyan)",
             fontSize: "14px",
+            fontWeight: 600,
             cursor: "pointer",
-            textDecoration: "underline",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "6px",
+            margin: "0 auto",
           }}
         >
-          {isLogin ? "Não tem conta? Criar conta" : "Já tem conta? Fazer login"}
+          {isLogin ? (
+            <>Novo por aqui? Criar conta <ArrowRight size={14} /></>
+          ) : (
+            <>Já possui acesso? Fazer login <ArrowRight size={14} /></>
+          )}
         </button>
       </div>
     </div>
