@@ -19,9 +19,13 @@ export class PasswordSecurityService {
     const entropy = this.calculateEntropy(password);
     const hasDictMatch = this.checkDictionary(password);
 
-    let score = Math.min(100, (entropy / 80) * 100);
-    if (hasDictMatch) score = Math.max(10, score - 40);
-    if (password.length < 8) score = Math.max(5, score - 30);
+    // Dynamic scoring
+    let score = Math.min(100, (entropy / 90) * 100);
+    
+    // Penalties
+    if (hasDictMatch) score = Math.max(5, score - 45);
+    if (password.length < 8) score = Math.max(5, score - 35);
+    if (password.length < 12) score = Math.max(10, score - 15);
 
     const strength = this.getStrengthLabel(score);
     const crackTime = this.estimateCrackTime(entropy, hasDictMatch);
@@ -44,22 +48,25 @@ export class PasswordSecurityService {
     if (/[0-9]/.test(password)) charsetSize += 10;
     if (/[^a-zA-Z0-9]/.test(password)) charsetSize += 32;
 
-    if (password.length === 0) return 0;
-    // Formula: E = L * log2(R) where L is length and R is charset size
+    if (password.length === 0 || charsetSize === 0) return 0;
+    // Formula: E = L * log2(R)
     return password.length * Math.log2(charsetSize);
   }
 
   private checkDictionary(password: string): boolean {
-    const commonPatterns = ['123', 'qwerty', 'admin', 'senha', 'password', 'brasil', '123456', 'aaaaa'];
+    const commonPatterns = [
+      '123', 'qwerty', 'admin', 'senha', 'password', 'brasil', '123456', 'aaaaa',
+      'root', 'login', 'padrão', 'mudar', 'teste', 'security', 'ciber', 'shield'
+    ];
     const lower = password.toLowerCase();
     return commonPatterns.some(p => lower.includes(p));
   }
 
   private getStrengthLabel(score: number): any {
-    if (score < 20) return 'MUITO FRACA';
-    if (score < 40) return 'FRACA';
-    if (score < 60) return 'MODERADA';
-    if (score < 80) return 'FORTE';
+    if (score < 15) return 'MUITO FRACA';
+    if (score < 35) return 'FRACA';
+    if (score < 55) return 'MODERADA';
+    if (score < 75) return 'FORTE';
     return 'MUITO FORTE';
   }
 

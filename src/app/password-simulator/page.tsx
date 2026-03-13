@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import AppLayout from "@/components/AppLayout";
+import { apiFetch } from "@/lib/api";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface AnalysisResult {
@@ -30,7 +31,7 @@ export default function PasswordSimulator() {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/simulations/password/test`, {
+      const response = await apiFetch("simulations/password/test", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,27 +58,57 @@ export default function PasswordSimulator() {
     if (/[^a-zA-Z0-9]/.test(pwd)) charset += 32;
 
     const entropy = pwd.length * Math.log2(charset || 1);
-    const isWeak = pwd.length < 8 || /123|qwerty|admin|senha/i.test(pwd);
+    const hasDict = /123|qwerty|admin|senha|password|brasil|aaaaa|root/i.test(pwd);
+    
+    let score = Math.min(100, (entropy / 90) * 100);
+    if (hasDict) score = Math.max(10, score - 45);
+    if (pwd.length < 8) score = Math.max(5, score - 35);
+
+    let strength = "MUITO FRACA";
+    if (score >= 15) strength = "FRACA";
+    if (score >= 35) strength = "MODERADA";
+    if (score >= 55) strength = "FORTE";
+    if (score >= 75) strength = "MUITO FORTE";
+
+    const crackSeconds = Math.pow(2, entropy) / 1e10;
 
     return {
       entropy: Math.round(entropy),
-      score: isWeak ? 20 : Math.min(100, (entropy / 80) * 100),
-      strength: isWeak ? "FRACA" : entropy > 60 ? "MUITO FORTE" : "MODERADA",
+      score: Math.round(score),
+      strength,
       crackTime: {
-        bruteForce: isWeak ? "0.3 segundos" : "120 anos",
-        dictionary: isWeak ? "Instantâneo" : "80 anos",
-        botnet: isWeak ? "Instantâneo" : "5 anos",
+        bruteForce: formatMockTime(crackSeconds),
+        dictionary: formatMockTime(crackSeconds / 1000),
+        botnet: formatMockTime(crackSeconds / 50000),
       },
-      suggestions: isWeak ? ["Use pelo menos 12 caracteres", "Adicione símbolos e números"] : ["Senha excelente!"],
+      suggestions: getMockSuggestions(pwd, hasDict),
     };
+  };
+
+  const formatMockTime = (seconds: number): string => {
+    if (seconds < 1) return "Instantâneo";
+    if (seconds < 60) return `${Math.round(seconds)} segundos`;
+    if (seconds < 3600) return `${Math.round(seconds / 60)} min`;
+    if (seconds < 86400) return `${Math.round(seconds / 3600)} horas`;
+    if (seconds < 31536000) return `${Math.round(seconds / 86400)} dias`;
+    return `${Math.round(seconds / 31536000)} anos`;
+  };
+
+  const getMockSuggestions = (pwd: string, hasDict: boolean): string[] => {
+    const s = [];
+    if (pwd.length < 12) s.push("Aumente para 12+ caracteres");
+    if (!/[A-Z]/.test(pwd) || !/[0-9]/.test(pwd) || !/[^a-zA-Z0-9]/.test(pwd)) s.push("Misture maiúsculas, números e símbolos");
+    if (hasDict) s.push("Evite palavras comuns ou sequências");
+    if (s.length === 0) s.push("Senha excelente!");
+    return s;
   };
 
   const getStrengthColor = (strength: string) => {
     switch (strength) {
-      case 'MUITO FRACA':
+      case 'MUITO FRACA': return '#ff4444';
       case 'FRACA': return 'var(--accent-red)';
       case 'MODERADA': return 'var(--accent-orange)';
-      case 'FORTE':
+      case 'FORTE': return '#fbbf24';
       case 'MUITO FORTE': return 'var(--accent-green)';
       default: return 'var(--text-muted)';
     }

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import AppLayout from "@/components/AppLayout";
+import { apiFetch } from "@/lib/api";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface Option {
@@ -224,7 +225,7 @@ export default function SocialEngineeringPage() {
   useEffect(() => {
     const fetchScenarios = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/simulations/social/scenarios`, {
+        const response = await apiFetch("simulations/social/scenarios", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -255,7 +256,7 @@ export default function SocialEngineeringPage() {
     if (!option) return;
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/simulations/social/play`, {
+      const response = await apiFetch("simulations/social/play", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

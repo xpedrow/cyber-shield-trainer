@@ -2,6 +2,7 @@
 
 import AppLayout from "@/components/AppLayout";
 import { useState, useEffect } from "react";
+import { apiFetch } from "@/lib/api";
 
 export default function Feedback() {
   const [userData, setUserData] = useState<any>(null);
@@ -14,7 +15,7 @@ export default function Feedback() {
         const token = localStorage.getItem("token");
 
         // Fetch user stats
-        const statsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/scores/me/stats`, {
+        const statsRes = await apiFetch("scores/me/stats", {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (statsRes.ok) {
@@ -23,7 +24,7 @@ export default function Feedback() {
         }
 
         // Fetch progress data
-        const progressRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/my-progress`, {
+        const progressRes = await apiFetch("reports/my-progress", {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (progressRes.ok) {
