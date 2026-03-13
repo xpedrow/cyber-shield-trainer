@@ -23,18 +23,36 @@ import { SimulationsModule } from './simulations/simulations.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (cfg: ConfigService) => ({
-        type: cfg.get<'sqlite' | 'postgres'>('DB_TYPE', 'sqlite'),
-        host: cfg.get<string>('DB_HOST'),
-        port: cfg.get<number>('DB_PORT'),
-        username: cfg.get<string>('DB_USER'),
-        password: cfg.get<string>('DB_PASSWORD'),
-        database: cfg.get<string>('DB_NAME') || cfg.get<string>('DATABASE_PATH') || 'database.sqlite',
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
-        synchronize: true, // Auto-create tables for easier training setup
-        logging: cfg.get('NODE_ENV') === 'development',
-      }),
+      useFactory: (cfg: ConfigService) => {
+        const databaseUrl = cfg.get<string>('DATABASE_URL');
+        
+        if (databaseUrl) {
+          return {
+            type: 'postgres',
+            url: databaseUrl,
+            entities: [__dirname + '/**/*.entity{.ts,.js}'],
+            migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
+            synchronize: true,
+            ssl: {
+              rejectUnauthorized: false,
+            },
+          };
+        }
+
+        return {
+          type: cfg.get<'sqlite' | 'postgres'>('DB_TYPE', 'sqlite'),
+          host: cfg.get<string>('DB_HOST'),
+          port: cfg.get<number>('DB_PORT'),
+          username: cfg.get<string>('DB_USER'),
+          password: cfg.get<string>('DB_PASSWORD'),
+          database: cfg.get<string>('DB_NAME') || cfg.get<string>('DATABASE_PATH') || 'database.sqlite',
+          entities: [__dirname + '/**/*.entity{.ts,.js}'],
+          migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
+          synchronize: true,
+          logging: cfg.get('NODE_ENV') === 'development',
+          ...(cfg.get('DB_TYPE') === 'postgres' ? { ssl: { rejectUnauthorized: false } } : {}),
+        };
+      },
     }),
 
     // Rate limiting
