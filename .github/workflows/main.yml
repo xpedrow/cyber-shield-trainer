@@ -38,6 +38,7 @@ jobs:
     - name: Build Backend
       run: |
         cd backend
+        chmod +x node_modules/.bin/nest
         npm run build
 
   docker-build:
