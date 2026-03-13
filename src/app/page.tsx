@@ -327,7 +327,9 @@ export default function Dashboard() {
               </p>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "16px" }}>
                 <span style={{ fontSize: "12px", color: "var(--accent-orange)", fontWeight: 700 }}>+500 XP</span>
-                <button className="btn-primary" style={{ padding: "6px 14px", fontSize: "12px", width: "auto" }}>INICIAR</button>
+                <Link href="/network-attack">
+                  <button className="btn-cyber btn-primary" style={{ padding: "6px 20px", fontSize: "12px", width: "auto" }}>INICIAR</button>
+                </Link>
               </div>
             </div>
           </div>

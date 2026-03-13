@@ -22,10 +22,10 @@ const threatIcons = {
 };
 
 const severityColors = {
-  'LOW': 'text-green-400 bg-green-500/20 border-green-500/30',
-  'MEDIUM': 'text-yellow-400 bg-yellow-500/20 border-yellow-500/30',
-  'HIGH': 'text-orange-400 bg-orange-500/20 border-orange-500/30',
-  'CRITICAL': 'text-red-400 bg-red-500/20 border-red-500/30'
+  'LOW': 'var(--accent-green)',
+  'MEDIUM': 'var(--accent-orange)',
+  'HIGH': 'var(--accent-red)',
+  'CRITICAL': 'var(--accent-red)'
 };
 
 export default function InsiderThreatPage() {
@@ -320,115 +320,107 @@ export default function InsiderThreatPage() {
               {/* Feedback & Analysis */}
               <AnimatePresence>
                 {feedback && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    className={`p-4 rounded-lg border-2 mb-4 ${
-                      feedback.includes('correta') || feedback.includes('bem-sucedida')
-                        ? 'bg-green-500/10 border-green-500/30 text-green-300'
-                        : 'bg-red-500/10 border-red-500/30 text-red-300'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-2 mb-2">
-                      <span className={feedback.includes('correta') ? 'text-green-400' : 'text-red-400'}>
-                        {feedback.includes('correta') ? '✅' : '❌'}
-                      </span>
-                      <span className="font-semibold">
+                  <div style={{
+                    padding: "16px",
+                    borderRadius: "12px",
+                    background: feedback.includes('correta') ? "rgba(0, 255, 136, 0.05)" : "rgba(255, 68, 68, 0.05)",
+                    border: `1px solid ${feedback.includes('correta') ? "var(--accent-green)" : "var(--accent-red)"}`,
+                    marginBottom: "16px"
+                  }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
+                      <span>{feedback.includes('correta') ? '✅' : '❌'}</span>
+                      <span style={{ fontWeight: 800, color: feedback.includes('correta') ? "var(--accent-green)" : "var(--accent-red)" }}>
                         {feedback.includes('correta') ? 'Ação Correta!' : 'Ação Incorreta'}
                       </span>
                     </div>
-                    <p className="text-sm leading-relaxed">{feedback}</p>
-                  </motion.div>
+                    <p style={{ fontSize: "14px", lineHeight: "1.6", color: "var(--text-secondary)" }}>{feedback}</p>
+                  </div>
                 )}
               </AnimatePresence>
 
               {/* Analysis Section */}
               {showAnalysis && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-gray-900/50 rounded-lg p-4 border border-gray-600"
-                >
-                  <h4 className="text-lg font-semibold text-gray-200 mb-3 flex items-center">
-                    <span className="mr-2">📊</span>
+                <div style={{
+                  padding: "24px",
+                  borderRadius: "12px",
+                  background: "var(--bg-card)",
+                  border: "1px solid var(--border-accent)",
+                  marginTop: "16px"
+                }}>
+                  <h4 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "12px", display: "flex", alignItems: "center", gap: "8px" }}>
+                    <span>📊</span>
                     Análise da Situação
                   </h4>
-                  <p className="text-gray-300 text-sm leading-relaxed mb-4">
+                  <p style={{ color: "var(--text-secondary)", fontSize: "14px", lineHeight: "1.6", marginBottom: "20px" }}>
                     {selectedThreat.explanation}
                   </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div className="bg-gray-800/50 p-3 rounded-lg">
-                      <div className="text-cyan-400 font-medium mb-1">Ação Recomendada</div>
-                      <div className="text-gray-300">{getActionLabel(selectedThreat.correctAction)}</div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                    <div style={{ padding: "12px", borderRadius: "8px", background: "rgba(0,0,0,0.2)", border: "1px solid var(--border-subtle)" }}>
+                      <div style={{ fontSize: "12px", color: "var(--accent-cyan)", fontWeight: 700, marginBottom: "4px" }}>Ação Recomendada</div>
+                      <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>{getActionLabel(selectedThreat.correctAction)}</div>
                     </div>
-                    <div className="bg-gray-800/50 p-3 rounded-lg">
-                      <div className="text-green-400 font-medium mb-1">Pontos Ganhos</div>
-                        <div className="text-gray-300">
-                          {feedback.includes('correta') ? '+50 XP' : '+10 XP'}
-                        </div>
+                    <div style={{ padding: "12px", borderRadius: "8px", background: "rgba(0,0,0,0.2)", border: "1px solid var(--border-subtle)" }}>
+                      <div style={{ fontSize: "12px", color: "var(--accent-green)", fontWeight: 700, marginBottom: "4px" }}>Pontos Ganhos</div>
+                      <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>
+                        {feedback.includes('correta') ? '+50 XP' : '+10 XP'}
                       </div>
                     </div>
-                  </motion.div>
-                )}
-              </motion.div>
-            ) : (
-              <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-12 text-center">
-                <div className="w-24 h-24 bg-gradient-to-br from-gray-600 to-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <span className="text-4xl">🎯</span>
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-200 mb-2">
-                  Selecione um Cenário
-                </h3>
-                <p className="text-gray-400">
-                  Escolha uma ameaça interna da lista para começar a simulação e praticar suas habilidades de resposta a incidentes.
-                </p>
+              )}
+            </motion.div>
+          ) : (
+            <div className="cyber-card" style={{ padding: "60px", textAlign: "center", display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: "80px", height: "80px", borderRadius: "50%", background: "rgba(255, 255, 255, 0.03)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "24px" }}>
+                <span style={{ fontSize: "40px" }}>🎯</span>
               </div>
-            )}
+              <h3 style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-primary)", marginBottom: "12px" }}>
+                Selecione um Cenário
+              </h3>
+              <p style={{ color: "var(--text-secondary)", fontSize: "15px", maxWidth: "400px", lineHeight: 1.6 }}>
+                Escolha uma ameaça interna da lista para começar a simulação e praticar suas habilidades de resposta a incidentes.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Educational Footer */}
+      <div style={{ marginTop: "60px", padding: "32px", borderRadius: "16px", background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)" }}>
+        <h3 style={{ fontSize: "18px", fontWeight: 800, color: "var(--text-primary)", marginBottom: "24px", display: "flex", alignItems: "center", gap: "10px" }}>
+          <span>📚</span>
+          Sobre Ameaças Internas
+        </h3>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "32px" }}>
+          <div>
+            <h4 style={{ fontSize: "14px", fontWeight: 700, color: "var(--accent-cyan)", marginBottom: "12px", textTransform: "uppercase" }}>Principais Riscos</h4>
+            <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
+              <li style={{ fontSize: "13px", color: "var(--text-secondary)" }}>• Vazamento de dados confidenciais</li>
+              <li style={{ fontSize: "13px", color: "var(--text-secondary)" }}>• Acesso não autorizado a sistemas</li>
+              <li style={{ fontSize: "13px", color: "var(--text-secondary)" }}>• Violações de políticas de segurança</li>
+              <li style={{ fontSize: "13px", color: "var(--text-secondary)" }}>• Uso indevido de recursos corporativos</li>
+            </ul>
+          </div>
+          <div>
+            <h4 style={{ fontSize: "14px", fontWeight: 700, color: "var(--accent-cyan)", marginBottom: "12px", textTransform: "uppercase" }}>Prevenção</h4>
+            <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
+              <li style={{ fontSize: "13px", color: "var(--text-secondary)" }}>• Controle rigoroso de acesso (RBAC)</li>
+              <li style={{ fontSize: "13px", color: "var(--text-secondary)" }}>• Monitoramento contínuo de logs</li>
+              <li style={{ fontSize: "13px", color: "var(--text-secondary)" }}>• Treinamento regular de segurança</li>
+              <li style={{ fontSize: "13px", color: "var(--text-secondary)" }}>• Políticas claras de uso aceitável</li>
+            </ul>
+          </div>
+          <div>
+            <h4 style={{ fontSize: "14px", fontWeight: 700, color: "var(--accent-cyan)", marginBottom: "12px", textTransform: "uppercase" }}>Resposta</h4>
+            <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
+              <li style={{ fontSize: "13px", color: "var(--text-secondary)" }}>• Investigação imediata de incidentes</li>
+              <li style={{ fontSize: "13px", color: "var(--text-secondary)" }}>• Isolamento de sistemas comprometidos</li>
+              <li style={{ fontSize: "13px", color: "var(--text-secondary)" }}>• Notificação às partes interessadas</li>
+              <li style={{ fontSize: "13px", color: "var(--text-secondary)" }}>• Aprendizado e melhoria contínua</li>
+            </ul>
           </div>
         </div>
-
-        {/* Educational Footer */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="mt-12 bg-gradient-to-r from-gray-800/50 to-gray-900/50 rounded-lg p-6 border border-gray-700"
-        >
-          <h3 className="text-lg font-semibold text-gray-200 mb-4 flex items-center">
-            <span className="mr-2">📚</span>
-            Sobre Ameaças Internas
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
-            <div>
-              <h4 className="font-medium text-cyan-400 mb-2">Principais Riscos</h4>
-              <ul className="text-gray-300 space-y-1">
-                <li>• Vazamento de dados confidenciais</li>
-                <li>• Acesso não autorizado a sistemas</li>
-                <li>• Violações de políticas de segurança</li>
-                <li>• Uso indevido de recursos corporativos</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-medium text-cyan-400 mb-2">Prevenção</h4>
-              <ul className="text-gray-300 space-y-1">
-                <li>• Controle rigoroso de acesso (RBAC)</li>
-                <li>• Monitoramento contínuo de logs</li>
-                <li>• Treinamento regular de segurança</li>
-                <li>• Políticas claras de uso aceitável</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-medium text-cyan-400 mb-2">Resposta</h4>
-              <ul className="text-gray-300 space-y-1">
-                <li>• Investigação imediata de incidentes</li>
-                <li>• Isolamento de sistemas comprometidos</li>
-                <li>• Notificação às partes interessadas</li>
-                <li>• Aprendizado e melhoria contínua</li>
-              </ul>
-            </div>
-          </div>
-        </motion.div>
+      </div>
       </div>
     </AppLayout>
   );

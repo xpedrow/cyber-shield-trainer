@@ -1,6 +1,7 @@
 const getBaseUrl = () => {
-  if (process.env.NEXT_PUBLIC_API_URL) {
-    return process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, "");
+  const url = process.env.NEXT_PUBLIC_API_URL;
+  if (url && url !== "undefined") {
+    return url.replace(/\/$/, "");
   }
   return "";
 };

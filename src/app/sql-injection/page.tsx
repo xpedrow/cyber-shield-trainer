@@ -163,12 +163,14 @@ export default function SqlInjectionPage() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className={`card ${selectedScenario?.id === scenario.id ? 'ring-2 ring-cyan-400' : ''} ${completed.includes(scenario.id) ? 'border-green-400' : ''}`}
+                  className={`card ${selectedScenario?.id === scenario.id ? 'ring-2 ring-cyan-400' : ''} ${completed.includes(scenario.id) ? 'border-accent' : ''}`}
                   style={{
                     padding: "16px",
                     cursor: "pointer",
                     borderLeft: `4px solid ${getSeverityColor(scenario.severity)}`,
-                    opacity: completed.includes(scenario.id) ? 0.8 : 1
+                    opacity: completed.includes(scenario.id) ? 0.8 : 1,
+                    borderColor: completed.includes(scenario.id) ? 'var(--accent-green)' : 'var(--border-subtle)',
+                    boxShadow: selectedScenario?.id === scenario.id ? 'var(--glow-cyan)' : 'none'
                   }}
                   onClick={() => {
                     setSelectedScenario(scenario);
@@ -350,50 +352,42 @@ export default function SqlInjectionPage() {
                   </button>
                 </div>
 
-                {/* Results */}
+                {/* Results Section */}
                 <AnimatePresence>
                   {showResult && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      className="card"
-                      style={{ padding: "24px" }}
-                    >
+                    <div className="cyber-card" style={{ padding: "24px", marginTop: "24px" }}>
                       {/* Feedback */}
                       {feedback && (
                         <div style={{
                           padding: "16px",
-                          borderRadius: "8px",
-                          background: feedback.includes('bem-sucedida') ? "rgba(0,255,136,0.06)" : "rgba(255,140,0,0.06)",
-                          border: `1px solid ${feedback.includes('bem-sucedida') ? "rgba(0,255,136,0.2)" : "rgba(255,140,0,0.2)"}`,
+                          borderRadius: "12px",
+                          background: feedback.includes('bem-sucedida') ? "rgba(0, 255, 136, 0.05)" : "rgba(255, 140, 0, 0.05)",
+                          border: `1px solid ${feedback.includes('bem-sucedida') ? "var(--accent-green)" : "var(--accent-orange)"}`,
                           marginBottom: "20px"
                         }}>
                           <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
-                            <span style={{ fontSize: "16px" }}>
-                              {feedback.includes('bem-sucedida') ? '✅' : '⚠️'}
-                            </span>
-                            <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>
+                            <span>{feedback.includes('bem-sucedida') ? '✅' : '⚠️'}</span>
+                            <span style={{ fontWeight: 800, color: "var(--text-primary)" }}>
                               {feedback.includes('bem-sucedida') ? 'Injeção Bem-Sucedida!' : 'Resultado do Teste'}
                             </span>
                           </div>
-                          <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.5 }}>{feedback}</p>
+                          <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.6 }}>{feedback}</p>
                         </div>
                       )}
 
                       {/* Simulated Results */}
                       {result && (
-                        <div style={{ marginBottom: "20px" }}>
-                          <h4 style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-muted)", marginBottom: "12px", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                            📊 Resultado Simulado
+                        <div style={{ marginBottom: "24px" }}>
+                          <h4 style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-muted)", marginBottom: "12px", textTransform: "uppercase", letterSpacing: "1px" }}>
+                            📊 Resultado do Banco de Dados
                           </h4>
                           <div style={{
                             background: "rgba(0,0,0,0.3)",
                             border: "1px solid var(--border-subtle)",
-                            borderRadius: "8px",
+                            borderRadius: "10px",
                             padding: "16px",
-                            fontSize: "12px",
-                            color: "var(--text-secondary)",
+                            fontSize: "13px",
+                            color: "var(--accent-cyan)",
                             fontFamily: "var(--font-mono)",
                             overflowX: "auto"
                           }}>
@@ -406,45 +400,28 @@ export default function SqlInjectionPage() {
 
                       {/* Analysis */}
                       <div>
-                        <h4 style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-muted)", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                        <h4 style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-muted)", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "1px" }}>
                           📚 Análise Técnica
                         </h4>
-                        <p style={{ color: "var(--text-secondary)", fontSize: "13px", lineHeight: 1.5, marginBottom: "16px" }}>
+                        <p style={{ color: "var(--text-secondary)", fontSize: "14px", lineHeight: 1.6, marginBottom: "20px" }}>
                           {selectedScenario.explanation}
                         </p>
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-                          <div style={{
-                            padding: "12px",
-                            background: "rgba(0,0,0,0.2)",
-                            border: "1px solid var(--border-subtle)",
-                            borderRadius: "8px"
-                          }}>
-                            <div style={{ fontSize: "12px", color: "var(--accent-cyan)", fontWeight: 600, marginBottom: "4px" }}>Injeção Correta</div>
-                            <div style={{
-                              fontSize: "11px",
-                              color: "var(--text-secondary)",
-                              fontFamily: "var(--font-mono)",
-                              background: "rgba(0,0,0,0.3)",
-                              padding: "8px",
-                              borderRadius: "4px"
-                            }}>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                          <div style={{ padding: "16px", borderRadius: "10px", background: "rgba(0,0,0,0.2)", border: "1px solid var(--border-subtle)" }}>
+                            <div style={{ fontSize: "11px", color: "var(--accent-cyan)", fontWeight: 700, marginBottom: "8px", textTransform: "uppercase" }}>Injeção Correta</div>
+                            <div style={{ fontSize: "13px", color: "var(--text-primary)", fontFamily: "var(--font-mono)", background: "rgba(0,0,0,0.3)", padding: "10px", borderRadius: "6px" }}>
                               {selectedScenario.correctInjection}
                             </div>
                           </div>
-                          <div style={{
-                            padding: "12px",
-                            background: "rgba(0,0,0,0.2)",
-                            border: "1px solid var(--border-subtle)",
-                            borderRadius: "8px"
-                          }}>
-                            <div style={{ fontSize: "12px", color: "var(--accent-green)", fontWeight: 600, marginBottom: "4px" }}>Pontos Ganhos</div>
-                            <div style={{ fontSize: "14px", color: "var(--text-primary)", fontWeight: 700 }}>
+                          <div style={{ padding: "16px", borderRadius: "10px", background: "rgba(0,0,0,0.2)", border: "1px solid var(--border-subtle)" }}>
+                            <div style={{ fontSize: "11px", color: "var(--accent-green)", fontWeight: 700, marginBottom: "8px", textTransform: "uppercase" }}>Experiência</div>
+                            <div style={{ fontSize: "20px", color: "var(--text-primary)", fontWeight: 800 }}>
                               {feedback.includes('bem-sucedida') ? '+75 XP' : '+5 XP'}
                             </div>
                           </div>
                         </div>
                       </div>
-                    </motion.div>
+                    </div>
                   )}
                 </AnimatePresence>
               </motion.div>

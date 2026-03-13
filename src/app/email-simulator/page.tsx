@@ -3,6 +3,7 @@
 import AppLayout from "@/components/AppLayout";
 import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
+import { ShieldAlert, ShieldCheck } from "lucide-react";
 
 const emails = [
   {
@@ -424,15 +425,19 @@ export default function EmailSimulator() {
                 <span style={{ fontSize: "14px", color: "var(--text-muted)", marginRight: "4px" }}>Este e-mail é:</span>
                 <button
                   className="btn-cyber btn-danger"
+                  style={{ padding: "12px 24px", fontSize: "14px" }}
                   onClick={() => handleAnswer(selectedEmail.id, "phishing")}
                 >
-                  🚨 Phishing!
+                  <ShieldAlert size={18} />
+                  Phishing!
                 </button>
                 <button
                   className="btn-cyber btn-success"
+                  style={{ padding: "12px 24px", fontSize: "14px" }}
                   onClick={() => handleAnswer(selectedEmail.id, "safe")}
                 >
-                  ✅ Legítimo
+                  <ShieldCheck size={18} />
+                  Legítimo
                 </button>
               </div>
             ) : (
@@ -442,15 +447,14 @@ export default function EmailSimulator() {
                   <div
                     className="animate-fade-in-up"
                     style={{
-                      borderRadius: "10px",
-                      padding: "20px",
-                      background: selectedEmail.isPhishing
-                        ? (answers[selectedEmail.id] === "phishing" ? "rgba(0,255,136,0.06)" : "rgba(255,68,68,0.06)")
-                        : (answers[selectedEmail.id] === "safe" ? "rgba(0,255,136,0.06)" : "rgba(255,68,68,0.06)"),
+                      borderRadius: "16px",
+                      padding: "24px",
+                      background: "var(--bg-card)",
                       border: `1px solid ${getResultForEmail(selectedEmail)
-                          ? "rgba(0,255,136,0.2)"
-                          : "rgba(255,68,68,0.2)"
+                          ? "var(--accent-green)"
+                          : "var(--accent-red)"
                         }`,
+                      boxShadow: getResultForEmail(selectedEmail) ? "var(--glow-green)" : "var(--glow-red)",
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "14px" }}>

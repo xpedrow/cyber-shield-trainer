@@ -2,6 +2,7 @@
 
 import AppLayout from "@/components/AppLayout";
 import { useState } from "react";
+import { ShieldAlert, ShieldCheck } from "lucide-react";
 
 type LoginSite = {
   id: string;
@@ -299,7 +300,7 @@ export default function LoginSimulator() {
 
             {/* Simulated browser */}
             <div
-              className="card"
+              className="cyber-card"
               style={{ overflow: "hidden", border: "1px solid var(--border-subtle)" }}
             >
               {/* Browser chrome */}
@@ -429,19 +430,21 @@ export default function LoginSimulator() {
               <div style={{ display: "flex", gap: "12px", marginTop: "16px" }}>
                 <button
                   className="btn-cyber btn-danger"
-                  style={{ flex: 1, justifyContent: "center", padding: "14px" }}
+                  style={{ flex: 1, justifyContent: "center", padding: "18px", fontSize: "16px" }}
                   onClick={() => handleAnswer("fake")}
                   id="btn-fake"
                 >
-                  🚨 Site Falso (Phishing)
+                  <ShieldAlert size={18} />
+                  Site Falso (Phishing)
                 </button>
                 <button
                   className="btn-cyber btn-success"
-                  style={{ flex: 1, justifyContent: "center", padding: "14px" }}
+                  style={{ flex: 1, justifyContent: "center", padding: "18px", fontSize: "16px" }}
                   onClick={() => handleAnswer("real")}
                   id="btn-real"
                 >
-                  ✅ Site Legítimo
+                  <ShieldCheck size={18} />
+                  Site Legítimo
                 </button>
               </div>
             ) : (

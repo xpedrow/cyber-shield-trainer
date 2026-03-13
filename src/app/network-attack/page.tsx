@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import AppLayout from "@/components/AppLayout";
 import { motion, AnimatePresence } from "framer-motion";
 import { apiFetch } from "@/lib/api";
+import { ShieldAlert, ShieldCheck, Info } from "lucide-react";
 
 interface NetworkAttack {
   id: string;
@@ -219,37 +220,48 @@ export default function NetworkAttackPage() {
               </AnimatePresence>
             </div>
 
-            <div style={{ display: "flex", gap: "12px" }}>
-              <button
-                disabled={!!result}
-                onClick={() => handleAction('block')}
-                className="btn-cyber btn-danger"
-                style={{ flex: 1, padding: '16px', fontSize: '15px' }}
-              >
-                BLOQUEAR IP
-              </button>
-              <button
-                disabled={!!result}
-                onClick={() => handleAction('monitor')}
-                className="btn-cyber"
-                style={{ flex: 1, padding: '16px', fontSize: '15px', background: '#fbbf24', color: 'black', border: 'none' }}
-              >
-                MONITORAR
-              </button>
-              <button
-                disabled={!!result}
-                onClick={() => handleAction('ignore')}
-                className="btn-cyber btn-ghost"
-                style={{ flex: 1, padding: '16px', fontSize: '15px' }}
-              >
-                IGNORAR
-              </button>
-            </div>
+              <div style={{ display: "flex", gap: "12px" }}>
+                <button
+                  disabled={!!result}
+                  onClick={() => handleAction('block')}
+                  className="btn-cyber btn-danger"
+                  style={{ flex: 1, padding: '16px', fontSize: '15px' }}
+                >
+                  <ShieldAlert size={18} />
+                  BLOQUEAR IP
+                </button>
+                <button
+                  disabled={!!result}
+                  onClick={() => handleAction('monitor')}
+                  className="btn-cyber"
+                  style={{
+                    flex: 1,
+                    padding: '16px',
+                    fontSize: '15px',
+                    background: 'linear-gradient(135deg, #d97706, #fbbf24)',
+                    color: 'black',
+                    border: 'none',
+                    boxShadow: '0 0 15px rgba(251, 191, 36, 0.2)'
+                  }}
+                >
+                  <Info size={18} />
+                  MONITORAR
+                </button>
+                <button
+                  disabled={!!result}
+                  onClick={() => handleAction('ignore')}
+                  className="btn-cyber btn-ghost"
+                  style={{ flex: 1, padding: '16px', fontSize: '15px' }}
+                >
+                  <ShieldCheck size={18} />
+                  IGNORAR
+                </button>
+              </div>
           </div>
 
           {/* Incident Data */}
           <div>
-            <div className="card" style={{ padding: "24px", marginBottom: '20px' }}>
+            <div className="cyber-card" style={{ padding: "24px", marginBottom: '20px' }}>
               <h3 style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-muted)", marginBottom: "20px", textTransform: "uppercase", letterSpacing: "0.1em" }}>Dados do Alerta</h3>
 
               <div style={{ display: "grid", gap: "20px" }}>
@@ -282,14 +294,15 @@ export default function NetworkAttackPage() {
                   animate={{ opacity: 1, scale: 1 }}
                   style={{
                     padding: "24px",
-                    borderRadius: "12px",
-                    background: result.success ? "rgba(0, 255, 136, 0.05)" : "rgba(255, 68, 68, 0.05)",
-                    border: `1px solid ${result.success ? "rgba(0, 255, 136, 0.2)" : "rgba(255, 68, 68, 0.2)"}`,
+                    borderRadius: "16px",
+                    background: "var(--bg-card)",
+                    border: `1px solid ${result.success ? "var(--accent-green)" : "var(--accent-red)"}`,
+                    boxShadow: result.success ? "var(--glow-green)" : "var(--glow-red)",
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                    <span style={{ fontSize: '20px' }}>{result.success ? "✅" : "❌"}</span>
-                    <h4 style={{ fontWeight: 800, color: result.success ? "var(--accent-green)" : "var(--accent-red)" }}>
+                    <span>{result.success ? "✅" : "❌"}</span>
+                    <h4 style={{ fontWeight: 800, color: result.success ? "var(--accent-green)" : "var(--accent-red)", fontSize: '16px' }}>
                       {result.success ? "SISTEMA PROTEGIDO" : "RISCO DETECTADO"}
                     </h4>
                   </div>
