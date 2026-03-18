@@ -6,18 +6,14 @@ import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
 
 import { 
-  ShieldCheck, 
   Mail, 
   Lock, 
-  Users, 
-  Network, 
-  ArrowRight,
-  Target
+  Network
 } from "lucide-react";
 
 export default function Dashboard() {
   const [userData, setUserData] = useState<any>(null);
-  const [activities, setActivities] = useState<any[]>([]);
+  const [_activities, setActivities] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -203,7 +199,7 @@ export default function Dashboard() {
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
           {/* Mission */}
           <div className="panel" style={{ background: "var(--black2)", border: "1px solid rgba(0,207,207,0.3)", padding: "18px", position: "relative" }}>
-             <div style={{ position: "absolute", top: "-1px", left: "16px", fontSize: "0.55rem", letterSpacing: "0.18em", color: "var(--cyan)", background: "var(--black2)", padding: "0 6px" }}>// MISSÃO DIÁRIA</div>
+             <div style={{ position: "absolute", top: "-1px", left: "16px", fontSize: "0.55rem", letterSpacing: "0.18em", color: "var(--cyan)", background: "var(--black2)", padding: "0 6px" }}>{"// MISSÃO DIÁRIA"}</div>
              <p style={{ fontSize: "0.8rem", color: "var(--white)", lineHeight: "1.6", marginBottom: "14px", fontStyle: "italic" }}>
                "Analise logs do firewall e localize a origem do ataque DDoS iniciado às 02:40 AM."
              </p>

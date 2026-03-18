@@ -14,8 +14,7 @@ import {
   Users, 
   Network, 
   KeyRound, 
-  BarChart3,
-  ShieldCheck
+  BarChart3
 } from "lucide-react";
 
 const navItems = [
@@ -33,7 +32,7 @@ export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [userData, setUserData] = useState<any>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [_isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {

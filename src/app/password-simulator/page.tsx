@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import AppLayout from "@/components/AppLayout";
 import { apiFetch } from "@/lib/api";
 import { motion, AnimatePresence } from "framer-motion";
@@ -41,7 +41,7 @@ export default function PasswordSimulator() {
       });
       const data = await response.json();
       setAnalysis(data);
-    } catch (error) {
+    } catch (_error) {
       // Fallback logic for offline/demo
       const mockResult = calculateMockAnalysis(password);
       setAnalysis(mockResult);

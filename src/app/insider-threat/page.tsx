@@ -15,18 +15,6 @@ interface InsiderThreat {
   explanation: string;
 }
 
-const threatIcons = {
-  'data-leak': '🔓',
-  'unauthorized-access': '🚫',
-  'policy-violation': '⚠️'
-};
-
-const severityColors = {
-  'LOW': 'var(--accent-green)',
-  'MEDIUM': 'var(--accent-orange)',
-  'HIGH': 'var(--accent-red)',
-  'CRITICAL': 'var(--accent-red)'
-};
 
 export default function InsiderThreatPage() {
   const [threats, setThreats] = useState<InsiderThreat[]>([]);

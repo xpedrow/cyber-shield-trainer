@@ -6,8 +6,8 @@ import { apiFetch } from "@/lib/api";
 
 export default function Feedback() {
   const [userData, setUserData] = useState<any>(null);
-  const [progressData, setProgressData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [_progressData, setProgressData] = useState<any>(null);
+  const [_loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {

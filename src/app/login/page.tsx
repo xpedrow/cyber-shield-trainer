@@ -47,7 +47,7 @@ export default function LoginPage() {
         const errorData = await response.json();
         setError(errorData.message || "Credenciais inválidas");
       }
-    } catch (err) {
+    } catch (_err) {
       setError("Erro de conexão. Verifique se o servidor está ativo.");
     } finally {
       setLoading(false);
@@ -99,7 +99,7 @@ export default function LoginPage() {
         const errorData = await response.json();
         setError(errorData.message || "Erro ao criar conta");
       }
-    } catch (err) {
+    } catch (_err) {
       setError("Erro de conexão. Tente novamente.");
     } finally {
       setLoading(false);

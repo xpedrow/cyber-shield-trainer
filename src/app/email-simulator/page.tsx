@@ -1,7 +1,7 @@
 "use client";
 
 import AppLayout from "@/components/AppLayout";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { apiFetch } from "@/lib/api";
 import { ShieldAlert, ShieldCheck } from "lucide-react";
 
@@ -277,7 +277,7 @@ export default function EmailSimulator() {
           action,
         }),
       });
-      const data = await response.json();
+      const _data = await response.json();
 
       const correct = (answer === "phishing") === email.isPhishing;
       setAnswers((prev) => ({ ...prev, [emailId]: answer }));

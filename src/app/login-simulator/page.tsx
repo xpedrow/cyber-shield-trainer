@@ -186,7 +186,7 @@ export default function LoginSimulator() {
   const [answers, setAnswers] = useState<Record<string, "fake" | "real" | null>>({});
   const [showResult, setShowResult] = useState(false);
   const [score, setScore] = useState(0);
-  const [phase, setPhase] = useState<"inspect" | "answer">("inspect");
+  const [_phase, setPhase] = useState<"inspect" | "answer">("inspect");
   const [attemptedLogin, setAttemptedLogin] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

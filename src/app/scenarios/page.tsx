@@ -127,7 +127,7 @@ export default function Scenarios() {
       {/* Scenarios grid */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "24px" }}>
         <AnimatePresence mode="popLayout">
-          {filteredScenarios.map((sc, i) => (
+          {filteredScenarios.map((sc) => (
             <motion.div
               layout
               initial={{ opacity: 0, scale: 0.9 }}
