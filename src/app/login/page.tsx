@@ -119,55 +119,56 @@ export default function LoginPage() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "var(--bg-primary)",
-        backgroundImage: "radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.05), transparent 80%)",
-        padding: "20px",
+        background: "var(--black)",
+        position: "relative",
+        fontFamily: "var(--mono)"
       }}
     >
       <div
-        className="cyber-card"
+        className="panel"
         style={{
           width: "100%",
           maxWidth: "420px",
           padding: "48px 40px",
           textAlign: "center",
-          background: "rgba(16, 25, 40, 0.8)",
-          backdropFilter: "blur(20px)",
+          background: "var(--black2)",
         }}
       >
         <div 
           style={{ 
             width: '64px', 
             height: '64px', 
-            background: 'linear-gradient(135deg, var(--accent-blue), var(--accent-cyan))',
-            borderRadius: '16px',
+            border: '2px solid var(--green)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             margin: '0 auto 24px',
-            boxShadow: 'var(--glow-cyan)'
+            background: 'var(--gdim)',
+            boxShadow: 'var(--glow-green)'
           }}
         >
-          <ShieldCheck size={32} color="white" />
+          <ShieldCheck size={32} color="var(--green)" />
         </div>
         
         <h1
           style={{
-            fontSize: "28px",
+            fontSize: "1.8rem",
             fontWeight: 900,
-            color: "var(--text-primary)",
+            color: "var(--green)",
             marginBottom: "8px",
-            letterSpacing: "-0.04em"
+            letterSpacing: "0.1em",
+            fontFamily: "var(--display)",
+            textShadow: "0 0 20px rgba(0,255,65,0.4)"
           }}
         >
-          Nexus Shield
+          Cyber Shield
         </h1>
         <p
           style={{
-            color: "var(--text-secondary)",
-            fontSize: "15px",
+            color: "var(--muted)",
+            fontSize: "0.75rem",
             marginBottom: "40px",
-            fontWeight: 500
+            letterSpacing: "0.05em"
           }}
         >
           {isLogin ? "Identifique-se para acessar o sistema" : "Inicie sua jornada na cibersegurança"}
@@ -176,7 +177,7 @@ export default function LoginPage() {
         <form onSubmit={isLogin ? handleLogin : handleRegister}>
           {!isLogin && (
             <div style={{ marginBottom: "16px", position: "relative" }}>
-              <User size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--text-muted)" }} />
+              <User size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--green)", zIndex: 10 }} />
               <input
                 type="text"
                 name="name"
@@ -185,13 +186,12 @@ export default function LoginPage() {
                 onChange={handleInputChange}
                 required
                 className="cyber-input"
-                style={{ paddingLeft: "36px" }}
               />
             </div>
           )}
 
           <div style={{ marginBottom: "16px", position: "relative" }}>
-            <Mail size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--text-muted)" }} />
+            <Mail size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--green)", zIndex: 10 }} />
             <input
               type="email"
               name="email"
@@ -200,12 +200,11 @@ export default function LoginPage() {
               onChange={handleInputChange}
               required
               className="cyber-input"
-              style={{ paddingLeft: "36px" }}
             />
           </div>
 
           <div style={{ marginBottom: "20px", position: "relative" }}>
-            <Lock size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--text-muted)" }} />
+            <Lock size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--green)", zIndex: 10 }} />
             <input
               type="password"
               name="password"
@@ -214,13 +213,12 @@ export default function LoginPage() {
               onChange={handleInputChange}
               required
               className="cyber-input"
-              style={{ paddingLeft: "36px" }}
             />
           </div>
 
           {!isLogin && (
             <div style={{ marginBottom: "24px", position: "relative" }}>
-              <Lock size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--text-muted)" }} />
+              <Lock size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--green)", zIndex: 10 }} />
               <input
                 type="password"
                 name="confirmPassword"
@@ -229,7 +227,6 @@ export default function LoginPage() {
                 onChange={handleInputChange}
                 required
                 className="cyber-input"
-                style={{ paddingLeft: "36px" }}
               />
             </div>
           )}
@@ -238,13 +235,12 @@ export default function LoginPage() {
             <div
               style={{
                 padding: "12px",
-                background: "rgba(255, 51, 102, 0.1)",
-                border: "1px solid rgba(255, 51, 102, 0.2)",
-                borderRadius: "8px",
-                color: "var(--accent-red)",
-                fontSize: "14px",
+                background: "var(--reddim)",
+                border: "1px solid var(--red)",
+                color: "var(--red)",
+                fontSize: "0.75rem",
                 marginBottom: "20px",
-                fontWeight: 600
+                fontFamily: "var(--mono)"
               }}
             >
               {error}
@@ -254,15 +250,13 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="btn-cyber btn-primary"
+            className="btn-cyber"
             style={{
               width: "100%",
               padding: "14px",
               justifyContent: "center",
-              fontSize: "16px",
-              fontWeight: 800,
+              fontSize: "0.8rem",
               marginBottom: "24px",
-              letterSpacing: "0.5px"
             }}
           >
             {loading ? "PROCESSANDO..." : (isLogin ? "ENTRAR NO SISTEMA" : "CRIAR ACESSO")}
@@ -274,8 +268,8 @@ export default function LoginPage() {
           style={{
             background: "none",
             border: "none",
-            color: "var(--accent-cyan)",
-            fontSize: "14px",
+            color: "var(--cyan)",
+            fontSize: "0.75rem",
             fontWeight: 600,
             cursor: "pointer",
             display: "flex",
@@ -283,6 +277,7 @@ export default function LoginPage() {
             justifyContent: "center",
             gap: "6px",
             margin: "0 auto",
+            fontFamily: "var(--mono)"
           }}
         >
           {isLogin ? (
