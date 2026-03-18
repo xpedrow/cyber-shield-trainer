@@ -1,0 +1,2207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CyberShield Trainer v2.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════
+   CYBERSHIELD — TERMINAL HACKER AESTHETIC
+   Verde Matrix #00FF41 · Ciano #00CFCF · Preto #080C08
+   Vermelho Alerta #FF2D55 · Âmbar Warn #FFAA00
+   ═══════════════════════════════════════════════════ */
+:root {
+  --black:    #080C08;
+  --black2:   #0D120D;
+  --black3:   #111811;
+  --black4:   #1A241A;
+  --green:    #00FF41;
+  --green2:   #00CC33;
+  --green3:   #008020;
+  --gdim:     rgba(0,255,65,.1);
+  --gdim2:    rgba(0,255,65,.05);
+  --cyan:     #00CFCF;
+  --cyandim:  rgba(0,207,207,.15);
+  --red:      #FF2D55;
+  --reddim:   rgba(255,45,85,.15);
+  --amber:    #FFAA00;
+  --ambdim:   rgba(255,170,0,.12);
+  --white:    #C8FFC8;
+  --muted:    #4A7A4A;
+  --border:   rgba(0,255,65,.18);
+  --border2:  rgba(0,255,65,.08);
+
+  --mono:    'Share Tech Mono', monospace;
+  --display: 'Orbitron', monospace;
+  --body:    'Inter', sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px;scroll-behavior:smooth}
+body{
+  background:var(--black);
+  color:var(--green);
+  font-family:var(--mono);
+  overflow:hidden; height:100vh;
+  display:flex; flex-direction:column;
+}
+
+/* ── SCANLINES ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+  background:repeating-linear-gradient(
+    0deg,transparent,transparent 2px,
+    rgba(0,0,0,.08) 2px,rgba(0,0,0,.08) 4px
+  );
+}
+/* CRT vignette */
+body::after{
+  content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.6) 100%);
+}
+
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--black)}
+::-webkit-scrollbar-thumb{background:var(--green3)}
+::selection{background:var(--green);color:var(--black)}
+a{color:inherit;text-decoration:none}
+
+/* ═══ HEADER ═══ */
+.header{
+  flex-shrink:0; height:52px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;
+  background:var(--black2);
+  border-bottom:1px solid var(--border);
+  position:relative;z-index:100;
+}
+.header::after{
+  content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--green),transparent);
+}
+.logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--display);font-size:.85rem;font-weight:700;
+  letter-spacing:.12em;color:var(--green);
+}
+.logo-icon{
+  width:30px;height:30px;border:1.5px solid var(--green);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.logo-icon::before{
+  content:'⬡';font-size:.9rem;color:var(--green);
+  animation:pulse-icon 2s ease-in-out infinite;
+}
+.logo span{color:var(--cyan)}
+.logo-ver{font-size:.55rem;color:var(--muted);letter-spacing:.15em;margin-left:4px;align-self:flex-end;margin-bottom:2px}
+
+.header-status{
+  display:flex;align-items:center;gap:20px;
+  font-size:.68rem;letter-spacing:.1em;color:var(--muted);
+}
+.status-dot{
+  display:flex;align-items:center;gap:6px;
+}
+.sdot{width:6px;height:6px;border-radius:50%;background:var(--green);
+  animation:blink 1.4s ease-in-out infinite}
+.sdot.warn{background:var(--amber)}
+.sdot.alert{background:var(--red)}
+
+.header-score{
+  font-family:var(--display);font-size:.75rem;
+  color:var(--cyan);letter-spacing:.1em;
+}
+.header-score span{color:var(--green);font-weight:700}
+
+/* ═══ LAYOUT ═══ */
+.app-layout{
+  flex:1;display:flex;overflow:hidden;
+}
+
+/* ═══ SIDEBAR ═══ */
+.sidebar{
+  width:220px;flex-shrink:0;
+  background:var(--black2);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  overflow-y:auto;
+  position:relative;z-index:50;
+}
+.sidebar-section{padding:14px 0;border-bottom:1px solid var(--border2)}
+.sidebar-label{
+  padding:0 16px 8px;
+  font-size:.6rem;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--muted);
+}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px;cursor:pointer;
+  font-size:.73rem;letter-spacing:.06em;color:var(--muted);
+  transition:all .2s;border-left:2px solid transparent;
+  position:relative;
+}
+.nav-item:hover{color:var(--green);background:var(--gdim2)}
+.nav-item.active{
+  color:var(--green);background:var(--gdim);
+  border-left-color:var(--green);
+}
+.nav-item.active::after{
+  content:'';position:absolute;right:0;top:0;bottom:0;width:1px;
+  background:linear-gradient(180deg,transparent,var(--green),transparent);
+}
+.nav-icon{font-size:.85rem;width:20px;text-align:center;flex-shrink:0}
+.nav-xp{
+  margin-left:auto;font-size:.6rem;
+  color:var(--amber);letter-spacing:.06em;
+}
+.nav-badge{
+  margin-left:auto;padding:2px 6px;
+  background:var(--reddim);border:1px solid var(--red);
+  font-size:.55rem;color:var(--red);letter-spacing:.06em;
+}
+.nav-badge.cyan{background:var(--cyandim);border-color:var(--cyan);color:var(--cyan)}
+
+.sidebar-profile{
+  margin-top:auto;padding:14px 16px;
+  border-top:1px solid var(--border);
+}
+.profile-avatar{
+  width:36px;height:36px;
+  border:1.5px solid var(--green);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;background:var(--gdim);
+  font-family:var(--display);
+}
+.profile-info{margin-top:10px}
+.profile-name{font-size:.73rem;color:var(--white);letter-spacing:.06em}
+.profile-level{font-size:.62rem;color:var(--muted);margin-top:2px}
+.profile-bar{
+  margin-top:8px;height:3px;background:var(--black4);
+  border-radius:2px;overflow:hidden;
+}
+.profile-fill{height:100%;width:35%;background:var(--green);
+  box-shadow:0 0 8px var(--green);
+  animation:fill-glow 2s ease-in-out infinite alternate}
+
+/* ═══ MAIN CONTENT ═══ */
+.main{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  position:relative;
+}
+.view{display:none;padding:24px;min-height:100%}
+.view.active{display:block;animation:fadeIn .3s ease}
+
+/* ═══ COMMON COMPONENTS ═══ */
+.page-header{margin-bottom:28px}
+.page-title{
+  font-family:var(--display);
+  font-size:1.4rem;font-weight:900;letter-spacing:.08em;
+  color:var(--green);margin-bottom:6px;
+  text-shadow:0 0 20px rgba(0,255,65,.4);
+}
+.page-sub{font-size:.75rem;color:var(--muted);letter-spacing:.08em}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+
+.panel{
+  background:var(--black2);border:1px solid var(--border);
+  border-radius:2px;position:relative;overflow:hidden;
+}
+.panel::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--green),transparent);
+}
+.panel-header{
+  padding:12px 16px;border-bottom:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.panel-title{
+  font-family:var(--display);font-size:.7rem;font-weight:700;
+  letter-spacing:.14em;color:var(--green);
+}
+.panel-badge{
+  font-size:.6rem;letter-spacing:.1em;
+  padding:2px 8px;border:1px solid var(--border);color:var(--muted);
+}
+.panel-body{padding:16px}
+
+/* stat cards */
+.stat-card{
+  background:var(--black2);border:1px solid var(--border);
+  padding:18px 16px;position:relative;overflow:hidden;
+  cursor:default;transition:border-color .2s;
+}
+.stat-card:hover{border-color:var(--green)}
+.stat-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--green),transparent);
+}
+.stat-label{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.stat-value{
+  font-family:var(--display);font-size:2rem;font-weight:900;
+  color:var(--green);line-height:1;
+  text-shadow:0 0 16px rgba(0,255,65,.5);
+}
+.stat-value.cyan{color:var(--cyan);text-shadow:0 0 16px rgba(0,207,207,.5)}
+.stat-value.amber{color:var(--amber);text-shadow:0 0 16px rgba(255,170,0,.5)}
+.stat-value.red{color:var(--red);text-shadow:0 0 16px rgba(255,45,85,.5)}
+.stat-sub{font-size:.62rem;color:var(--muted);margin-top:6px}
+.stat-live{
+  position:absolute;top:14px;right:14px;
+  font-size:.55rem;letter-spacing:.14em;color:var(--green);
+  display:flex;align-items:center;gap:5px;
+}
+
+/* buttons */
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:9px 18px;border:1px solid var(--border);
+  background:transparent;color:var(--green);
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;
+  text-transform:uppercase;cursor:pointer;
+  transition:all .2s;position:relative;overflow:hidden;
+}
+.btn::before{
+  content:'';position:absolute;inset:0;
+  background:var(--gdim);opacity:0;transition:opacity .2s;
+}
+.btn:hover{border-color:var(--green);color:var(--black);background:var(--green);
+  box-shadow:0 0 20px rgba(0,255,65,.4)}
+.btn:hover::before{opacity:0}
+.btn.danger{border-color:var(--red);color:var(--red)}
+.btn.danger:hover{background:var(--red);color:#fff;box-shadow:0 0 20px rgba(255,45,85,.4)}
+.btn.warn{border-color:var(--amber);color:var(--amber)}
+.btn.warn:hover{background:var(--amber);color:var(--black);box-shadow:0 0 20px rgba(255,170,0,.4)}
+.btn.cyan{border-color:var(--cyan);color:var(--cyan)}
+.btn.cyan:hover{background:var(--cyan);color:var(--black)}
+.btn.sm{padding:6px 12px;font-size:.65rem}
+.btn.lg{padding:13px 28px;font-size:.78rem}
+.btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}
+
+/* tags */
+.tag{
+  display:inline-block;padding:3px 9px;
+  border:1px solid var(--border);
+  font-size:.6rem;letter-spacing:.1em;color:var(--muted);
+}
+.tag.green{border-color:rgba(0,255,65,.4);color:var(--green)}
+.tag.red{border-color:rgba(255,45,85,.4);color:var(--red)}
+.tag.amber{border-color:rgba(255,170,0,.4);color:var(--amber)}
+.tag.cyan{border-color:rgba(0,207,207,.4);color:var(--cyan)}
+
+/* terminal block */
+.terminal{
+  background:var(--black);border:1px solid var(--border);
+  font-size:.73rem;line-height:1.8;padding:14px;
+  max-height:280px;overflow-y:auto;
+}
+.t-line{display:block;color:var(--muted)}
+.t-line.green{color:var(--green)}
+.t-line.red{color:var(--red)}
+.t-line.amber{color:var(--amber)}
+.t-line.cyan{color:var(--cyan)}
+.t-prompt{color:var(--green)}
+.t-cursor{animation:blink .8s step-end infinite}
+
+/* progress bar */
+.pbar{height:4px;background:var(--black4);border-radius:0;overflow:hidden}
+.pbar-fill{
+  height:100%;background:var(--green);
+  box-shadow:0 0 8px var(--green);
+  transition:width .6s ease;
+}
+.pbar-fill.red{background:var(--red);box-shadow:0 0 8px var(--red)}
+.pbar-fill.amber{background:var(--amber);box-shadow:0 0 8px var(--amber)}
+.pbar-fill.cyan{background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+
+/* ═══════════════════════════════════════════════════
+   VIEW 1 — DASHBOARD
+   ═══════════════════════════════════════════════════ */
+.dashboard-hero{
+  background:var(--black2);border:1px solid var(--border);
+  padding:20px 24px;margin-bottom:20px;
+  position:relative;overflow:hidden;
+}
+.dashboard-hero::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--green),var(--cyan),var(--green));
+  animation:scan 3s linear infinite;
+}
+.dh-title{
+  font-family:var(--display);font-size:1.6rem;font-weight:900;
+  letter-spacing:.08em;color:var(--green);
+  text-shadow:0 0 30px rgba(0,255,65,.5);
+}
+.dh-sub{font-size:.72rem;color:var(--muted);margin-top:6px;letter-spacing:.08em}
+
+/* radar SVG */
+.radar-wrap{position:relative;width:160px;height:160px;flex-shrink:0}
+.radar-wrap svg{width:100%;height:100%}
+.radar-sweep{
+  transform-origin:80px 80px;
+  animation:radar-spin 3s linear infinite;
+}
+
+/* scenario cards */
+.scenario-card{
+  background:var(--black2);border:1px solid var(--border);
+  padding:18px;cursor:pointer;
+  transition:all .25s;position:relative;overflow:hidden;
+}
+.scenario-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:var(--green3);transform:scaleX(0);transform-origin:left;
+  transition:transform .3s;
+}
+.scenario-card:hover{border-color:var(--green);background:var(--gdim)}
+.scenario-card:hover::after{transform:scaleX(1)}
+.sc-emoji{font-size:1.4rem;margin-bottom:10px}
+.sc-title{font-size:.8rem;color:var(--white);letter-spacing:.06em;margin-bottom:6px;font-family:var(--display);font-weight:700}
+.sc-desc{font-size:.68rem;color:var(--muted);line-height:1.6;margin-bottom:12px}
+.sc-footer{display:flex;align-items:center;justify-content:space-between}
+.sc-xp{font-size:.65rem;color:var(--amber)}
+.sc-progress{flex:1;margin:0 12px;height:3px;background:var(--black4)}
+.sc-progress-fill{height:100%;background:var(--green);box-shadow:0 0 6px var(--green)}
+
+/* mission card */
+.mission-card{
+  background:var(--black2);border:1px solid rgba(0,207,207,.3);
+  padding:18px;position:relative;
+}
+.mission-card::before{
+  content:'// MISSÃO DIÁRIA';position:absolute;top:-1px;left:16px;
+  font-size:.55rem;letter-spacing:.18em;color:var(--cyan);
+  background:var(--black2);padding:0 6px;
+}
+.mission-text{font-size:.8rem;color:var(--white);line-height:1.6;margin-bottom:14px;font-style:italic}
+.mission-reward{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.mr-badge{padding:4px 12px;background:var(--ambdim);border:1px solid var(--amber);font-size:.65rem;color:var(--amber)}
+
+/* agent level */
+.agent-level{
+  background:var(--black2);border:1px solid var(--border);
+  padding:18px;
+}
+.al-title{font-size:.6rem;letter-spacing:.2em;color:var(--muted);margin-bottom:12px}
+.al-rank{
+  font-family:var(--display);font-size:1.4rem;font-weight:900;
+  color:var(--green);letter-spacing:.12em;
+  text-shadow:0 0 20px rgba(0,255,65,.4);
+}
+.al-score{font-size:.7rem;color:var(--muted);margin-top:4px}
+.al-bar{margin-top:16px}
+.al-bar-label{display:flex;justify-content:space-between;font-size:.6rem;color:var(--muted);margin-bottom:6px}
+
+/* ═══════════════════════════════════════════════════
+   VIEW 2 — SCENARIOS
+   ═══════════════════════════════════════════════════ */
+.filter-bar{
+  display:flex;align-items:center;gap:8px;margin-bottom:20px;
+}
+.filter-btn{
+  padding:5px 14px;border:1px solid var(--border);
+  font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;
+  cursor:pointer;color:var(--muted);background:transparent;
+  transition:all .2s;
+}
+.filter-btn.active,.filter-btn:hover{
+  border-color:var(--green);color:var(--green);background:var(--gdim);
+}
+.filter-btn.warn.active{border-color:var(--amber);color:var(--amber);background:var(--ambdim)}
+.filter-btn.danger.active{border-color:var(--red);color:var(--red);background:var(--reddim)}
+
+.scenario-big-card{
+  background:var(--black2);border:1px solid var(--border);
+  padding:22px;cursor:pointer;
+  transition:all .25s;
+  display:grid;grid-template-columns:56px 1fr auto;
+  align-items:start;gap:18px;
+}
+.scenario-big-card:hover{border-color:var(--green);background:var(--gdim)}
+.sbc-icon{
+  width:52px;height:52px;border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;background:var(--black);flex-shrink:0;
+}
+.sbc-body{}
+.sbc-title{
+  font-family:var(--display);font-size:.85rem;font-weight:700;
+  color:var(--white);letter-spacing:.06em;margin-bottom:6px;
+}
+.sbc-desc{font-size:.72rem;color:var(--muted);line-height:1.6;margin-bottom:10px}
+.sbc-tags{display:flex;gap:6px;flex-wrap:wrap}
+.sbc-meta{text-align:right;flex-shrink:0}
+.sbc-xp{font-size:.8rem;color:var(--amber);font-family:var(--display);font-weight:700}
+.sbc-time{font-size:.62rem;color:var(--muted);margin-top:4px}
+.sbc-lvl{font-size:.62rem;margin-top:6px}
+
+.scenarios-grid{display:flex;flex-direction:column;gap:10px}
+
+/* ═══════════════════════════════════════════════════
+   VIEW 3 — EMAIL SIMULATOR
+   ═══════════════════════════════════════════════════ */
+.email-layout{display:grid;grid-template-columns:280px 1fr;gap:16px;height:calc(100vh - 160px)}
+.inbox{
+  background:var(--black2);border:1px solid var(--border);
+  overflow-y:auto;
+}
+.inbox-header{
+  padding:12px 14px;border-bottom:1px solid var(--border);
+  font-size:.65rem;letter-spacing:.16em;color:var(--muted);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.inbox-count{
+  padding:2px 7px;background:var(--gdim);border:1px solid var(--border);
+  font-size:.6rem;color:var(--green);
+}
+.email-item{
+  padding:12px 14px;border-bottom:1px solid var(--border2);
+  cursor:pointer;transition:background .2s;
+}
+.email-item:hover{background:var(--gdim2)}
+.email-item.active{background:var(--gdim);border-left:2px solid var(--green)}
+.email-item.phishing{border-left:2px solid var(--red)!important}
+.email-item.legit{border-left:2px solid var(--green)!important}
+.ei-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.ei-sender{font-size:.72rem;color:var(--white);letter-spacing:.04em}
+.ei-time{font-size:.6rem;color:var(--muted)}
+.ei-subject{font-size:.7rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
+.ei-preview{font-size:.62rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.7}
+.ei-badge{
+  font-size:.55rem;padding:1px 5px;margin-right:4px;
+  vertical-align:middle;
+}
+.ei-badge.warn{background:var(--ambdim);border:1px solid var(--amber);color:var(--amber)}
+
+.email-panel{
+  background:var(--black2);border:1px solid var(--border);
+  display:flex;flex-direction:column;
+}
+.ep-placeholder{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:12px;
+  color:var(--muted);font-size:.75rem;letter-spacing:.1em;
+}
+.ep-placeholder-icon{font-size:2rem;opacity:.4}
+.ep-header{
+  padding:14px 18px;border-bottom:1px solid var(--border);
+  background:var(--black);
+}
+.ep-subject{
+  font-size:.9rem;color:var(--white);margin-bottom:10px;font-family:var(--display);font-weight:700;letter-spacing:.04em;
+}
+.ep-meta{display:flex;flex-direction:column;gap:4px}
+.ep-row{display:flex;gap:10px;font-size:.68rem}
+.ep-row .label{color:var(--muted);width:60px;flex-shrink:0}
+.ep-row .val{color:var(--white)}
+.ep-row .val.suspicious{color:var(--amber)}
+.ep-row .val.danger{color:var(--red)}
+.ep-body{
+  flex:1;padding:18px;overflow-y:auto;
+  font-size:.78rem;line-height:1.8;color:var(--white);
+  border-bottom:1px solid var(--border);
+}
+.ep-link{
+  color:var(--cyan);text-decoration:underline;cursor:pointer;
+  position:relative;
+}
+.ep-link-tooltip{
+  display:none;position:absolute;
+  background:var(--black);border:1px solid var(--red);
+  padding:6px 10px;font-size:.62rem;color:var(--red);
+  white-space:nowrap;bottom:100%;left:0;z-index:10;
+}
+.ep-link:hover .ep-link-tooltip{display:block}
+.ep-actions{
+  padding:14px 18px;display:flex;gap:10px;align-items:center;
+  flex-shrink:0;
+}
+.ep-feedback{
+  display:none;padding:12px 18px;
+  font-size:.75rem;letter-spacing:.06em;
+  border-top:1px solid var(--border);
+}
+.ep-feedback.correct{
+  background:var(--gdim);border-color:var(--green);color:var(--green);
+}
+.ep-feedback.wrong{
+  background:var(--reddim);border-color:var(--red);color:var(--red);
+}
+
+/* indicators panel */
+.indicators{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 18px 14px}
+.ind{
+  padding:10px;border:1px solid var(--border2);background:var(--black);
+  font-size:.62rem;
+}
+.ind-label{color:var(--muted);margin-bottom:4px}
+.ind-val{color:var(--white)}
+.ind-val.red{color:var(--red)}
+.ind-val.green{color:var(--green)}
+.ind-val.amber{color:var(--amber)}
+
+/* ═══════════════════════════════════════════════════
+   VIEW 4 — PASSWORD SIMULATOR
+   ═══════════════════════════════════════════════════ */
+.pw-wrap{max-width:700px}
+.pw-input-group{
+  display:flex;align-items:center;gap:0;
+  border:1px solid var(--border);margin-bottom:20px;
+  position:relative;
+}
+.pw-input-group::before{
+  content:'❯';position:absolute;left:14px;
+  color:var(--green);font-size:.9rem;pointer-events:none;
+}
+.pw-input{
+  flex:1;background:transparent;border:none;
+  padding:13px 14px 13px 32px;
+  font-family:var(--mono);font-size:.95rem;
+  color:var(--green);outline:none;letter-spacing:.12em;
+}
+.pw-input::placeholder{color:var(--muted)}
+.pw-toggle{
+  background:none;border:none;border-left:1px solid var(--border);
+  padding:0 14px;color:var(--muted);cursor:pointer;font-size:.8rem;
+}
+.pw-toggle:hover{color:var(--green)}
+
+.pw-strength{
+  margin-bottom:24px;
+}
+.pw-strength-label{
+  display:flex;justify-content:space-between;margin-bottom:8px;
+  font-size:.65rem;letter-spacing:.12em;
+}
+.strength-bars{display:flex;gap:4px;margin-bottom:8px}
+.sbar{flex:1;height:5px;background:var(--black4)}
+.sbar.active.weak{background:var(--red);box-shadow:0 0 6px var(--red)}
+.sbar.active.fair{background:var(--amber);box-shadow:0 0 6px var(--amber)}
+.sbar.active.good{background:var(--cyan);box-shadow:0 0 6px var(--cyan)}
+.sbar.active.strong{background:var(--green);box-shadow:0 0 6px var(--green)}
+
+.pw-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px}
+.pw-metric{
+  background:var(--black2);border:1px solid var(--border);
+  padding:14px;
+}
+.pm-label{font-size:.6rem;letter-spacing:.16em;color:var(--muted);margin-bottom:8px;text-transform:uppercase}
+.pm-value{font-family:var(--display);font-size:1.2rem;font-weight:700;color:var(--green);letter-spacing:.06em}
+.pm-value.red{color:var(--red);text-shadow:0 0 10px rgba(255,45,85,.4)}
+.pm-value.amber{color:var(--amber)}
+.pm-value.cyan{color:var(--cyan)}
+.pm-value.green{color:var(--green);text-shadow:0 0 10px rgba(0,255,65,.4)}
+.pm-sub{font-size:.62rem;color:var(--muted);margin-top:4px}
+
+.brute-anim{
+  background:var(--black);border:1px solid var(--border);
+  padding:14px;margin-bottom:20px;display:none;
+}
+.ba-header{display:flex;justify-content:space-between;font-size:.62rem;color:var(--muted);margin-bottom:10px}
+.ba-current{font-family:var(--mono);font-size:.8rem;color:var(--red);letter-spacing:.08em;min-height:22px;overflow:hidden}
+.ba-progress{margin-top:10px}
+
+.pw-tips{display:flex;flex-direction:column;gap:8px;margin-top:20px}
+.pw-tip{
+  display:flex;align-items:flex-start;gap:10px;
+  background:var(--black2);border:1px solid var(--border2);
+  padding:12px;font-size:.7rem;color:var(--muted);line-height:1.6;
+}
+.pw-tip-icon{color:var(--cyan);flex-shrink:0;margin-top:1px}
+.pw-tip strong{color:var(--white)}
+
+/* ═══════════════════════════════════════════════════
+   VIEW 5 — NETWORK ATTACK
+   ═══════════════════════════════════════════════════ */
+.network-layout{display:grid;grid-template-columns:1fr 320px;gap:16px;height:calc(100vh - 160px)}
+.log-stream{
+  background:var(--black);border:1px solid var(--border);
+  display:flex;flex-direction:column;
+  font-family:var(--mono);
+}
+.ls-header{
+  padding:10px 14px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--black2);
+}
+.ls-indicator{display:flex;align-items:center;gap:6px;font-size:.65rem;color:var(--green)}
+.ls-body{flex:1;overflow-y:auto;padding:10px 14px;font-size:.68rem;line-height:2}
+.log-entry{display:block;margin-bottom:2px}
+.log-ts{color:var(--muted)}
+.log-ip{color:var(--cyan)}
+.log-action{color:var(--white)}
+.log-status.ok{color:var(--green)}
+.log-status.sus{color:var(--amber)}
+.log-status.crit{color:var(--red);font-weight:bold}
+.log-entry.highlight{background:var(--reddim);padding:0 4px;margin:0 -4px;animation:flash-red 1s ease}
+
+.net-panel{display:flex;flex-direction:column;gap:12px;overflow-y:auto}
+.threat-queue{
+  background:var(--black2);border:1px solid var(--border);
+  flex-shrink:0;
+}
+.tq-header{padding:10px 14px;border-bottom:1px solid var(--border2);font-size:.65rem;letter-spacing:.14em;color:var(--muted)}
+.threat-item{
+  padding:12px 14px;border-bottom:1px solid var(--border2);
+  transition:background .2s;
+}
+.threat-item.active{background:var(--gdim)}
+.ti-type{font-size:.65rem;color:var(--red);letter-spacing:.1em;margin-bottom:4px}
+.ti-ip{font-family:var(--mono);font-size:.75rem;color:var(--white);margin-bottom:4px}
+.ti-desc{font-size:.65rem;color:var(--muted)}
+.ti-actions{display:flex;gap:6px;margin-top:10px}
+
+.net-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.nstat{background:var(--black2);border:1px solid var(--border);padding:12px;text-align:center}
+.nstat-n{font-family:var(--display);font-size:1.4rem;font-weight:700;color:var(--green)}
+.nstat-n.red{color:var(--red)}
+.nstat-n.amber{color:var(--amber)}
+.nstat-l{font-size:.6rem;color:var(--muted);letter-spacing:.1em;margin-top:4px}
+
+/* ═══════════════════════════════════════════════════
+   VIEW 6 — SOCIAL ENGINEERING
+   ═══════════════════════════════════════════════════ */
+.social-layout{display:grid;grid-template-columns:1fr 320px;gap:16px;height:calc(100vh - 160px)}
+.chat-window{
+  background:var(--black2);border:1px solid var(--border);
+  display:flex;flex-direction:column;
+}
+.chat-header{
+  padding:12px 16px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;
+  background:var(--black);
+}
+.caller-avatar{
+  width:36px;height:36px;background:var(--reddim);
+  border:1px solid var(--red);
+  display:flex;align-items:center;justify-content:center;font-size:1rem;
+}
+.caller-name{font-size:.8rem;color:var(--white);font-family:var(--display);font-weight:700}
+.caller-sub{font-size:.62rem;color:var(--red);letter-spacing:.08em}
+.caller-live{
+  margin-left:auto;display:flex;align-items:center;gap:6px;
+  font-size:.6rem;color:var(--red);
+}
+
+.chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+.msg{max-width:80%;animation:fadeIn .3s ease}
+.msg.attacker{align-self:flex-start}
+.msg.user{align-self:flex-end}
+.msg-bubble{
+  padding:10px 14px;font-size:.75rem;line-height:1.7;
+}
+.msg.attacker .msg-bubble{
+  background:var(--reddim);border:1px solid rgba(255,45,85,.2);
+  color:var(--white);
+}
+.msg.user .msg-bubble{
+  background:var(--gdim);border:1px solid var(--border);
+  color:var(--green);
+}
+.msg-name{font-size:.6rem;letter-spacing:.12em;color:var(--muted);margin-bottom:4px}
+
+.chat-choices{
+  padding:14px 16px;border-top:1px solid var(--border);
+  display:flex;flex-direction:column;gap:8px;
+  background:var(--black);
+}
+.choice-btn{
+  padding:10px 14px;border:1px solid var(--border);
+  background:transparent;color:var(--muted);
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;
+  cursor:pointer;text-align:left;line-height:1.5;
+  transition:all .2s;
+}
+.choice-btn:hover{border-color:var(--green);color:var(--green);background:var(--gdim2)}
+.choice-btn.selected.correct{border-color:var(--green);color:var(--green);background:var(--gdim)}
+.choice-btn.selected.wrong{border-color:var(--red);color:var(--red);background:var(--reddim)}
+
+.social-info{overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+.red-flags{background:var(--black2);border:1px solid var(--border)}
+.rf-header{padding:10px 14px;border-bottom:1px solid var(--border2);font-size:.65rem;letter-spacing:.14em;color:var(--red)}
+.rf-item{
+  padding:8px 14px;border-bottom:1px solid var(--border2);
+  font-size:.68rem;color:var(--muted);line-height:1.5;
+  display:flex;align-items:flex-start;gap:8px;
+}
+.rf-item::before{content:'▸';color:var(--red);flex-shrink:0}
+.rf-item.detected::before{content:'▸ ✓';color:var(--green)}
+
+.score-tracker{background:var(--black2);border:1px solid var(--border);padding:16px}
+.st-title{font-size:.62rem;letter-spacing:.16em;color:var(--muted);margin-bottom:12px}
+.st-meter{
+  display:flex;justify-content:center;align-items:center;
+  width:80px;height:80px;margin:0 auto 12px;
+  border-radius:50%;border:2px solid var(--border);
+  font-family:var(--display);font-size:1.4rem;font-weight:900;
+  color:var(--green);background:var(--gdim);
+  position:relative;
+}
+.st-label{text-align:center;font-size:.62rem;color:var(--muted)}
+
+/* ═══════════════════════════════════════════════════
+   VIEW 7 — LOGIN SIMULATOR
+   ═══════════════════════════════════════════════════ */
+.login-sim-layout{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.login-frame{
+  background:var(--black2);border:1px solid var(--border);
+  overflow:hidden;
+}
+.lf-bar{
+  background:var(--black3);padding:8px 12px;
+  display:flex;align-items:center;gap:8px;font-size:.65rem;color:var(--muted);
+}
+.lf-dots{display:flex;gap:5px}
+.lf-dot{width:9px;height:9px;border-radius:50%}
+.lf-dot.r{background:rgba(255,100,100,.5)}
+.lf-dot.y{background:rgba(255,200,0,.5)}
+.lf-dot.g{background:rgba(0,200,100,.5)}
+.lf-url{
+  flex:1;background:var(--black);border:1px solid var(--border);
+  padding:4px 10px;font-family:var(--mono);font-size:.65rem;
+  display:flex;align-items:center;gap:6px;
+}
+.lf-ssl{font-size:.7rem}
+.lf-ssl.ok{color:var(--green)}
+.lf-ssl.bad{color:var(--red)}
+.lf-page{padding:24px;display:flex;flex-direction:column;align-items:center}
+.fake-logo{
+  font-family:var(--display);font-size:1.2rem;font-weight:900;
+  margin-bottom:20px;letter-spacing:.1em;
+}
+.fake-form{width:100%;max-width:240px}
+.fake-input{
+  width:100%;background:var(--black3);border:1px solid var(--border);
+  padding:9px 12px;font-family:var(--mono);font-size:.75rem;
+  color:var(--white);margin-bottom:10px;outline:none;
+}
+.fake-btn{
+  width:100%;padding:10px;border:none;cursor:pointer;
+  font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;
+  text-transform:uppercase;
+}
+
+.login-analysis{display:flex;flex-direction:column;gap:14px}
+.check-list{}
+.check-item{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:12px 14px;background:var(--black2);
+  border:1px solid var(--border2);margin-bottom:8px;
+  font-size:.72rem;
+}
+.check-icon{font-size:1rem;flex-shrink:0}
+.check-label{color:var(--white);margin-bottom:3px;font-family:var(--display);font-size:.68rem;font-weight:700;letter-spacing:.06em}
+.check-desc{color:var(--muted);font-size:.65rem;line-height:1.5}
+.check-result{margin-left:auto;flex-shrink:0}
+.check-pass{color:var(--green);font-size:.65rem}
+.check-fail{color:var(--red);font-size:.65rem}
+
+.verdict-box{
+  padding:18px;text-align:center;
+  border:2px solid var(--border);display:none;
+}
+.verdict-box.fake{border-color:var(--red);background:var(--reddim)}
+.verdict-box.real{border-color:var(--green);background:var(--gdim)}
+.verdict-title{font-family:var(--display);font-size:1.1rem;font-weight:900;letter-spacing:.1em;margin-bottom:8px}
+.verdict-box.fake .verdict-title{color:var(--red)}
+.verdict-box.real .verdict-title{color:var(--green)}
+.verdict-desc{font-size:.72rem;color:var(--muted);line-height:1.6}
+
+/* ═══════════════════════════════════════════════════
+   VIEW 8 — FEEDBACK
+   ═══════════════════════════════════════════════════ */
+.feedback-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.radar-chart{display:flex;justify-content:center;padding:24px}
+
+.achievement-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ach-card{
+  background:var(--black2);border:1px solid var(--border);
+  padding:14px;display:flex;align-items:flex-start;gap:12px;
+  transition:border-color .2s;
+}
+.ach-card.unlocked{border-color:var(--green)}
+.ach-card:hover{border-color:var(--green)}
+.ach-icon{font-size:1.4rem;flex-shrink:0}
+.ach-title{font-size:.72rem;color:var(--white);font-family:var(--display);font-weight:700;letter-spacing:.04em;margin-bottom:4px}
+.ach-desc{font-size:.62rem;color:var(--muted);line-height:1.5}
+.ach-status{font-size:.6rem;margin-top:6px}
+.ach-status.done{color:var(--green)}
+.ach-status.pend{color:var(--muted)}
+
+.improve-item{
+  background:var(--black2);border:1px solid var(--border2);
+  padding:16px;margin-bottom:10px;
+}
+.imp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.imp-skill{font-size:.75rem;color:var(--white);font-family:var(--display);font-weight:700;letter-spacing:.06em}
+.imp-pct{font-size:.75rem;font-family:var(--display)}
+.imp-pct.red{color:var(--red)}
+.imp-pct.amber{color:var(--amber)}
+.imp-tip{font-size:.68rem;color:var(--muted);margin-top:10px;line-height:1.6;border-left:2px solid var(--border);padding-left:10px}
+.imp-tip::before{content:'💡 ';color:var(--amber)}
+
+/* ═══ KEYFRAMES ═══ */
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes pulse-icon{0%,100%{text-shadow:0 0 8px var(--green)}50%{text-shadow:0 0 20px var(--green),0 0 40px var(--green)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes radar-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes scan{from{background-position:0 0}to{background-position:200% 0}}
+@keyframes flash-red{0%,100%{background:var(--reddim)}50%{background:rgba(255,45,85,.35)}}
+@keyframes fill-glow{from{box-shadow:0 0 4px var(--green)}to{box-shadow:0 0 12px var(--green),0 0 24px var(--green)}}
+@keyframes type-blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes count-up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:1100px){
+  .sidebar{width:180px}
+  .grid-4{grid-template-columns:1fr 1fr}
+  .email-layout{grid-template-columns:240px 1fr}
+}
+@media(max-width:800px){
+  .sidebar{display:none}
+  .grid-4{grid-template-columns:1fr 1fr}
+  .network-layout,.social-layout,.feedback-layout,.login-sim-layout{grid-template-columns:1fr}
+  .email-layout{grid-template-columns:1fr}
+  .email-panel{display:none}
+  .email-panel.show{display:flex}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon"></div>
+    CYBER<span>SHIELD</span>
+    <span class="logo-ver">v2.0</span>
+  </div>
+  <div class="header-status">
+    <div class="status-dot"><div class="sdot"></div> SISTEMA OPERACIONAL</div>
+    <div class="status-dot"><div class="sdot warn"></div> 3 AMEAÇAS DETECTADAS</div>
+    <div class="status-dot" id="clock-dot"><div class="sdot"></div><span id="sys-clock">--:--:--</span></div>
+  </div>
+  <div class="header-score">SCORE: <span id="hdr-score">0</span> / 1000</div>
+</div>
+
+<div class="app-layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">// NAVEGAÇÃO</div>
+      <div class="nav-item active" onclick="goto('dashboard')">
+        <span class="nav-icon">⬡</span>Dashboard
+      </div>
+      <div class="nav-item" onclick="goto('scenarios')">
+        <span class="nav-icon">◈</span>Cenários
+        <span class="nav-badge cyan">7</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">// SIMULADORES</div>
+      <div class="nav-item" onclick="goto('email')">
+        <span class="nav-icon">📧</span>Simulador E-mail
+        <span class="nav-xp">+150xp</span>
+      </div>
+      <div class="nav-item" onclick="goto('password')">
+        <span class="nav-icon">🔑</span>Senhas
+        <span class="nav-xp">+100xp</span>
+      </div>
+      <div class="nav-item" onclick="goto('network')">
+        <span class="nav-icon">🛰️</span>Ataque de Rede
+        <span class="nav-badge">LIVE</span>
+      </div>
+      <div class="nav-item" onclick="goto('social')">
+        <span class="nav-icon">🕵️</span>Eng. Social
+        <span class="nav-xp">+250xp</span>
+      </div>
+      <div class="nav-item" onclick="goto('login')">
+        <span class="nav-icon">🔐</span>Login Falso
+        <span class="nav-xp">+200xp</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">// RELATÓRIO</div>
+      <div class="nav-item" onclick="goto('feedback')">
+        <span class="nav-icon">📊</span>Feedback & Score
+      </div>
+    </div>
+    <div class="sidebar-profile">
+      <div class="profile-avatar">T</div>
+      <div class="profile-info">
+        <div class="profile-name">TRAINEE USER</div>
+        <div class="profile-level">NÍVEL: RECRUTA</div>
+        <div class="profile-bar"><div class="profile-fill"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN AREA -->
+  <div class="main">
+
+    <!-- ══ DASHBOARD ══ -->
+    <div class="view active" id="view-dashboard">
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px">
+        <div>
+          <div class="page-title">NEXUS DASHBOARD</div>
+          <div class="page-sub">// Bem-vindo ao centro de operações, Trainee. Status do sistema: <span style="color:var(--green)">OPERACIONAL</span></div>
+        </div>
+        <div class="radar-wrap">
+          <svg viewBox="0 0 160 160">
+            <circle cx="80" cy="80" r="70" fill="none" stroke="rgba(0,255,65,.1)" stroke-width="1"/>
+            <circle cx="80" cy="80" r="50" fill="none" stroke="rgba(0,255,65,.1)" stroke-width="1"/>
+            <circle cx="80" cy="80" r="30" fill="none" stroke="rgba(0,255,65,.1)" stroke-width="1"/>
+            <line x1="10" y1="80" x2="150" y2="80" stroke="rgba(0,255,65,.08)" stroke-width="1"/>
+            <line x1="80" y1="10" x2="80" y2="150" stroke="rgba(0,255,65,.08)" stroke-width="1"/>
+            <g class="radar-sweep">
+              <line x1="80" y1="80" x2="80" y2="12" stroke="var(--green)" stroke-width="1.5" opacity=".8"/>
+              <path d="M80,80 L80,12 A68,68 0 0,1 80,80Z" fill="url(#rsweep)" opacity=".3"/>
+            </g>
+            <defs>
+              <radialGradient id="rsweep" cx="50%" cy="50%">
+                <stop offset="0%" stop-color="var(--green)" stop-opacity=".5"/>
+                <stop offset="100%" stop-color="var(--green)" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <!-- blips -->
+            <circle cx="110" cy="45" r="3" fill="var(--red)"><animate attributeName="opacity" values="1;0;1" dur="1.2s" repeatCount="indefinite"/></circle>
+            <circle cx="55" cy="120" r="2.5" fill="var(--amber)"><animate attributeName="opacity" values="1;0;1" dur="1.8s" repeatCount="indefinite"/></circle>
+            <circle cx="40" cy="60" r="2" fill="var(--green)"><animate attributeName="opacity" values="1;0;1" dur="2.4s" repeatCount="indefinite"/></circle>
+          </svg>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="grid-4" style="margin-bottom:20px">
+        <div class="stat-card">
+          <div class="stat-label">SCORE DE SEGURANÇA</div>
+          <div class="stat-value" id="stat-score">0</div>
+          <div class="stat-sub">DE 1000 POSSÍVEIS</div>
+          <div class="stat-live"><div class="sdot"></div>Realtime</div>
+          <div class="pbar" style="margin-top:10px"><div class="pbar-fill" id="score-bar" style="width:0%"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">XP TOTAL</div>
+          <div class="stat-value cyan" id="stat-xp">0</div>
+          <div class="stat-sub">PONTOS DE EXPERIÊNCIA</div>
+          <div class="stat-live"><div class="sdot"></div>Realtime</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">SEQUÊNCIA</div>
+          <div class="stat-value amber" id="stat-streak">0 dias</div>
+          <div class="stat-sub">DIAS CONSECUTIVOS</div>
+          <div class="stat-live"><div class="sdot"></div>Realtime</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">CENÁRIOS</div>
+          <div class="stat-value red" id="stat-scenarios">0</div>
+          <div class="stat-sub">COMPLETADOS</div>
+          <div class="stat-live"><div class="sdot"></div>Realtime</div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:20px;gap:20px">
+        <!-- SCENARIO CARDS GRID -->
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <div style="font-size:.65rem;letter-spacing:.18em;color:var(--muted)">// CENÁRIOS DE TREINAMENTO</div>
+            <button class="btn sm" onclick="goto('scenarios')">VER TODOS →</button>
+          </div>
+          <div class="grid-2" style="gap:10px">
+            <div class="scenario-card" onclick="goto('email')">
+              <div class="sc-emoji">📧</div>
+              <div class="sc-title">ATAQUE DE PHISHING</div>
+              <div class="sc-desc">Identifique e-mails fraudulentos e proteja suas credenciais.</div>
+              <div class="sc-footer">
+                <span class="tag amber">MÉDIO</span>
+                <div class="sc-progress" style="flex:1;margin:0 8px;height:3px;background:var(--black4)"><div class="sc-progress-fill" style="width:0%"></div></div>
+                <span class="sc-xp">+150xp</span>
+              </div>
+            </div>
+            <div class="scenario-card" onclick="goto('login')">
+              <div class="sc-emoji">🔐</div>
+              <div class="sc-title">LOGIN FALSO</div>
+              <div class="sc-desc">Detecte páginas de login fraudulentas e typosquatting.</div>
+              <div class="sc-footer">
+                <span class="tag red">ALTO</span>
+                <div class="sc-progress" style="flex:1;margin:0 8px;height:3px;background:var(--black4)"><div class="sc-progress-fill" style="width:0%"></div></div>
+                <span class="sc-xp">+200xp</span>
+              </div>
+            </div>
+            <div class="scenario-card" onclick="goto('social')">
+              <div class="sc-emoji">🕵️</div>
+              <div class="sc-title">ENG. SOCIAL</div>
+              <div class="sc-desc">Reconheça manipulações psicológicas de atacantes.</div>
+              <div class="sc-footer">
+                <span class="tag" style="border-color:rgba(255,45,85,.6);color:var(--red)">CRÍTICO</span>
+                <div class="sc-progress" style="flex:1;margin:0 8px;height:3px;background:var(--black4)"><div class="sc-progress-fill" style="width:0%"></div></div>
+                <span class="sc-xp">+250xp</span>
+              </div>
+            </div>
+            <div class="scenario-card" onclick="goto('network')">
+              <div class="sc-emoji">🛰️</div>
+              <div class="sc-title">ATAQUE DE REDE</div>
+              <div class="sc-desc">Responda a incidentes de rede em tempo real com IDS.</div>
+              <div class="sc-footer">
+                <span class="tag amber">MÉDIO</span>
+                <div class="sc-progress" style="flex:1;margin:0 8px;height:3px;background:var(--black4)"><div class="sc-progress-fill" style="width:0%"></div></div>
+                <span class="sc-xp">+175xp</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <!-- AGENT LEVEL -->
+          <div class="agent-level">
+            <div class="al-title">// NÍVEL DO AGENTE</div>
+            <div style="display:flex;align-items:center;gap:16px">
+              <div>
+                <div class="al-score" id="al-score-label">0 Score</div>
+                <div class="al-rank" id="al-rank">RECRUTA</div>
+              </div>
+              <div style="flex:1">
+                <div class="al-bar">
+                  <div class="al-bar-label">
+                    <span>PROGRESSO</span><span id="al-pct">0%</span>
+                  </div>
+                  <div class="pbar"><div class="pbar-fill" id="al-fill" style="width:0%"></div></div>
+                </div>
+                <div style="margin-top:10px;font-size:.62rem;color:var(--muted)">
+                  Complete cenários <span style="color:var(--red)">CRÍTICO</span> para ganhar <span style="color:var(--amber)">XP Bônus</span>.
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- MISSION CARD -->
+          <div class="mission-card">
+            <div class="mission-text">"Simule um ataque de rede e neutralize 3 ameaças antes que o tempo acabe."</div>
+            <div class="mission-reward">
+              <div class="mr-badge">⚡ +500 XP</div>
+              <span style="font-size:.62rem;color:var(--muted)">MISSÃO DIÁRIA</span>
+            </div>
+            <button class="btn" onclick="goto('network')" style="width:100%;justify-content:center">INICIAR MISSÃO →</button>
+          </div>
+          <!-- LIVE TERMINAL -->
+          <div class="panel" style="flex:1">
+            <div class="panel-header">
+              <span class="panel-title">FEED DE EVENTOS</span>
+              <span class="panel-badge" style="color:var(--green)">● LIVE</span>
+            </div>
+            <div class="terminal" id="dash-terminal" style="max-height:160px">
+              <span class="t-line green">[SYS] CyberShield v2.0 inicializado</span>
+              <span class="t-line">[NET] Monitoramento de rede ativo</span>
+              <span class="t-line amber">[WARN] 3 tentativas de acesso suspeitas detectadas</span>
+              <span class="t-line">[AUTH] Sessão do usuário validada</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SCENARIOS ══ -->
+    <div class="view" id="view-scenarios">
+      <div class="page-header">
+        <div class="page-title">CENÁRIOS DE ATAQUE</div>
+        <div class="page-sub">// Situações realistas para treinar sua resposta a incidentes. Avalie suas decisões sob pressão.</div>
+      </div>
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterScenarios('all',this)">TODOS</button>
+        <button class="filter-btn warn" onclick="filterScenarios('medio',this)">MÉDIO</button>
+        <button class="filter-btn" style="border-color:rgba(255,45,85,.4);color:var(--red)" onclick="filterScenarios('alto',this)">ALTO</button>
+        <button class="filter-btn danger" onclick="filterScenarios('critico',this)">CRÍTICO</button>
+      </div>
+      <div class="scenarios-grid" id="scenarios-list">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- ══ EMAIL SIMULATOR ══ -->
+    <div class="view" id="view-email">
+      <div class="page-header">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:1.4rem">📧</span>
+          <div>
+            <div class="page-title">SIMULADOR DE E-MAIL</div>
+            <div class="page-sub">// Analise cada e-mail e determine: phishing ou legítimo?</div>
+          </div>
+        </div>
+      </div>
+      <div class="email-layout">
+        <!-- INBOX -->
+        <div class="inbox">
+          <div class="inbox-header">
+            CAIXA DE ENTRADA
+            <span class="inbox-count" id="inbox-count">8</span>
+          </div>
+          <div id="email-list"></div>
+        </div>
+        <!-- PANEL -->
+        <div class="email-panel" id="email-panel">
+          <div class="ep-placeholder" id="ep-placeholder">
+            <div class="ep-placeholder-icon">📬</div>
+            <span>SELECIONE UM E-MAIL PARA ANALISAR</span>
+          </div>
+          <div id="ep-content" style="display:none;flex-direction:column;height:100%">
+            <div class="ep-header">
+              <div class="ep-subject" id="ep-subject">—</div>
+              <div class="ep-meta">
+                <div class="ep-row"><span class="label">DE:</span><span class="val" id="ep-from">—</span></div>
+                <div class="ep-row"><span class="label">PARA:</span><span class="val">trainee@cybershield.io</span></div>
+                <div class="ep-row"><span class="label">DOMÍNIO:</span><span class="val" id="ep-domain">—</span></div>
+                <div class="ep-row"><span class="label">IP:</span><span class="val" id="ep-ip">—</span></div>
+              </div>
+            </div>
+            <div class="indicators">
+              <div class="ind"><div class="ind-label">SPF</div><div class="ind-val" id="ind-spf">—</div></div>
+              <div class="ind"><div class="ind-label">DKIM</div><div class="ind-val" id="ind-dkim">—</div></div>
+              <div class="ind"><div class="ind-label">URGÊNCIA</div><div class="ind-val" id="ind-urgency">—</div></div>
+            </div>
+            <div class="ep-body" id="ep-body"></div>
+            <div class="ep-feedback" id="ep-feedback"></div>
+            <div class="ep-actions">
+              <button class="btn danger" onclick="judgeEmail(true)">🚨 PHISHING</button>
+              <button class="btn" onclick="judgeEmail(false)">✓ LEGÍTIMO</button>
+              <span style="margin-left:auto;font-size:.65rem;color:var(--muted)" id="ep-score-info"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PASSWORD SIMULATOR ══ -->
+    <div class="view" id="view-password">
+      <div class="page-header">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:1.4rem">🔑</span>
+          <div>
+            <div class="page-title">SIMULADOR DE SENHA</div>
+            <div class="page-sub">// Teste a resistência da sua senha contra Brute Force e Dicionário.</div>
+          </div>
+        </div>
+      </div>
+      <div class="pw-wrap">
+        <div class="pw-input-group">
+          <input class="pw-input" id="pw-input" type="password" placeholder="Digite uma senha para testar..." oninput="analyzePw(this.value)" autocomplete="off">
+          <button class="pw-toggle" id="pw-toggle" onclick="togglePwVis()">👁</button>
+        </div>
+
+        <div class="pw-strength">
+          <div class="pw-strength-label">
+            <span style="color:var(--muted)">FORÇA:</span>
+            <span id="pw-strength-label" style="color:var(--muted)">—</span>
+          </div>
+          <div class="strength-bars">
+            <div class="sbar" id="sb0"></div><div class="sbar" id="sb1"></div>
+            <div class="sbar" id="sb2"></div><div class="sbar" id="sb3"></div>
+          </div>
+        </div>
+
+        <div class="pw-metrics">
+          <div class="pw-metric">
+            <div class="pm-label">TEMPO PARA QUEBRAR</div>
+            <div class="pm-value" id="pw-crack-time">—</div>
+            <div class="pm-sub">estimativa de ataque brute force</div>
+          </div>
+          <div class="pw-metric">
+            <div class="pm-label">ENTROPIA</div>
+            <div class="pm-value" id="pw-entropy">0 bits</div>
+            <div class="pm-sub">aleatoriedade da senha</div>
+          </div>
+          <div class="pw-metric">
+            <div class="pm-label">CHARSET</div>
+            <div class="pm-value cyan" id="pw-charset">0 chars</div>
+            <div class="pm-sub">tamanho do conjunto de caracteres</div>
+          </div>
+          <div class="pw-metric">
+            <div class="pm-label">COMPRIMENTO</div>
+            <div class="pm-value" id="pw-len">0</div>
+            <div class="pm-sub">caracteres</div>
+          </div>
+        </div>
+
+        <div class="brute-anim" id="brute-anim">
+          <div class="ba-header">
+            <span>// SIMULANDO ATAQUE BRUTE FORCE</span>
+            <span id="ba-speed">10B tentativas/seg</span>
+          </div>
+          <div class="ba-current" id="ba-current">Iniciando...</div>
+          <div class="ba-progress">
+            <div class="pbar"><div class="pbar-fill red" id="ba-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+
+        <div class="pw-tips">
+          <div class="pw-tip"><span class="pw-tip-icon">◈</span><div><strong>Entropia</strong> — Quanto maior o charset e o comprimento, mais difícil é quebrar por exaustão.</div></div>
+          <div class="pw-tip"><span class="pw-tip-icon">◈</span><div><strong>Ataque de Dicionário</strong> — Senhas como "123456" são quebradas em nanossegundos usando listas de bilhões de vazamentos.</div></div>
+          <div class="pw-tip"><span class="pw-tip-icon">◈</span><div><strong>Use</strong>: mínimo 16 caracteres, letras maiúsculas/minúsculas, números, símbolos — e considere um gerenciador de senhas.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ NETWORK ATTACK ══ -->
+    <div class="view" id="view-network">
+      <div class="page-header">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:1.4rem">🛰️</span>
+            <div>
+              <div class="page-title">ATAQUE DE REDE (IDS)</div>
+              <div class="page-sub">// Analise logs em tempo real e tome decisões para bloquear invasores.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <div class="net-stats" style="grid-template-columns:repeat(4,80px)">
+              <div class="nstat"><div class="nstat-n" id="ns-blocked">0</div><div class="nstat-l">BLOQUEADOS</div></div>
+              <div class="nstat"><div class="nstat-n red" id="ns-threats">3</div><div class="nstat-l">AMEAÇAS</div></div>
+              <div class="nstat"><div class="nstat-n amber" id="ns-pending">0</div><div class="nstat-l">PENDENTES</div></div>
+              <div class="nstat"><div class="nstat-n" id="ns-score">0</div><div class="nstat-l">SCORE</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="network-layout">
+        <div class="log-stream">
+          <div class="ls-header">
+            <div class="ls-indicator"><div class="sdot"></div>STREAM DE LOGS — REDE CORPORATIVA</div>
+            <span style="font-size:.62rem;color:var(--muted)" id="net-timer">--:--</span>
+          </div>
+          <div class="ls-body" id="net-log-body"></div>
+        </div>
+        <div class="net-panel">
+          <div class="threat-queue">
+            <div class="tq-header">FILA DE AMEAÇAS — AGUARDANDO DECISÃO</div>
+            <div id="threat-list"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><span class="panel-title">GUIA DE RESPOSTA</span></div>
+            <div class="panel-body" style="font-size:.68rem;color:var(--muted);line-height:1.8">
+              <div style="margin-bottom:8px"><span style="color:var(--red)">▸ BLOQUEAR</span> — Corta conexão imediatamente. Use para ataques confirmados.</div>
+              <div style="margin-bottom:8px"><span style="color:var(--amber)">▸ MONITORAR</span> — Mantém ativo mas registra todos os pacotes. Para suspeitos.</div>
+              <div><span style="color:var(--cyan)">▸ ESCALAR</span> — Envia para análise do SOC. Para incidentes complexos.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SOCIAL ENGINEERING ══ -->
+    <div class="view" id="view-social">
+      <div class="page-header">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:1.4rem">🕵️</span>
+          <div>
+            <div class="page-title">ENGENHARIA SOCIAL</div>
+            <div class="page-sub">// Um suposto técnico de TI liga pedindo suas credenciais. Responda com sabedoria.</div>
+          </div>
+        </div>
+      </div>
+      <div class="social-layout">
+        <div class="chat-window">
+          <div class="chat-header">
+            <div class="caller-avatar">👤</div>
+            <div>
+              <div class="caller-name">CARLOS — SUPORTE TI</div>
+              <div class="caller-sub">⚠ IDENTIDADE NÃO VERIFICADA</div>
+            </div>
+            <div class="caller-live"><div class="sdot alert"></div>EM CHAMADA</div>
+          </div>
+          <div class="chat-messages" id="social-msgs"></div>
+          <div class="chat-choices" id="social-choices">
+            <div style="font-size:.62rem;color:var(--muted);margin-bottom:6px;letter-spacing:.1em">// ESCOLHA SUA RESPOSTA:</div>
+          </div>
+        </div>
+        <div class="social-info">
+          <div class="red-flags">
+            <div class="rf-header">⚠ RED FLAGS DETECTADAS</div>
+            <div id="red-flags-list"></div>
+          </div>
+          <div class="score-tracker">
+            <div class="st-title">// SCORE DE DECISÃO</div>
+            <div class="st-meter" id="social-score-meter">0</div>
+            <div class="st-label">PONTOS DE SEGURANÇA</div>
+            <div class="pbar" style="margin-top:12px"><div class="pbar-fill" id="social-pbar" style="width:0%"></div></div>
+            <div style="margin-top:10px;font-size:.62rem;color:var(--muted)">Cada decisão correta aumenta sua proteção contra ataques reais.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ LOGIN SIMULATOR ══ -->
+    <div class="view" id="view-login">
+      <div class="page-header">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:1.4rem">🔐</span>
+          <div>
+            <div class="page-title">DETECTOR DE LOGIN FALSO</div>
+            <div class="page-sub">// Analise os dois sites abaixo. Qual é o real? Qual é a armadilha?</div>
+          </div>
+        </div>
+      </div>
+      <div class="login-sim-layout">
+        <!-- SITE A -->
+        <div>
+          <div style="font-size:.65rem;letter-spacing:.14em;color:var(--muted);margin-bottom:10px">// SITE A — ANALISE COM ATENÇÃO</div>
+          <div class="login-frame" id="site-a">
+            <div class="lf-bar">
+              <div class="lf-dots">
+                <div class="lf-dot r"></div><div class="lf-dot y"></div><div class="lf-dot g"></div>
+              </div>
+              <div class="lf-url">
+                <span class="lf-ssl bad">🔓</span>
+                <span id="site-a-url">http://paypa1-secure-login.net/signin</span>
+              </div>
+            </div>
+            <div class="lf-page">
+              <div class="fake-logo" style="color:#003087">PayPal</div>
+              <div style="font-size:.7rem;color:var(--muted);margin-bottom:16px;text-align:center">Faça login na sua conta PayPal</div>
+              <div class="fake-form">
+                <input class="fake-input" type="email" placeholder="Email ou número de celular">
+                <input class="fake-input" type="password" placeholder="Senha">
+                <button class="fake-btn" style="background:#003087;color:#fff" onclick="loginDecision('a')">Entrar</button>
+                <div style="text-align:center;margin-top:12px;font-size:.65rem;color:var(--muted)">Esqueceu a senha? <span style="color:#003087;cursor:pointer">Clique aqui</span></div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:8px;justify-content:center">
+            <button class="btn danger sm" onclick="loginDecision('a-fake')">🚨 É FALSO</button>
+            <button class="btn sm" onclick="loginDecision('a-real')">✓ É REAL</button>
+          </div>
+        </div>
+
+        <!-- SITE B + ANALYSIS -->
+        <div>
+          <div style="font-size:.65rem;letter-spacing:.14em;color:var(--muted);margin-bottom:10px">// SITE B — ANALISE COM ATENÇÃO</div>
+          <div class="login-frame" id="site-b">
+            <div class="lf-bar">
+              <div class="lf-dots">
+                <div class="lf-dot r"></div><div class="lf-dot y"></div><div class="lf-dot g"></div>
+              </div>
+              <div class="lf-url">
+                <span class="lf-ssl ok">🔒</span>
+                <span style="color:var(--green)">https://</span><span id="site-b-url">paypal.com/signin</span>
+              </div>
+            </div>
+            <div class="lf-page">
+              <div class="fake-logo" style="color:#003087">PayPal</div>
+              <div style="font-size:.7rem;color:var(--muted);margin-bottom:16px;text-align:center">Log in to your PayPal account</div>
+              <div class="fake-form">
+                <input class="fake-input" type="email" placeholder="Email or mobile number">
+                <button class="fake-btn" style="background:#003087;color:#fff" onclick="loginDecision('b')">Next</button>
+                <div style="text-align:center;margin-top:12px;font-size:.65rem;color:var(--muted)">Having trouble logging in?</div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:8px;justify-content:center">
+            <button class="btn danger sm" onclick="loginDecision('b-fake')">🚨 É FALSO</button>
+            <button class="btn sm" onclick="loginDecision('b-real')">✓ É REAL</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px">
+        <div class="verdict-box" id="login-verdict"></div>
+        <div style="margin-top:16px">
+          <div style="font-size:.65rem;letter-spacing:.14em;color:var(--muted);margin-bottom:12px">// ANÁLISE DE INDICADORES</div>
+          <div class="check-list" id="login-checks"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ FEEDBACK ══ -->
+    <div class="view" id="view-feedback">
+      <div class="page-header">
+        <div class="page-title">FEEDBACK & SCORE DE SEGURANÇA</div>
+        <div class="page-sub">// Análise completa do seu desempenho e áreas para melhorar.</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">
+        <div class="stat-card"><div class="stat-label">SCORE TOTAL</div><div class="stat-value">742</div><div class="stat-sub">pts</div></div>
+        <div class="stat-card"><div class="stat-label">CENÁRIOS</div><div class="stat-value cyan">5</div><div class="stat-sub">completados</div></div>
+        <div class="stat-card"><div class="stat-label">PRECISÃO</div><div class="stat-value amber">78%</div><div class="stat-sub">média</div></div>
+        <div class="stat-card"><div class="stat-label">XP GANHO</div><div class="stat-value">450</div><div class="stat-sub">xp</div></div>
+      </div>
+      <div class="grid-2" style="gap:20px;margin-bottom:20px">
+        <!-- RADAR CHART -->
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">MAPA DE HABILIDADES</span></div>
+          <div class="radar-chart">
+            <svg viewBox="0 0 300 280" width="300" height="280">
+              <g transform="translate(150,140)">
+                <!-- grid -->
+                <polygon points="0,-90 77.94,-45 77.94,45 0,90 -77.94,45 -77.94,-45" fill="none" stroke="var(--border)" stroke-width="1"/>
+                <polygon points="0,-60 51.96,-30 51.96,30 0,60 -51.96,30 -51.96,-30" fill="none" stroke="var(--border2)" stroke-width="1"/>
+                <polygon points="0,-30 25.98,-15 25.98,15 0,30 -25.98,15 -25.98,-15" fill="none" stroke="var(--border2)" stroke-width="1"/>
+                <line x1="0" y1="-90" x2="0" y2="90" stroke="var(--border2)" stroke-width="1"/>
+                <line x1="-77.94" y1="-45" x2="77.94" y2="45" stroke="var(--border2)" stroke-width="1"/>
+                <line x1="77.94" y1="-45" x2="-77.94" y2="45" stroke="var(--border2)" stroke-width="1"/>
+                <!-- data: Phishing 85%, Senhas 70%, Incidentes 60%, Rede 55%, Social 45%, Logs 65% -->
+                <polygon id="radar-data"
+                  points="0,-76.5 53.46,-31.5 46.77,27 0,49.5 -34.98,20.25 -50.96,-29.25"
+                  fill="rgba(0,255,65,.15)" stroke="var(--green)" stroke-width="1.5">
+                  <animate attributeName="points"
+                    from="0,0 0,0 0,0 0,0 0,0 0,0"
+                    to="0,-76.5 53.46,-31.5 46.77,27 0,49.5 -34.98,20.25 -50.96,-29.25"
+                    dur="1.5s" fill="freeze"/>
+                </polygon>
+                <!-- labels -->
+                <text x="0" y="-100" text-anchor="middle" fill="var(--muted)" font-size="9" font-family="Share Tech Mono">Phishing</text>
+                <text x="90" y="-52" text-anchor="start" fill="var(--muted)" font-size="9" font-family="Share Tech Mono">Senhas</text>
+                <text x="90" y="52" text-anchor="start" fill="var(--muted)" font-size="9" font-family="Share Tech Mono">Incidentes</text>
+                <text x="0" y="106" text-anchor="middle" fill="var(--muted)" font-size="9" font-family="Share Tech Mono">Rede</text>
+                <text x="-90" y="52" text-anchor="end" fill="var(--muted)" font-size="9" font-family="Share Tech Mono">Social Eng.</text>
+                <text x="-90" y="-52" text-anchor="end" fill="var(--muted)" font-size="9" font-family="Share Tech Mono">Logs</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <!-- ACHIEVEMENTS -->
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">CONQUISTAS</span></div>
+          <div class="panel-body">
+            <div class="achievement-grid">
+              <div class="ach-card unlocked">
+                <div class="ach-icon">🎯</div>
+                <div><div class="ach-title">OLHO DE FALCÃO</div><div class="ach-desc">Detectou 10 e-mails de phishing</div><div class="ach-status done">✅ CONQUISTADO</div></div>
+              </div>
+              <div class="ach-card unlocked">
+                <div class="ach-icon">🛡️</div>
+                <div><div class="ach-title">ESCUDO DE FERRO</div><div class="ach-desc">Completou 5 cenários sem erros</div><div class="ach-status done">✅ CONQUISTADO</div></div>
+              </div>
+              <div class="ach-card unlocked">
+                <div class="ach-icon">🕵️</div>
+                <div><div class="ach-title">DETETIVE DIGITAL</div><div class="ach-desc">Identificou 3 sites falsos seguidos</div><div class="ach-status done">✅ CONQUISTADO</div></div>
+              </div>
+              <div class="ach-card">
+                <div class="ach-icon">🔒</div>
+                <div><div class="ach-title">GUARDIÃO DE SENHAS</div><div class="ach-desc">Score de senha acima de 95%</div><div class="ach-status pend">⬡ PENDENTE</div></div>
+              </div>
+              <div class="ach-card">
+                <div class="ach-icon">⚡</div>
+                <div><div class="ach-title">RESPOSTA RÁPIDA</div><div class="ach-desc">Respondeu a incidente em &lt;2 min</div><div class="ach-status pend">⬡ PENDENTE</div></div>
+              </div>
+              <div class="ach-card">
+                <div class="ach-icon">🏆</div>
+                <div><div class="ach-title">ESPECIALISTA ELITE</div><div class="ach-desc">Alcance score 900+</div><div class="ach-status pend">⬡ PENDENTE</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IMPROVE AREAS -->
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title">ÁREAS PARA MELHORAR</span></div>
+        <div class="panel-body">
+          <div class="improve-item">
+            <div class="imp-header"><span class="imp-skill">ENGENHARIA SOCIAL</span><span class="imp-pct red">45%</span></div>
+            <div class="pbar"><div class="pbar-fill red" style="width:45%"></div></div>
+            <div class="imp-tip">Pratique o cenário de Vishing e sempre verifique a identidade de quem liga antes de fornecer qualquer informação.</div>
+          </div>
+          <div class="improve-item">
+            <div class="imp-header"><span class="imp-skill">SEGURANÇA DE REDE</span><span class="imp-pct amber">58%</span></div>
+            <div class="pbar"><div class="pbar-fill amber" style="width:58%"></div></div>
+            <div class="imp-tip">Estude sobre VPNs, firewalls e segmentação de rede. Revise o cenário de Ataque de Rede (IDS).</div>
+          </div>
+          <div class="improve-item">
+            <div class="imp-header"><span class="imp-skill">ANÁLISE DE LOGS</span><span class="imp-pct amber">62%</span></div>
+            <div class="pbar"><div class="pbar-fill amber" style="width:62%"></div></div>
+            <div class="imp-tip">Revise o cenário de Ameaça Interna — foco em monitoramento de comportamento e DLP.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app-layout -->
+
+<script>
+/* ═══════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════ */
+const STATE = {
+  score: 0, xp: 0, streak: 1, scenarios: 0,
+  emailAnswers: {},
+  netBlocked: 0, netScore: 0, netPending: 0,
+  socialScore: 0, socialStep: 0,
+};
+
+/* ═══ ROUTING ═══ */
+function goto(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('view-' + view)?.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.textContent.toLowerCase().includes(view.slice(0,4))) n.classList.add('active');
+  });
+  // trigger init
+  if (view === 'network') initNetwork();
+  if (view === 'social')  initSocial();
+  if (view === 'email')   initEmailSim();
+  if (view === 'login')   initLogin();
+  if (view === 'scenarios') renderScenarios();
+}
+
+/* ═══ CLOCK ═══ */
+function updateClock() {
+  const n = new Date();
+  document.getElementById('sys-clock').textContent =
+    n.toTimeString().slice(0,8);
+}
+setInterval(updateClock, 1000); updateClock();
+
+/* ═══ DASHBOARD LIVE FEED ═══ */
+const logMsgs = [
+  { cls:'amber', txt:'[SCAN] Port scan detectado: 192.168.1.44 → 443,80,22' },
+  { cls:'red',   txt:'[ALERT] Brute force SSH: 10.0.0.15 — 847 tentativas/min' },
+  { cls:'green', txt:'[OK] Regra de firewall aplicada: bloqueado 10.0.0.15' },
+  { cls:'',      txt:'[AUTH] Login bem-sucedido: admin@corp.io — 192.168.1.1' },
+  { cls:'amber', txt:'[WARN] Tráfego incomum: 45MB enviados para 185.220.101.5' },
+  { cls:'red',   txt:'[ALERT] SQLi tentativa detectada em /api/login' },
+  { cls:'green', txt:'[WAF] Requisição bloqueada pela WAF — OWASP CRS' },
+  { cls:'cyan',  txt:'[IDS] Assinatura Snort #2001219 acionada' },
+  { cls:'',      txt:'[NET] Scan de vulnerabilidades concluído — 0 críticos' },
+  { cls:'amber', txt:'[WARN] Certificado SSL expira em 7 dias: api.corp.io' },
+];
+let logIdx = 0;
+function addDashLog() {
+  const t = document.getElementById('dash-terminal');
+  if (!t) return;
+  const m = logMsgs[logIdx % logMsgs.length]; logIdx++;
+  const ts = new Date().toTimeString().slice(0,8);
+  const span = document.createElement('span');
+  span.className = 't-line ' + m.cls;
+  span.textContent = `[${ts}] ${m.txt}`;
+  t.appendChild(span);
+  t.scrollTop = t.scrollHeight;
+  if (t.children.length > 20) t.removeChild(t.children[0]);
+}
+setInterval(addDashLog, 2800);
+
+/* ═══ SCORE ANIMATION ═══ */
+function animateTo(el, target, suffix='') {
+  const start = parseInt(el.textContent) || 0;
+  const dur = 800, step = 16;
+  const steps = dur / step;
+  const inc = (target - start) / steps;
+  let cur = start, count = 0;
+  const t = setInterval(() => {
+    cur += inc; count++;
+    el.textContent = Math.round(cur) + suffix;
+    if (count >= steps) { el.textContent = target + suffix; clearInterval(t); }
+  }, step);
+}
+function addScore(pts, xp) {
+  STATE.score = Math.min(1000, STATE.score + pts);
+  STATE.xp += xp; STATE.scenarios++;
+  updateStats();
+}
+function updateStats() {
+  animateTo(document.getElementById('stat-score'), STATE.score);
+  animateTo(document.getElementById('stat-xp'), STATE.xp);
+  animateTo(document.getElementById('hdr-score'), STATE.score);
+  document.getElementById('stat-streak').textContent = STATE.streak + ' dias';
+  document.getElementById('stat-scenarios').textContent = STATE.scenarios;
+  document.getElementById('score-bar').style.width = (STATE.score / 10) + '%';
+  // agent level
+  const ranks = [
+    {n:'RECRUTA',min:0,max:200},{n:'AGENTE',min:200,max:400},
+    {n:'ANALISTA',min:400,max:600},{n:'ESPECIALISTA',min:600,max:800},
+    {n:'ELITE',min:800,max:1000}
+  ];
+  const r = ranks.find(r => STATE.score >= r.min && STATE.score < r.max) || ranks[4];
+  document.getElementById('al-rank').textContent = r.n;
+  document.getElementById('al-score-label').textContent = STATE.score + ' Score';
+  const pct = Math.round(((STATE.score - r.min) / (r.max - r.min)) * 100);
+  document.getElementById('al-pct').textContent = pct + '%';
+  document.getElementById('al-fill').style.width = pct + '%';
+}
+
+/* ═══════════════════════════════════════════════════
+   EMAIL SIMULATOR
+═══════════════════════════════════════════════════ */
+const EMAILS = [
+  { id:'e1', from:'seguranca@bradesc0.com.br', sender:'Bradesco Segurança', time:'09:32',
+    subject:'⚠️ URGENTE: Sua conta será bloqueada em 24h', preview:'Detectamos atividade suspeita. Clique aqui para verificar...',
+    domain:'bradesc0.com.br', ip:'185.220.101.47', spf:'FALHOU', dkim:'FALHOU', urgency:'ALTA',
+    isPhishing:true,
+    body:`<p>Prezado Cliente,</p><p style="margin:10px 0">Identificamos <strong style="color:var(--amber)">atividade suspeita</strong> em sua conta. Para evitar o bloqueio nas próximas 24 horas, confirme seus dados clicando no link abaixo:</p>
+    <p style="margin:14px 0"><span class="ep-link">🔗 www.bradesc0-seguranca.net/confirmar<div class="ep-link-tooltip">URL REAL: 185.220.101.47/phish.php — DOMÍNIO MALICIOSO!</div></span></p>
+    <p>Caso não confirme, sua conta será suspensa.</p><p style="margin-top:14px">Atenciosamente,<br>Equipe de Segurança Bradesco</p>`,
+    red:['Domínio falso: bradesc0 (zero no lugar do "o")', 'SPF e DKIM falharam', 'Urgência artificial: 24 horas', 'URL aponta para IP externo', 'Ameaça de suspensão como pressão'] },
+  { id:'e2', from:'noreply@github.com', sender:'GitHub', time:'08:14',
+    subject:'[GitHub] A new public key was added to your account',
+    preview:'A public key was added to your GitHub account. If you did not...', domain:'github.com', ip:'192.30.252.1',
+    spf:'PASSOU', dkim:'PASSOU', urgency:'BAIXA', isPhishing:false,
+    body:`<p>Hi there,</p><p style="margin:10px 0">A new <strong>public SSH key</strong> was added to your GitHub account.</p>
+    <p style="background:var(--black3);padding:10px;margin:10px 0;font-family:var(--mono);font-size:.75rem">Key fingerprint: SHA256:uNiVztksCsDhcc0u9e8BujQXVUpKZIDTMczCvj3tD2s</p>
+    <p>If you believe this is an error, you can remove the key in your settings.</p><p style="margin-top:14px">— The GitHub Team</p>`,
+    red:[] },
+  { id:'e3', from:'loteriaf3deral@gmail.com', sender:'Loteria Federal', time:'07:48',
+    subject:'🎉 Parabéns! Você ganhou R$50.000 — resgate hoje!', preview:'Seu número foi sorteado. Para resgatar, informe seus dados bancários...',
+    domain:'gmail.com (domínio pessoal)', ip:'209.85.220.44', spf:'PASSOU (mas é gmail)', dkim:'PASSOU', urgency:'CRÍTICA', isPhishing:true,
+    body:`<p>PARABÉNS!!! 🎉🎉🎉</p><p style="margin:10px 0">Seu número foi SORTEADO na Loteria Federal Especial de março. Você ganhou o prêmio de <strong style="color:var(--amber)">R$ 50.000,00</strong>!</p>
+    <p>Para resgatar, informe no formulário abaixo seus dados bancários e CPF:</p>
+    <p style="margin:14px 0"><span class="ep-link">🔗 resgate-loteria-federal.tk/premio<div class="ep-link-tooltip">DOMÍNIO .tk = GRATUITO = SUSPEITO — scam clássico!</div></span></p>
+    <p><strong>ATENÇÃO: Oferta expira em 2 horas!</strong></p>`,
+    red:['Remetente usa Gmail — loteria usaria domínio oficial .gov.br', 'Domínio .tk gratuito e suspeito', 'Pedido de dados bancários', 'Urgência: "expira em 2 horas"', 'Promessa de prêmio não solicitado'] },
+  { id:'e4', from:'seguranca@mercadolivre.com', sender:'Mercado Livre Segurança', time:'10:21',
+    subject:'🔒 Atividade incomum detectada na sua conta', preview:'Detectamos um acesso de um novo dispositivo. Confirme agora...',
+    domain:'mercadolivre.com', ip:'54.207.100.100', spf:'PASSOU', dkim:'PASSOU', urgency:'MÉDIA', isPhishing:false,
+    body:`<p>Olá,</p><p style="margin:10px 0">Detectamos um novo acesso à sua conta a partir de:</p>
+    <div style="background:var(--black3);padding:12px;margin:10px 0;font-size:.75rem">Dispositivo: Chrome/Windows · Localização: São Paulo, BR · Horário: 10:21</div>
+    <p>Se foi você, não precisa fazer nada. Caso contrário, acesse Minha Conta > Segurança para encerrar sessões ativas.</p>
+    <p style="margin-top:14px">Equipe de Segurança — Mercado Livre</p>`,
+    red:[] },
+  { id:'e5', from:'noreply@amazon.com.br', sender:'Amazon', time:'07:58',
+    subject:'Seu pedido foi enviado', preview:'Seu pacote foi despachado e está a caminho...',
+    domain:'amazon.com.br', ip:'54.239.28.85', spf:'PASSOU', dkim:'PASSOU', urgency:'BAIXA', isPhishing:false,
+    body:`<p>Olá,</p><p style="margin:10px 0">Seu pedido <strong>#405-1234567-8901234</strong> foi enviado!</p>
+    <p>Previsão de entrega: <strong>18–20 de março</strong></p>
+    <p>Rastreie em <span style="color:var(--cyan)">amazon.com.br/meus-pedidos</span></p>`, red:[] },
+  { id:'e6', from:'billing@netf1ix-conta.com', sender:'Netflix Billing', time:'11:47',
+    subject:'Problema com seu pagamento', preview:'Não conseguimos processar seu pagamento mensal...',
+    domain:'netf1ix-conta.com', ip:'91.108.4.200', spf:'FALHOU', dkim:'FALHOU', urgency:'ALTA', isPhishing:true,
+    body:`<p>Prezado assinante,</p><p style="margin:10px 0">Ocorreu um problema ao processar seu pagamento. Sua assinatura será <strong style="color:var(--red)">cancelada em 48h</strong> se não atualizar o cartão.</p>
+    <p style="margin:14px 0"><span class="ep-link">🔗 netf1ix-conta.com/atualizar-pagamento<div class="ep-link-tooltip">TYPOSQUATTING: "netf1ix" usa o número 1 no lugar do "i"!</div></span></p>`,
+    red:['Typosquatting: netf1ix (número 1 no lugar do "i")', 'SPF e DKIM falharam', 'Urgência: "48h para cancelamento"', 'Pede atualização de cartão por link', 'IP suspeito: bloco Tor'] },
+  { id:'e7', from:'no-reply@accounts.google.com', sender:'Google Security', time:'06:33',
+    subject:'Novo login na sua Conta Google', preview:'Detectamos um login a partir de um novo dispositivo...',
+    domain:'accounts.google.com', ip:'209.85.200.191', spf:'PASSOU', dkim:'PASSOU', urgency:'BAIXA', isPhishing:false,
+    body:`<p>Um novo dispositivo fez login na sua conta Google.</p>
+    <div style="background:var(--black3);padding:12px;margin:10px 0;font-size:.75rem">Dispositivo: iPhone · App: Conta Google · Localização: Sorocaba, SP</div>
+    <p>Se não foi você, acesse sua conta agora e altere a senha.</p>`, red:[] },
+  { id:'e8', from:'support@paypa1-accounts.com', sender:'PayPal Support', time:'12:04',
+    subject:'⚠️ Sua conta foi limitada temporariamente', preview:'Precisamos verificar suas informações para restaurar...',
+    domain:'paypa1-accounts.com', ip:'185.100.87.174', spf:'FALHOU', dkim:'FALHOU', urgency:'CRÍTICA', isPhishing:true,
+    body:`<p>Prezado usuário PayPal,</p><p style="margin:10px 0">Identificamos atividade irregular. Sua conta foi <strong style="color:var(--red)">LIMITADA</strong>.</p>
+    <p>Para restaurar o acesso, confirme suas informações em até 24h:</p>
+    <p style="margin:14px 0"><span class="ep-link">🔗 paypa1-accounts.com/restore<div class="ep-link-tooltip">DOMÍNIO FALSO: "paypa1" usa número 1 no lugar do "l"!</div></span></p>
+    <p>Dados necessários: Número do cartão, CVV, CPF.</p>`,
+    red:['Typosquatting: paypa1 (número 1 no lugar do "l")', 'Pede número de cartão, CVV e CPF por e-mail', 'SPF e DKIM falharam', 'Urgência: 24 horas', 'IP em bloco de hosting abusivo'] },
+];
+
+let selectedEmail = null;
+function initEmailSim() {
+  const list = document.getElementById('email-list');
+  if (list.children.length) return;
+  EMAILS.forEach((e,i) => {
+    const div = document.createElement('div');
+    div.className = 'email-item';
+    div.id = 'ei-' + e.id;
+    div.innerHTML = `<div class="ei-header">
+      <span class="ei-sender">${e.isPhishing ? '<span class="ei-badge warn">⚠</span>' : ''}${e.sender}</span>
+      <span class="ei-time">${e.time}</span>
+    </div>
+    <div class="ei-subject">${e.subject}</div>
+    <div class="ei-preview">${e.preview}</div>`;
+    div.onclick = () => openEmail(e);
+    list.appendChild(div);
+  });
+}
+
+function openEmail(e) {
+  selectedEmail = e;
+  document.querySelectorAll('.email-item').forEach(el => el.classList.remove('active'));
+  document.getElementById('ei-' + e.id)?.classList.add('active');
+  document.getElementById('ep-placeholder').style.display = 'none';
+  const cnt = document.getElementById('ep-content');
+  cnt.style.display = 'flex';
+  document.getElementById('ep-subject').textContent = e.subject;
+  document.getElementById('ep-from').textContent = e.from;
+  const domEl = document.getElementById('ep-domain');
+  domEl.textContent = e.domain;
+  domEl.className = 'val ' + (e.isPhishing ? 'danger' : 'green');
+  document.getElementById('ep-ip').textContent = e.ip;
+  const spf = document.getElementById('ind-spf');
+  spf.textContent = e.spf; spf.className = 'ind-val ' + (e.spf === 'PASSOU' ? 'green' : 'red');
+  const dkim = document.getElementById('ind-dkim');
+  dkim.textContent = e.dkim; dkim.className = 'ind-val ' + (e.dkim === 'PASSOU' ? 'green' : 'red');
+  const urg = document.getElementById('ind-urgency');
+  urg.textContent = e.urgency;
+  urg.className = 'ind-val ' + ({'BAIXA':'green','MÉDIA':'amber','ALTA':'amber','CRÍTICA':'red'}[e.urgency] || '');
+  document.getElementById('ep-body').innerHTML = e.body;
+  document.getElementById('ep-feedback').style.display = 'none';
+  document.getElementById('ep-score-info').textContent =
+    STATE.emailAnswers[e.id] ? '✓ JÁ RESPONDIDO' : '';
+}
+
+function judgeEmail(isPhishing) {
+  if (!selectedEmail) return;
+  if (STATE.emailAnswers[selectedEmail.id] !== undefined) {
+    showFeedback('Você já respondeu este e-mail.', true); return;
+  }
+  const correct = isPhishing === selectedEmail.isPhishing;
+  STATE.emailAnswers[selectedEmail.id] = correct;
+  document.getElementById('ei-' + selectedEmail.id).classList.add(selectedEmail.isPhishing ? 'phishing' : 'legit');
+  if (correct) {
+    if (selectedEmail.isPhishing) {
+      const flags = selectedEmail.red.map(r => `<div style="margin-bottom:6px">▸ ${r}</div>`).join('');
+      showFeedback(`✓ CORRETO! Este era um e-mail de phishing.\n\nIndicadores detectados:\n${flags}`, true);
+    } else {
+      showFeedback('✓ CORRETO! Este é um e-mail legítimo. Domínio autêntico, SPF/DKIM válidos.', true);
+    }
+    addScore(80, 150);
+  } else {
+    if (selectedEmail.isPhishing) {
+      showFeedback('✗ ERRADO. Este era phishing! Indicadores: domínio falso, SPF/DKIM inválidos, urgência artificial.', false);
+    } else {
+      showFeedback('✗ ERRADO. Este e-mail era legítimo — domínio correto, autenticação válida.', false);
+    }
+  }
+  document.getElementById('ep-score-info').textContent = '✓ JÁ RESPONDIDO';
+}
+
+function showFeedback(msg, correct) {
+  const el = document.getElementById('ep-feedback');
+  el.style.display = 'block';
+  el.className = 'ep-feedback ' + (correct ? 'correct' : 'wrong');
+  el.innerHTML = msg;
+}
+
+/* ═══════════════════════════════════════════════════
+   PASSWORD SIMULATOR
+═══════════════════════════════════════════════════ */
+let bruteInterval = null;
+let pwVisible = false;
+
+function togglePwVis() {
+  pwVisible = !pwVisible;
+  document.getElementById('pw-input').type = pwVisible ? 'text' : 'password';
+}
+
+function analyzePw(pw) {
+  if (!pw) {
+    resetPwUI(); return;
+  }
+  const len = pw.length;
+  let charset = 0;
+  if (/[a-z]/.test(pw)) charset += 26;
+  if (/[A-Z]/.test(pw)) charset += 26;
+  if (/[0-9]/.test(pw)) charset += 10;
+  if (/[^a-zA-Z0-9]/.test(pw)) charset += 32;
+  const entropy = Math.round(len * Math.log2(charset || 1));
+  const combinations = Math.pow(charset || 1, len);
+  const guessPerSec = 1e10;
+  const secs = combinations / guessPerSec;
+
+  document.getElementById('pw-len').textContent = len;
+  document.getElementById('pw-len').className = 'pm-value ' + (len < 8 ? 'red' : len < 12 ? 'amber' : 'green');
+  document.getElementById('pw-charset').textContent = charset + ' chars';
+  document.getElementById('pw-entropy').textContent = entropy + ' bits';
+  document.getElementById('pw-entropy').className = 'pm-value ' + (entropy < 30 ? 'red' : entropy < 60 ? 'amber' : entropy < 80 ? 'cyan' : 'green');
+
+  let strength = 0;
+  if (len >= 8) strength++;
+  if (len >= 12) strength++;
+  if (charset >= 62) strength++;
+  if (entropy >= 60) strength++;
+
+  const labels = ['MUITO FRACA','FRACA','RAZOÁVEL','FORTE','MUITO FORTE'];
+  const colors = ['weak','weak','fair','good','strong'];
+  document.getElementById('pw-strength-label').textContent = labels[strength];
+  document.getElementById('pw-strength-label').style.color = ['var(--red)','var(--red)','var(--amber)','var(--cyan)','var(--green)'][strength];
+  for (let i = 0; i < 4; i++) {
+    const bar = document.getElementById('sb' + i);
+    bar.className = 'sbar' + (i < strength ? ' active ' + colors[strength] : '');
+  }
+
+  const crackLabel = document.getElementById('pw-crack-time');
+  let timeStr, cls;
+  if (secs < 1) { timeStr = 'INSTANTÂNEO'; cls = 'red'; }
+  else if (secs < 60) { timeStr = Math.round(secs) + ' SEG'; cls = 'red'; }
+  else if (secs < 3600) { timeStr = Math.round(secs/60) + ' MIN'; cls = 'red'; }
+  else if (secs < 86400) { timeStr = Math.round(secs/3600) + ' HRS'; cls = 'amber'; }
+  else if (secs < 31536000) { timeStr = Math.round(secs/86400) + ' DIAS'; cls = 'amber'; }
+  else if (secs < 3153600000) { timeStr = Math.round(secs/31536000) + ' ANOS'; cls = 'cyan'; }
+  else { timeStr = '+100 SÉCULOS'; cls = 'green'; }
+  crackLabel.textContent = timeStr;
+  crackLabel.className = 'pm-value ' + cls;
+
+  // brute force animation
+  if (secs < 3600) {
+    document.getElementById('brute-anim').style.display = 'block';
+    runBruteAnim(pw, secs);
+  } else {
+    document.getElementById('brute-anim').style.display = 'none';
+    if (bruteInterval) clearInterval(bruteInterval);
+  }
+}
+
+function runBruteAnim(target, totalSecs) {
+  if (bruteInterval) clearInterval(bruteInterval);
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$';
+  let attempt = 0;
+  const totalAttempts = Math.min(totalSecs * 100, 500);
+  const fill = document.getElementById('ba-fill');
+  const cur = document.getElementById('ba-current');
+  bruteInterval = setInterval(() => {
+    attempt++;
+    let guess = '';
+    for (let i = 0; i < target.length; i++) {
+      guess += chars[Math.floor(Math.random() * chars.length)];
+    }
+    cur.textContent = `Tentando: "${guess}"  (${attempt.toLocaleString()} tentativas)`;
+    fill.style.width = Math.min(100, (attempt/totalAttempts)*100) + '%';
+    if (attempt >= totalAttempts) {
+      cur.textContent = `✓ Senha encontrada após ${attempt.toLocaleString()} tentativas!`;
+      cur.style.color = 'var(--red)';
+      clearInterval(bruteInterval);
+    }
+  }, 50);
+}
+
+function resetPwUI() {
+  ['pw-crack-time','pw-entropy','pw-charset','pw-len'].forEach(id => {
+    const el = document.getElementById(id);
+    el.textContent = id === 'pw-crack-time' ? '—' : id === 'pw-entropy' ? '0 bits' : id === 'pw-charset' ? '0 chars' : '0';
+    el.className = 'pm-value';
+  });
+  for (let i = 0; i < 4; i++) document.getElementById('sb'+i).className = 'sbar';
+  document.getElementById('pw-strength-label').textContent = '—';
+  document.getElementById('pw-strength-label').style.color = '';
+  document.getElementById('brute-anim').style.display = 'none';
+  if (bruteInterval) clearInterval(bruteInterval);
+}
+
+/* ═══════════════════════════════════════════════════
+   NETWORK ATTACK
+═══════════════════════════════════════════════════ */
+const NET_LOGS = [
+  { ip:'192.168.1.44', action:'PORT SCAN', ports:'22,80,443,8080,3306', cls:'amber' },
+  { ip:'10.0.0.15', action:'SSH BRUTE FORCE', ports:'22', cls:'red' },
+  { ip:'185.220.101.47', action:'HTTP REQUEST', ports:'80', cls:'amber' },
+  { ip:'172.16.0.8', action:'DNS QUERY', ports:'53', cls:'' },
+  { ip:'10.0.0.20', action:'FTP LOGIN OK', ports:'21', cls:'green' },
+  { ip:'91.108.4.200', action:'SMTP CONNECTION', ports:'25', cls:'amber' },
+  { ip:'192.168.1.100', action:'HTTP/GET /admin', ports:'443', cls:'red' },
+  { ip:'10.10.0.5', action:'ICMP PING', ports:'—', cls:'' },
+  { ip:'185.100.87.174', action:'SQL INJECTION ATTEMPT', ports:'3306', cls:'red' },
+  { ip:'172.16.1.20', action:'FILE TRANSFER', ports:'22', cls:'amber' },
+];
+
+const THREATS = [
+  { id:'t1', type:'BRUTE FORCE SSH', ip:'10.0.0.15', desc:'847 tentativas/min na porta 22 — credential stuffing detectado.', severity:'CRÍTICO' },
+  { id:'t2', type:'PORT SCAN', ip:'192.168.1.44', desc:'Varredura completa de portas — possível reconhecimento pré-ataque.', severity:'MÉDIO' },
+  { id:'t3', type:'SQL INJECTION', ip:'185.100.87.174', desc:'Payload SQLi detectado na rota /api/login — ataque ativo.', severity:'CRÍTICO' },
+];
+
+let netLogInterval = null, netTimerInterval = null, netSecs = 0;
+
+function initNetwork() {
+  if (netLogInterval) return; // already running
+  const body = document.getElementById('net-log-body');
+  body.innerHTML = '';
+  let idx = 0;
+  netLogInterval = setInterval(() => {
+    const l = NET_LOGS[idx % NET_LOGS.length]; idx++;
+    const ts = new Date().toTimeString().slice(0,8);
+    const div = document.createElement('div');
+    div.className = 'log-entry ' + (l.cls === 'red' ? 'highlight' : '');
+    div.innerHTML = `<span class="log-ts">[${ts}]</span> <span class="log-ip">${l.ip}</span> <span class="log-action log-status ${l.cls}"> ${l.action}</span><span style="color:var(--muted)"> :${l.ports}</span>`;
+    body.appendChild(div);
+    body.scrollTop = body.scrollHeight;
+    if (body.children.length > 30) body.removeChild(body.children[0]);
+  }, 1200);
+
+  // threats
+  const tl = document.getElementById('threat-list');
+  tl.innerHTML = '';
+  THREATS.forEach(t => {
+    const div = document.createElement('div');
+    div.className = 'threat-item'; div.id = 'ti-' + t.id;
+    div.innerHTML = `<div class="ti-type">▸ ${t.type} — <span style="color:var(--amber)">${t.severity}</span></div>
+    <div class="ti-ip">${t.ip}</div>
+    <div class="ti-desc">${t.desc}</div>
+    <div class="ti-actions">
+      <button class="btn danger sm" onclick="netAction('${t.id}','block')">BLOQUEAR</button>
+      <button class="btn warn sm" onclick="netAction('${t.id}','monitor')">MONITORAR</button>
+      <button class="btn cyan sm" onclick="netAction('${t.id}','escalate')">ESCALAR</button>
+    </div>`;
+    tl.appendChild(div);
+  });
+  STATE.netPending = THREATS.length;
+  document.getElementById('ns-threats').textContent = THREATS.length;
+  document.getElementById('ns-pending').textContent = THREATS.length;
+
+  // timer
+  netSecs = 0;
+  netTimerInterval = setInterval(() => {
+    netSecs++;
+    const m = String(Math.floor(netSecs/60)).padStart(2,'0');
+    const s = String(netSecs%60).padStart(2,'0');
+    document.getElementById('net-timer').textContent = m + ':' + s;
+  }, 1000);
+}
+
+function netAction(id, action) {
+  const el = document.getElementById('ti-' + id);
+  if (!el || el.classList.contains('done')) return;
+  el.classList.add('done');
+  const isCorrect = action === 'block' || action === 'escalate';
+  if (action === 'block') {
+    el.style.opacity = '.4';
+    el.querySelector('.ti-type').innerHTML += ' <span style="color:var(--green)">— BLOQUEADO ✓</span>';
+    el.querySelector('.ti-actions').innerHTML = '<span style="color:var(--green);font-size:.65rem">✓ BLOQUEADO COM SUCESSO</span>';
+    STATE.netBlocked++;
+    document.getElementById('ns-blocked').textContent = STATE.netBlocked;
+    addScore(60, 100);
+  } else if (action === 'monitor') {
+    el.querySelector('.ti-actions').innerHTML = '<span style="color:var(--amber);font-size:.65rem">◉ EM MONITORAMENTO</span>';
+    addScore(20, 40);
+  } else {
+    el.querySelector('.ti-actions').innerHTML = '<span style="color:var(--cyan);font-size:.65rem">↑ ESCALADO PARA SOC</span>';
+    addScore(40, 80);
+  }
+  STATE.netPending--;
+  document.getElementById('ns-pending').textContent = Math.max(0, STATE.netPending);
+  STATE.netScore += isCorrect ? 60 : 20;
+  document.getElementById('ns-score').textContent = STATE.netScore;
+}
+
+/* ═══════════════════════════════════════════════════
+   SOCIAL ENGINEERING
+═══════════════════════════════════════════════════ */
+const SOCIAL_SCRIPT = [
+  { speaker:'attacker', msg:'Olá! Fala com o [nome]? Sou o Carlos, suporte de TI da empresa. Precisamos urgentemente atualizar o sistema de segurança da sua estação. Você tem 5 minutinhos?' },
+  { speaker:'user-choice', choices:[
+    { text:'Claro, pode falar! O que você precisa?', correct:false, flag:'Aceitou sem verificar identidade' },
+    { text:'Pode me passar seu número de funcionário e ramal para eu confirmar?', correct:true, feedback:'Perfeito! Sempre verifique a identidade antes de prosseguir.' },
+    { text:'Me ligue pelo número oficial da empresa e identificado.', correct:true, feedback:'Excelente! Encerrar e retornar pelo canal oficial é a resposta ideal.' },
+  ]},
+  { speaker:'attacker', msg:'Claro, claro. O número é 47821. Mas olha, estamos com um incidente crítico agora — se não corrigirmos nos próximos 15 minutos, toda a rede vai cair. Preciso do seu usuário e senha para fazer o acesso remoto imediatamente.' },
+  { speaker:'user-choice', choices:[
+    { text:'Ok, meu usuário é [nome]@corp.io e minha senha é...', correct:false, flag:'Compartilhou credenciais por telefone' },
+    { text:'Nunca compartilho senhas por telefone. Vou abrir um chamado oficial.', correct:true, feedback:'Correto! Senhas nunca devem ser compartilhadas, nem com "TI".' },
+    { text:'Posso dar apenas o usuário, a senha não.', correct:false, flag:'Cedeu parcialmente sob pressão' },
+  ]},
+  { speaker:'attacker', msg:'Entendo sua preocupação, mas é URGENTE! Você vai ser o responsável se a rede cair. O seu gerente me pediu para entrar em contato diretamente. Posso te passar o e-mail dele agora...' },
+  { speaker:'user-choice', choices:[
+    { text:'Se meu gerente pediu, tudo bem. Me diz o e-mail dele.', correct:false, flag:'Cedeu à pressão de autoridade' },
+    { text:'Vou ligar para meu gerente agora mesmo para confirmar.', correct:true, feedback:'Perfeito! Sempre confirme por canais independentes quando invocarem autoridade.' },
+    { text:'Isso é engenharia social. Vou encerrar a chamada e reportar ao TI.', correct:true, feedback:'Excelente! Identificou e encerrou o ataque. Resposta máxima!' },
+  ]},
+];
+
+let socialStep = 0;
+let socialScore = 0;
+const redFlagsDetected = [];
+const allRedFlags = [
+  'Urgência artificial: "15 minutos"',
+  'Pedido de senha por telefone',
+  'Pressão de autoridade: "seu gerente pediu"',
+  'Identidade não verificável',
+  'Ameaça de consequências: "você será responsável"',
+];
+
+function initSocial() {
+  const msgs = document.getElementById('social-msgs');
+  const flags = document.getElementById('red-flags-list');
+  if (msgs.children.length) return;
+  socialStep = 0; socialScore = 0;
+  flags.innerHTML = allRedFlags.map(f =>
+    `<div class="rf-item" id="rf-${f.slice(0,8).replace(/\s/g,'_')}">${f}</div>`
+  ).join('');
+  advanceSocial();
+}
+
+function advanceSocial() {
+  const script = SOCIAL_SCRIPT;
+  if (socialStep >= script.length) return;
+  const step = script[socialStep];
+  if (step.speaker === 'attacker') {
+    addMsg('attacker', 'Carlos (Suporte TI)', step.msg);
+    socialStep++;
+    setTimeout(advanceSocial, 600);
+  } else {
+    showChoices(step.choices);
+  }
+}
+
+function addMsg(who, name, text) {
+  const msgs = document.getElementById('social-msgs');
+  const div = document.createElement('div');
+  div.className = 'msg ' + who;
+  div.innerHTML = `<div class="msg-name">${name}</div><div class="msg-bubble">${text}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showChoices(choices) {
+  const container = document.getElementById('social-choices');
+  container.innerHTML = '<div style="font-size:.62rem;color:var(--muted);margin-bottom:6px;letter-spacing:.1em">// ESCOLHA SUA RESPOSTA:</div>';
+  choices.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.textContent = c.text;
+    btn.onclick = () => pickChoice(c, choices, i, btn);
+    container.appendChild(btn);
+  });
+}
+
+function pickChoice(choice, all, idx, btn) {
+  const container = document.getElementById('social-choices');
+  container.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+  btn.classList.add('selected', choice.correct ? 'correct' : 'wrong');
+
+  addMsg('user', 'Você', choice.text);
+
+  if (choice.correct) {
+    socialScore += 40;
+    if (choice.feedback) setTimeout(() => addMsg('attacker','SISTEMA',`✓ ${choice.feedback}`), 500);
+  } else {
+    if (choice.flag) {
+      redFlagsDetected.push(choice.flag);
+      const rfEl = document.getElementById('social-msgs');
+      setTimeout(() => addMsg('attacker','⚠ ALERTA',`Red flag: "${choice.flag}"`), 500);
+      // mark flag
+      document.querySelectorAll('.rf-item').forEach(el => {
+        if (el.textContent.includes(choice.flag.slice(0,12))) el.classList.add('detected');
+      });
+    }
+  }
+
+  document.getElementById('social-score-meter').textContent = socialScore;
+  document.getElementById('social-pbar').style.width = Math.min(100,(socialScore/120*100)) + '%';
+
+  socialStep++;
+  setTimeout(() => {
+    if (socialStep < SOCIAL_SCRIPT.length) advanceSocial();
+    else {
+      container.innerHTML = `<div style="text-align:center;padding:12px;color:var(--green);font-size:.75rem;letter-spacing:.08em">
+        ✓ CENÁRIO CONCLUÍDO — Score: ${socialScore}/120
+        <br><button class="btn sm" style="margin-top:10px" onclick="addScore(50,250);this.textContent='✓ XP CREDITADO!'">RESGATAR XP</button></div>`;
+    }
+  }, 1200);
+}
+
+/* ═══════════════════════════════════════════════════
+   LOGIN SIMULATOR
+═══════════════════════════════════════════════════ */
+function initLogin() {
+  const checks = document.getElementById('login-checks');
+  if (checks.children.length) return;
+  const indicators = [
+    { icon:'🔒', label:'CERTIFICADO SSL/TLS', siteA:false, siteADesc:'HTTP sem criptografia — dados trafegam em texto claro', siteBDesc:'HTTPS válido — dados criptografados' },
+    { icon:'🌐', label:'DOMÍNIO AUTÊNTICO', siteA:false, siteADesc:'"paypa1" com número "1" no lugar do "l" (typosquatting)', siteBDesc:'paypal.com — domínio oficial e verificado' },
+    { icon:'📍', label:'SUBDOMÍNIO SUSPEITO', siteA:false, siteADesc:'paypa1-secure-login.net — estrutura de URL fraudulenta', siteBDesc:'paypal.com/signin — estrutura de URL limpa e oficial' },
+    { icon:'⚡', label:'CAMPO SOLICITADO', siteA:false, siteADesc:'Pede e-mail E senha juntos — técnica para capturar tudo', siteBDesc:'Pede e-mail separado — fluxo oficial do PayPal' },
+  ];
+  indicators.forEach(ind => {
+    const div = document.createElement('div');
+    div.className = 'check-item';
+    div.innerHTML = `<div class="check-icon">${ind.icon}</div>
+    <div style="flex:1">
+      <div class="check-label">${ind.label}</div>
+      <div class="check-desc" style="color:var(--red)">Site A: ${ind.siteADesc}</div>
+      <div class="check-desc" style="color:var(--green);margin-top:3px">Site B: ${ind.siteBDesc}</div>
+    </div>
+    <div class="check-result">
+      <div class="check-fail">Site A ✗</div>
+      <div class="check-pass">Site B ✓</div>
+    </div>`;
+    checks.appendChild(div);
+  });
+}
+
+let loginAnswered = false;
+function loginDecision(choice) {
+  if (loginAnswered) return;
+  const verdict = document.getElementById('login-verdict');
+  verdict.style.display = 'block';
+  if (choice === 'a-fake' || choice === 'b-real') {
+    loginAnswered = true;
+    verdict.className = 'verdict-box real';
+    verdict.innerHTML = `<div class="verdict-title">✓ CORRETO!</div>
+    <div class="verdict-desc">O Site A é FALSO (paypa1-secure-login.net — typosquatting, sem HTTPS, layout suspeito).<br>
+    O Site B é o REAL (paypal.com/signin — HTTPS válido, domínio oficial, fluxo correto).<br><br>
+    <span style="color:var(--green)">+200 XP creditados!</span></div>`;
+    addScore(100, 200);
+  } else if (choice === 'a-real' || choice === 'b-fake') {
+    loginAnswered = true;
+    verdict.className = 'verdict-box fake';
+    verdict.innerHTML = `<div class="verdict-title">✗ ERRADO!</div>
+    <div class="verdict-desc">O Site A é FALSO: URL usa "paypa1" com o número 1 no lugar do L, sem HTTPS, e pede todos os dados de uma vez.<br>
+    O Site B é o site real do PayPal. Sempre verifique a URL completa e o certificado SSL antes de inserir qualquer dado.</div>`;
+  } else if (choice === 'a' || choice === 'b') {
+    verdict.className = 'verdict-box fake';
+    verdict.innerHTML = `<div class="verdict-title">⚠ PERIGO!</div>
+    <div class="verdict-desc">Você tentou fazer login ${choice === 'a' ? 'no site FALSO' : 'em um site — sempre analise a URL antes de inserir seus dados'}. Nunca insira dados sem verificar o domínio e o certificado SSL.</div>`;
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   SCENARIOS
+═══════════════════════════════════════════════════ */
+const SCENARIOS_DATA = [
+  { emoji:'📧', level:'medio', levelLabel:'MÉDIO', time:'10 min', title:'Phishing por E-mail', desc:'Analise e-mails suspeitos e identifique tentativas de phishing usando análise de domínio, SPF/DKIM e gatilhos de urgência.',
+    tags:['Domínios Falsos','Urgência','Análise de Headers'], xp:150, route:'email' },
+  { emoji:'🔑', level:'medio', levelLabel:'MÉDIO', time:'5 min', title:'Simulador de Senha', desc:'Crie senhas e veja quanto tempo um atacante levaria para quebrá-las com brute force. Aprenda sobre entropia e charset.',
+    tags:['Brute Force','Entropia','Charset'], xp:100, route:'password' },
+  { emoji:'🔐', level:'alto', levelLabel:'ALTO', time:'15 min', title:'Página de Login Falsa', desc:'Detecte páginas de login fraudulentas. Analise URL, certificado SSL, layout e outros indicadores de typosquatting.',
+    tags:['Typosquatting','HTTPS/SSL','Certificados'], xp:200, route:'login' },
+  { emoji:'🕵️', level:'critico', levelLabel:'CRÍTICO', time:'8 min', title:'Engenharia Social', desc:'Um suposto técnico de TI liga pedindo suas credenciais. Reconheça vishing, pretexting e técnicas de pressão psicológica.',
+    tags:['Vishing','Pretexting','Verificação'], xp:250, route:'social' },
+  { emoji:'🛰️', level:'medio', levelLabel:'MÉDIO', time:'12 min', title:'Ataque de Rede (IDS)', desc:'Analise um stream de logs em tempo real e tome decisões para bloquear, monitorar ou escalar ameaças de rede.',
+    tags:['Port Scanning','Brute Force','DDoS'], xp:175, route:'network' },
+  { emoji:'🔍', level:'alto', levelLabel:'ALTO', time:'15 min', title:'Ameaça Interna', desc:'Dados sensíveis estão vazando da empresa. Identifique o vetor de saída e tome as medidas corretas de resposta a incidentes.',
+    tags:['DLP','Logs','Política de Acesso'], xp:220, route:'network' },
+  { emoji:'💉', level:'critico', levelLabel:'CRÍTICO', time:'18 min', title:'Injeção SQL', desc:'Um formulário do seu sistema está vulnerável. Identifique a falha, entenda como funciona e implemente a correção correta.',
+    tags:['SQLi','Prepared Statements','OWASP'], xp:280, route:'network' },
+];
+
+function renderScenarios(filter='all') {
+  const list = document.getElementById('scenarios-list');
+  list.innerHTML = '';
+  SCENARIOS_DATA.filter(s => filter === 'all' || s.level === filter).forEach(s => {
+    const div = document.createElement('div');
+    div.className = 'scenario-big-card';
+    const lvlCls = {medio:'amber',alto:'red',critico:''}[s.level];
+    const lvlStyle = s.level === 'critico' ? 'border-color:rgba(255,45,85,.6);color:var(--red)' : '';
+    div.innerHTML = `<div class="sbc-icon">${s.emoji}</div>
+    <div class="sbc-body">
+      <div class="sbc-title">${s.title}</div>
+      <div class="sbc-desc">${s.desc}</div>
+      <div class="sbc-tags">${s.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    </div>
+    <div class="sbc-meta">
+      <div class="sbc-xp">⚡ +${s.xp} XP</div>
+      <div class="sbc-time">⏱ ${s.time}</div>
+      <div class="sbc-lvl"><span class="tag ${lvlCls}" style="${lvlStyle}">${s.levelLabel}</span></div>
+      <button class="btn sm" style="margin-top:12px" onclick="goto('${s.route}')">INICIAR →</button>
+    </div>`;
+    list.appendChild(div);
+  });
+}
+
+function filterScenarios(filter, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderScenarios(filter);
+}
+
+/* ═══ INIT ═══ */
+renderScenarios();
+initEmailSim();
+
+// Simulate initial load animation
+setTimeout(() => {
+  addDashLog();
+}, 500);
+
+// Simulate real-time score ticking slowly
+setTimeout(() => {
+  STATE.score = 0; STATE.xp = 0; STATE.streak = 1;
+  updateStats();
+}, 100);
+</script>
+</body>
+</html>

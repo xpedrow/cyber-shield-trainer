@@ -5,114 +5,15 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
 
-
 import { 
-  Shield, 
-  Zap, 
-  Target, 
-  CheckCircle,
-  ShieldCheck,
-  Mail,
-  Lock,
-  Users,
-  Network,
-  ArrowRight
+  ShieldCheck, 
+  Mail, 
+  Lock, 
+  Users, 
+  Network, 
+  ArrowRight,
+  Target
 } from "lucide-react";
-
-const statsDefault = [
-  { label: "Score de Segurança", value: "0", unit: "/1000", color: "var(--accent-cyan)", icon: <Shield size={20} />, key: 'totalScore' },
-  { label: "XP Total", value: "0", unit: "", color: "var(--accent-green)", icon: <CheckCircle size={20} />, key: 'xp' },
-  { label: "Sequência", value: "0", unit: " dias", color: "var(--accent-orange)", icon: <Zap size={20} />, key: 'streak' },
-  { label: "Cenários", value: "0", unit: "", color: "var(--accent-purple)", icon: <Target size={20} />, key: 'scenarios' },
-];
-
-const scenarios = [
-  {
-    id: "phishing",
-    title: "Ataque de Phishing",
-    description: "Identifique e-mails fraudulentos tentando roubar suas credenciais.",
-    difficulty: "Médio",
-    difficultyClass: "threat-medium",
-    icon: <Mail size={22} />,
-    href: "/email-simulator",
-    progress: 0,
-  },
-  {
-    id: "fake-login",
-    title: "Login Falso",
-    description: "Detecte páginas de login falsas criadas para capturar senhas.",
-    difficulty: "Alto",
-    difficultyClass: "threat-high",
-    icon: <Lock size={22} />,
-    href: "/login-simulator",
-    progress: 0,
-  },
-  {
-    id: "social",
-    title: "Engenharia Social",
-    description: "Reconheça manipulações psicológicas usadas por atacantes.",
-    difficulty: "Crítico",
-    difficultyClass: "threat-critical",
-    icon: <Users size={22} />,
-    href: "/social-engineering",
-    progress: 0,
-  },
-  {
-    id: "network",
-    title: "Ataque de Rede",
-    description: "Analise logs e tome decisões contra invasões em tempo real.",
-    difficulty: "Médio",
-    difficultyClass: "threat-medium",
-    icon: <Network size={22} />,
-    href: "/network-attack",
-    progress: 0,
-  },
-];
-
-function ScoreRing({ score }: { score: number }) {
-  const radius = 58;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (Math.min(score, 1000) / 1000) * circumference;
-
-  return (
-    <div style={{ position: "relative", width: "160px", height: "160px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <svg width="150" height="150" viewBox="0 0 140 140" style={{ transform: "rotate(-90deg)", filter: "drop-shadow(var(--glow-cyan))" }}>
-        <circle cx="70" cy="70" r={radius} fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="8" />
-        <circle
-          cx="70" cy="70" r={radius}
-          fill="none"
-          stroke="url(#scoreGrad)"
-          strokeWidth="10"
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
-          strokeLinecap="round"
-          style={{ transition: "stroke-dashoffset 1.5s cubic-bezier(0.34, 1.56, 0.64, 1)" }}
-        />
-        <defs>
-          <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="var(--accent-cyan)" />
-            <stop offset="100%" stopColor="var(--accent-blue)" />
-          </linearGradient>
-        </defs>
-      </svg>
-      <div
-        style={{
-          position: "absolute",
-          display: "flex", flexDirection: "column",
-          alignItems: "center", justifyContent: "center",
-          userSelect: "none"
-        }}
-      >
-        <span style={{ fontSize: "36px", fontWeight: 900, color: "var(--text-primary)", lineHeight: 0.9, letterSpacing: "-0.04em" }}>
-          {score}
-        </span>
-        <span style={{ fontSize: "11px", color: "var(--accent-cyan)", fontWeight: 800, textTransform: "uppercase", letterSpacing: "1px", marginTop: "4px" }}>
-          Score
-        </span>
-      </div>
-    </div>
-  );
-}
 
 export default function Dashboard() {
   const [userData, setUserData] = useState<any>(null);
@@ -122,7 +23,6 @@ export default function Dashboard() {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        // Fetch user data
         const userRes = await apiFetch("users/me", {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -131,16 +31,14 @@ export default function Dashboard() {
           setUserData(data);
         }
 
-        // Fetch stats
         const statsRes = await apiFetch("scores/me/stats", {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (statsRes.ok) {
           const statsData = await statsRes.json();
-          setUserData((prev: Record<string, unknown> | null) => ({ ...prev, ...statsData }));
+          setUserData((prev: any) => ({ ...prev, ...statsData }));
         }
 
-        // Fetch progress data
         const progressRes = await apiFetch("reports/my-progress", {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -149,130 +47,151 @@ export default function Dashboard() {
           setActivities(progressData.history || []);
         }
       } catch (e) {
-        console.log("Fetch error, using mock data for demo", e);
+        console.log("Fetch error", e);
       }
     };
     fetchData();
   }, []);
 
-  const currentStats = statsDefault.map(s => {
-    if (!userData) return s;
-    if (s.key === 'totalScore') return { ...s, value: userData.totalPoints?.toString() || "0" };
-    if (s.key === 'xp') return { ...s, value: userData.xp?.toString() || "0" };
-    if (s.key === 'streak') return { ...s, value: userData.streak?.toString() || "0" };
-    if (s.key === 'scenarios') return { ...s, value: userData.scenariosCompleted?.toString() || "0" };
-    return s;
-  });
+  const scenarios = [
+    {
+      id: "phishing",
+      title: "Ataque de Phishing",
+      description: "Identifique e-mails fraudulentos tentando roubar suas credenciais.",
+      difficulty: "Médio",
+      icon: <Mail size={22} />,
+      href: "/email-simulator",
+      progress: 45,
+      xp: "+250 XP"
+    },
+    {
+      id: "fake-login",
+      title: "Login Falso",
+      description: "Detecte páginas de login falsas criadas para capturar senhas.",
+      difficulty: "Alto",
+      icon: <Lock size={22} />,
+      href: "/login-simulator",
+      progress: 0,
+      xp: "+400 XP"
+    },
+    {
+      id: "network",
+      title: "Ataque de Rede",
+      description: "Analise logs e tome decisões contra invasões em tempo real.",
+      difficulty: "Crítico",
+      icon: <Network size={22} />,
+      href: "/network-attack",
+      progress: 10,
+      xp: "+600 XP"
+    }
+  ];
 
   return (
     <AppLayout>
-      {/* Header */}
-      <div className="animate-fade-in-up" style={{ marginBottom: "40px" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "24px" }}>
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
-              <ShieldCheck size={28} color="var(--accent-cyan)" />
-              <h1 style={{ fontSize: "32px", fontWeight: 900, color: "var(--text-primary)", letterSpacing: "-0.04em" }}>
-                Nexus Dashboard
-              </h1>
-            </div>
-            <p style={{ color: "var(--text-secondary)", fontSize: "16px", fontWeight: 500 }}>
-              Bem-vindo ao centro de operações{userData ? `, Agente ${userData.name}` : ', Trainee'}.
-            </p>
-          </div>
-          <div
-            style={{
-              display: "flex", alignItems: "center", gap: "10px",
-              padding: "10px 20px",
-              borderRadius: "12px",
-              background: "rgba(0, 255, 163, 0.05)",
-              border: "1px solid rgba(0, 255, 163, 0.15)",
-              boxShadow: "var(--glow-green)"
-            }}
-          >
-            <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--accent-green)", display: "block", animation: "pulse-glow 2s infinite" }} />
-            <span style={{ fontSize: "14px", color: "var(--accent-green)", fontWeight: 700, letterSpacing: "0.5px" }}>SISTEMA OPERACIONAL</span>
+      {/* ═══ DASHBOARD HERO ═══ */}
+      <section 
+        className="dashboard-hero"
+        style={{
+          background: "var(--black2)",
+          border: "1px solid var(--border)",
+          padding: "20px 24px",
+          marginBottom: "20px",
+          position: "relative",
+          overflow: "hidden",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center"
+        }}
+      >
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, var(--green), var(--cyan), var(--green))", animation: "scan 3s linear infinite" }} />
+        
+        <div>
+          <h1 style={{ fontFamily: "var(--display)", fontSize: "1.6rem", fontWeight: 900, letterSpacing: "0.08em", color: "var(--green)", textShadow: "0 0 30px rgba(0,255,65,0.5)" }}>
+            BEM-VINDO, AGENTE
+          </h1>
+          <p style={{ fontSize: "0.72rem", color: "var(--muted)", marginTop: "6px", letterSpacing: "0.08em" }}>
+            CONEXÃO ESTABELECIDA // TERMINAL SEGURO // NÍVEL DE AMBIENTE: OPERACIONAL
+          </p>
+          <div style={{ marginTop: "15px", display: "flex", gap: "10px" }}>
+            <div style={{ padding: "4px 10px", border: "1px solid var(--border)", fontSize: "0.6rem", color: "var(--green)" }}>IP: 192.168.1.104</div>
+            <div style={{ padding: "4px 10px", border: "1px solid var(--border)", fontSize: "0.6rem", color: "var(--cyan)" }}>ESTADO: ATIVO</div>
           </div>
         </div>
-      </div>
 
-      {/* Stats grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "20px", marginBottom: "40px" }}>
-        {currentStats.map((stat, i) => (
-          <div
-            key={stat.label}
-            className="cyber-card animate-fade-in-up"
-            style={{ padding: "24px", animationDelay: `${i * 0.1}s` }}
+        {/* RADAR SVG Animation */}
+        <div style={{ position: "relative", width: "120px", height: "120px" }}>
+          <svg viewBox="0 0 160 160" style={{ width: "100%", height: "100%" }}>
+            <circle cx="80" cy="80" r="70" fill="none" stroke="var(--border)" strokeWidth="1" />
+            <circle cx="80" cy="80" r="45" fill="none" stroke="var(--border)" strokeWidth="1" />
+            <circle cx="80" cy="80" r="20" fill="none" stroke="var(--border)" strokeWidth="1" />
+            <line x1="10" y1="80" x2="150" y2="80" stroke="var(--border)" strokeWidth="1" />
+            <line x1="80" y1="10" x2="80" y2="150" stroke="var(--border)" strokeWidth="1" />
+            <circle cx="50" cy="40" r="3" fill="var(--green)" className="animate-pulse" />
+            <circle cx="110" cy="100" r="3" fill="var(--red)" className="animate-pulse" />
+            <g className="radar-sweep">
+               <path d="M 80,80 L 80,10 A 70,70 0 0 1 140.6,45 Z" fill="rgba(0,255,65,0.15)" />
+            </g>
+          </svg>
+        </div>
+      </section>
+
+      {/* ═══ STATS GRID ═══ */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px", marginBottom: "20px" }}>
+        {[
+          { label: "AMEAÇAS NEUTRALIZADAS", value: userData?.scenariosCompleted || "14", color: "var(--green)" },
+          { label: "PONTOS DE AGENTE", value: userData?.totalPoints || "742", color: "var(--cyan)" },
+          { label: "XP ACUMULADO", value: userData?.xp || "12.4k", color: "var(--amber)" },
+          { label: "VULNERABILIDADES", value: "03", color: "var(--red)" }
+        ].map((stat, i) => (
+          <div 
+            key={i}
+            className="panel"
+            style={{ padding: "18px 16px", background: "var(--black2)", border: "1px solid var(--border)", position: "relative", overflow: "hidden" }}
           >
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
-              <div style={{ color: stat.color, background: `${stat.color}15`, padding: "8px", borderRadius: "10px", border: `1px solid ${stat.color}30` }}>
-                {stat.icon}
-              </div>
-              <span style={{ fontSize: "11px", color: "var(--text-muted)", fontWeight: 800, textTransform: "uppercase", letterSpacing: "1px" }}>Realtime</span>
-            </div>
-            <div style={{ fontSize: "36px", fontWeight: 900, color: stat.color, lineHeight: 1, letterSpacing: "-0.02em" }}>
-              {stat.value}<span style={{ fontSize: "16px", fontWeight: 600, color: "var(--text-muted)", marginLeft: "4px" }}>{stat.unit}</span>
-            </div>
-            <div style={{ fontSize: "14px", color: "var(--text-secondary)", marginTop: "8px", fontWeight: 500 }}>{stat.label}</div>
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: `linear-gradient(90deg, transparent, ${stat.color}, transparent)` }} />
+            <div style={{ fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--muted)", marginBottom: "10px" }}>{stat.label}</div>
+            <div style={{ fontFamily: "var(--display)", fontSize: "1.8rem", fontWeight: 900, color: stat.color, textShadow: `0 0 16px ${stat.color}80` }}>{stat.value}</div>
           </div>
         ))}
       </div>
 
-      {/* Main content */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: "32px", alignItems: "start" }}>
-        {/* Scenarios */}
-        <div>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
-            <h2 style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.02em" }}>Cenários de Treinamento</h2>
-            <Link href="/scenarios" style={{ fontSize: "14px", color: "var(--accent-cyan)", textDecoration: "none", fontWeight: 600, display: "flex", alignItems: "center", gap: "4px" }}>
-              Ver todos <ArrowRight size={14} />
-            </Link>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "20px" }}>
+        {/* Scenarios List */}
+        <div className="panel" style={{ background: "var(--black2)", border: "1px solid var(--border)" }}>
+          <div style={{ padding: "12px 16px", borderBottom: "1px solid var(--border2)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span style={{ fontFamily: "var(--display)", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.14em", color: "var(--green)" }}>TREINAMENTOS DISPONÍVEIS</span>
+            <Link href="/scenarios" style={{ fontSize: "0.6rem", color: "var(--muted)", textDecoration: "underline" }}>VER TODOS DA LISTA</Link>
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            {scenarios.map((sc, i) => (
-              <Link
-                key={sc.id}
-                href={sc.href}
-                style={{ textDecoration: "none" }}
-                className="animate-fade-in-up"
-              >
-                <div
-                  className="cyber-card glass-hover"
-                  style={{ padding: "20px", animationDelay: `${i * 0.1}s` }}
+          <div style={{ padding: "16px", display: "flex", flexDirection: "column", gap: "12px" }}>
+            {scenarios.map((sc) => (
+              <Link key={sc.id} href={sc.href} style={{ textDecoration: "none" }}>
+                <div 
+                  className="scenario-card"
+                  style={{
+                    background: "var(--black2)",
+                    border: "1px solid var(--border)",
+                    padding: "16px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "15px",
+                    transition: "all 0.2s"
+                  }}
                 >
-                  <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-                    <div
-                      className="glass"
-                      style={{
-                        width: "56px", height: "56px",
-                        borderRadius: "14px",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        flexShrink: 0,
-                        color: "var(--accent-cyan)",
-                        border: "1px solid var(--border-subtle)"
-                      }}
-                    >
-                      {sc.icon}
+                  <div style={{ width: "40px", height: "40px", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--green)", background: "var(--black)" }}>
+                    {sc.icon}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
+                      <span style={{ fontSize: "0.8rem", color: "var(--white)", fontWeight: 700, fontFamily: "var(--display)" }}>{sc.title}</span>
+                      <span style={{ fontSize: "0.6rem", color: "var(--amber)" }}>{sc.xp}</span>
                     </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "6px" }}>
-                        <h3 style={{ fontSize: "16px", fontWeight: 800, color: "var(--text-primary)" }}>{sc.title}</h3>
-                        <span
-                          className={sc.difficultyClass}
-                          style={{ fontSize: "10px", fontWeight: 800, padding: "2px 10px", borderRadius: "100px", border: "1px solid", flexShrink: 0, textTransform: "uppercase", letterSpacing: "0.5px" }}
-                        >
-                          {sc.difficulty}
-                        </span>
-                      </div>
-                      <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginBottom: "14px", lineHeight: 1.5 }}>{sc.description}</p>
-                      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                        <div style={{ flex: 1, height: "6px", background: "var(--bg-secondary)", borderRadius: "100px", overflow: "hidden", border: "1px solid var(--border-subtle)" }}>
-                          <div style={{ width: `${sc.progress}%`, height: "100%", background: "linear-gradient(90deg, var(--accent-cyan), var(--accent-purple))", borderRadius: "100px", transition: "width 1s cubic-bezier(0.4, 0, 0.2, 1)" }} />
-                        </div>
-                        <span style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: 700, width: "35px" }}>{sc.progress}%</span>
-                      </div>
+                    <div style={{ fontSize: "0.68rem", color: "var(--muted)", marginBottom: "8px" }}>{sc.description}</div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                       <div style={{ flex: 1, height: "3px", background: "var(--black4)" }}>
+                          <div style={{ width: `${sc.progress}%`, height: "100%", background: "var(--green)", boxShadow: "0 0 6px var(--green)" }} />
+                       </div>
+                       <span style={{ fontSize: "0.6rem", color: "var(--muted)" }}>{sc.progress}%</span>
                     </div>
-                    <ArrowRight size={20} style={{ color: "var(--text-muted)", flexShrink: 0, opacity: 0.5 }} />
                   </div>
                 </div>
               </Link>
@@ -280,61 +199,60 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Right panel */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-          {/* Score panel */}
-          <div className="cyber-card" style={{ padding: "32px", textAlign: "center" }}>
-            <h3 style={{ fontSize: "12px", fontWeight: 800, color: "var(--text-muted)", marginBottom: "28px", textTransform: "uppercase", letterSpacing: "2px" }}>
-              Nível do Agente
-            </h3>
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: "24px" }}>
-              <ScoreRing score={userData?.totalScore || 0} />
-            </div>
-            <div
-              style={{
-                display: "inline-block",
-                padding: "6px 20px",
-                borderRadius: "100px",
-                background: "rgba(0, 229, 255, 0.1)",
-                border: "1px solid rgba(0, 229, 255, 0.2)",
-                fontSize: "14px",
-                fontWeight: 800,
-                color: "var(--accent-cyan)",
-                marginBottom: "20px",
-                textTransform: "uppercase",
-                letterSpacing: "1px",
-                boxShadow: "var(--glow-cyan)"
-              }}
-            >
-              {userData?.level?.toUpperCase() || "RECRUTA"}
-            </div>
-            <p style={{ fontSize: "13px", color: "var(--text-muted)", lineHeight: 1.6 }}>
-              Complete cenários de nível Crítico para ganhar <b>XP Bônus</b>.
-            </p>
+        {/* Sidebar Info */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+          {/* Mission */}
+          <div className="panel" style={{ background: "var(--black2)", border: "1px solid rgba(0,207,207,0.3)", padding: "18px", position: "relative" }}>
+             <div style={{ position: "absolute", top: "-1px", left: "16px", fontSize: "0.55rem", letterSpacing: "0.18em", color: "var(--cyan)", background: "var(--black2)", padding: "0 6px" }}>// MISSÃO DIÁRIA</div>
+             <p style={{ fontSize: "0.8rem", color: "var(--white)", lineHeight: "1.6", marginBottom: "14px", fontStyle: "italic" }}>
+               "Analise logs do firewall e localize a origem do ataque DDoS iniciado às 02:40 AM."
+             </p>
+             <div style={{ display: "flex", gap: "8px", marginBottom: "14px" }}>
+                <span style={{ padding: "4px 10px", border: "1px solid var(--amber)", background: "var(--ambdim)", color: "var(--amber)", fontSize: "0.62rem" }}>+500 XP</span>
+                <span style={{ padding: "4px 10px", border: "1px solid var(--cyan)", background: "var(--cyandim)", color: "var(--cyan)", fontSize: "0.62rem" }}>+10 PONTOS</span>
+             </div>
+             <button style={{ width: "100%", padding: "8px", background: "transparent", border: "1px solid var(--cyan)", color: "var(--cyan)", fontFamily: "var(--mono)", fontSize: "0.7rem", cursor: "pointer" }}>INICIAR MISSÃO</button>
           </div>
 
-          {/* Tips panel */}
-          <div className="cyber-card" style={{ padding: "24px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px" }}>
-              <Target size={18} color="var(--accent-orange)" />
-              <h3 style={{ fontSize: "12px", fontWeight: 800, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "2px" }}>
-                Missão Diária
-              </h3>
+          {/* Level Tracker */}
+          <div className="panel" style={{ background: "var(--black2)", border: "1px solid var(--border)", padding: "18px" }}>
+            <div style={{ fontSize: "0.6rem", letterSpacing: "0.2em", color: "var(--muted)", marginBottom: "12px" }}>PATENTE ATUAL</div>
+            <div style={{ fontFamily: "var(--display)", fontSize: "1.4rem", fontWeight: 900, color: "var(--green)", letterSpacing: "0.12em", textShadow: "0 0 20px rgba(0,255,65,0.4)" }}>
+              {userData?.level?.toUpperCase() || "AGENTE RECRUTA"}
             </div>
-            <div style={{ background: 'rgba(255, 157, 0, 0.05)', borderRadius: '12px', padding: '18px', border: '1px solid rgba(255, 157, 0, 0.1)' }}>
-              <p style={{ fontSize: "14px", color: "var(--text-primary)", lineHeight: 1.6, fontWeight: 500 }}>
-                 "Simule um ataque de rede e neutralize 3 ameaças antes que o tempo acabe."
-              </p>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "16px" }}>
-                <span style={{ fontSize: "12px", color: "var(--accent-orange)", fontWeight: 700 }}>+500 XP</span>
-                <Link href="/network-attack">
-                  <button className="btn-cyber btn-primary" style={{ padding: "6px 20px", fontSize: "12px", width: "auto" }}>INICIAR</button>
-                </Link>
+            <div style={{ fontSize: "0.7rem", color: "var(--muted)", marginTop: "4px" }}>SCORE: {userData?.totalPoints || "742"} / 1000</div>
+            <div style={{ marginTop: "16px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.6rem", color: "var(--muted)", marginBottom: "6px" }}>
+                <span>PRÓXIMO NÍVEL</span>
+                <span>74%</span>
+              </div>
+              <div style={{ height: "4px", background: "var(--black4)" }}>
+                <div style={{ width: "74%", height: "100%", background: "var(--green)", boxShadow: "0 0 8px var(--green)" }} />
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes scan {
+          0% { transform: translateY(-100%); opacity: 0; }
+          50% { opacity: 1; }
+          100% { transform: translateY(200%); opacity: 0; }
+        }
+        .radar-sweep {
+          transform-origin: 80px 80px;
+          animation: radar-spin 3s linear infinite;
+        }
+        @keyframes radar-spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .scenario-card:hover {
+          border-color: var(--green) !important;
+          background: var(--gdim) !important;
+        }
+      `}</style>
     </AppLayout>
   );
 }
