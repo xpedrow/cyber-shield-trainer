@@ -27,8 +27,20 @@ export class AuthService {
   }
 
   async login(dto: LoginDto) {
-    const user = await this.validateUser(dto.email, dto.password);
-    if (!user) throw new UnauthorizedException('Invalid credentials');
+    const user = await this.usersService.findByEmail(dto.email);
+    
+    if (!user) {
+      throw new UnauthorizedException('O e-mail inserido não existe no banco de dados do sistema.');
+    }
+
+    if (!user.isActive) {
+      throw new UnauthorizedException('Esta conta está desativada.');
+    }
+
+    const isPasswordValid = await bcrypt.compare(dto.password, user.passwordHash);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Senha incorreta. Verifique suas credenciais.');
+    }
 
     await this.usersService.updateLastLogin(user.id);
 
