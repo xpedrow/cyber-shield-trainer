@@ -14,7 +14,8 @@ import {
   Users, 
   Network, 
   KeyRound, 
-  BarChart3
+  BarChart3,
+  LogOut
 } from "lucide-react";
 
 const navItems = [
@@ -67,6 +68,12 @@ export default function Sidebar() {
     };
     fetchUser();
   }, [pathname, router]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    router.push("/login");
+  };
 
   return (
     <aside
@@ -206,6 +213,38 @@ export default function Sidebar() {
             }} 
           />
         </div>
+
+        <button
+          onClick={handleLogout}
+          style={{
+            marginTop: "16px",
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            padding: "8px 0",
+            fontSize: "0.7rem",
+            color: "var(--red)",
+            background: "transparent",
+            border: "1px solid rgba(255, 0, 0, 0.2)",
+            cursor: "pointer",
+            fontFamily: "var(--mono)",
+            justifyContent: "center",
+            transition: "all 0.3s ease",
+            letterSpacing: "0.1em"
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "var(--reddim)";
+            e.currentTarget.style.borderColor = "var(--red)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "transparent";
+            e.currentTarget.style.borderColor = "rgba(255, 0, 0, 0.2)";
+          }}
+        >
+          <LogOut size={14} />
+          <span>DESCONECTAR</span>
+        </button>
       </div>
       <style jsx>{`
         span span { color: var(--cyan); }
