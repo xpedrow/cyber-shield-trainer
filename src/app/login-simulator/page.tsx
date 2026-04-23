@@ -20,7 +20,7 @@ const loginSites: LoginSite[] = [
   {
     id: "paypal-fake",
     name: "PayPal",
-    url: "https:
+    url: "https://paypa1.com/login",
     realUrl: "paypal.com",
     logoChar: "P",
     logoColor: "#0070ba",
@@ -36,7 +36,7 @@ const loginSites: LoginSite[] = [
   {
     id: "gmail-real",
     name: "Gmail / Google",
-    url: "https:
+    url: "https://accounts.google.com/signin",
     realUrl: "accounts.google.com",
     logoChar: "G",
     logoColor: "#4285f4",
@@ -47,7 +47,7 @@ const loginSites: LoginSite[] = [
   {
     id: "itau-fake",
     name: "Itaú Unibanco",
-    url: "https:
+    url: "https://itau-banco-seguro.net/login",
     realUrl: "itau.com.br",
     logoChar: "i",
     logoColor: "#ff6600",
@@ -63,7 +63,7 @@ const loginSites: LoginSite[] = [
   {
     id: "microsoft-real",
     name: "Microsoft",
-    url: "https:
+    url: "https://login.microsoftonline.com",
     realUrl: "login.microsoftonline.com",
     logoChar: "M",
     logoColor: "#00a4ef",
@@ -74,7 +74,7 @@ const loginSites: LoginSite[] = [
   {
     id: "paypal-real",
     name: "PayPal",
-    url: "https:
+    url: "https://www.paypal.com/signin",
     realUrl: "paypal.com",
     logoChar: "P",
     logoColor: "#003087",
@@ -85,7 +85,7 @@ const loginSites: LoginSite[] = [
   {
     id: "paypal-fake1",
     name: "PayPal",
-    url: "https:
+    url: "https://paypal-secure-login.co/verify",
     realUrl: "paypal.com",
     logoChar: "P",
     logoColor: "#003087",
@@ -101,7 +101,7 @@ const loginSites: LoginSite[] = [
   {
     id: "netflix-real",
     name: "Netflix",
-    url: "https:
+    url: "https://www.netflix.com/login",
     realUrl: "netflix.com",
     logoChar: "N",
     logoColor: "#e50914",
@@ -112,7 +112,7 @@ const loginSites: LoginSite[] = [
   {
     id: "netflix-fake",
     name: "Netflix",
-    url: "https:
+    url: "https://netflix-login-support.net/account",
     realUrl: "netflix.com",
     logoChar: "N",
     logoColor: "#e50914",
@@ -128,7 +128,7 @@ const loginSites: LoginSite[] = [
   {
     id: "amazon-real",
     name: "Amazon",
-    url: "https:
+    url: "https://www.amazon.com/ap/signin",
     realUrl: "amazon.com",
     logoChar: "A",
     logoColor: "#ff9900",
@@ -139,7 +139,7 @@ const loginSites: LoginSite[] = [
   {
     id: "amazon-fake",
     name: "Amazon",
-    url: "https:
+    url: "https://amazon-verification-login.info/security",
     realUrl: "amazon.com",
     logoChar: "A",
     logoColor: "#ff9900",
@@ -155,7 +155,7 @@ const loginSites: LoginSite[] = [
   {
     id: "facebook-real",
     name: "Facebook",
-    url: "https:
+    url: "https://www.facebook.com/login",
     realUrl: "facebook.com",
     logoChar: "f",
     logoColor: "#1877f2",
@@ -166,7 +166,7 @@ const loginSites: LoginSite[] = [
   {
     id: "facebook-fake",
     name: "Facebook",
-    url: "https:
+    url: "https://facebook-security-check.ru/login",
     realUrl: "facebook.com",
     logoChar: "f",
     logoColor: "#1877f2",
@@ -183,7 +183,7 @@ const loginSites: LoginSite[] = [
 
 export default function LoginSimulator() {
   const [current, setCurrent] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, "fake" | "real" | null>>();
+  const [answers, setAnswers] = useState<Record<string, "fake" | "real" | null>>({});
   const [showResult, setShowResult] = useState(false);
   const [score, setScore] = useState(0);
   const [_phase, setPhase] = useState<"inspect" | "answer">("inspect");
@@ -266,16 +266,16 @@ export default function LoginSimulator() {
           <div style={{ color: "var(--text-muted)", marginBottom: "24px" }}>pontos ganhos</div>
           <button
             className="btn-cyber btn-primary"
-            onClick={() => { setCurrent(0); setAnswers(); setScore(0); setShowResult(false); }}
+            onClick={() => { setCurrent(0); setAnswers({}); setScore(0); setShowResult(false); }}
           >
             🔄 Tentar Novamente
           </button>
         </div>
       ) : (
         <div style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: "24px", alignItems: "start" }}>
-          
+          {/* Main login panel */}
           <div>
-            
+            {/* Progress */}
             <div
               style={{ display: "flex", gap: "8px", marginBottom: "20px" }}
             >
@@ -298,11 +298,12 @@ export default function LoginSimulator() {
               ))}
             </div>
 
+            {/* Simulated browser */}
             <div
               className="cyber-card"
               style={{ overflow: "hidden", border: "1px solid var(--border-subtle)" }}
             >
-              
+              {/* Browser chrome */}
               <div
                 style={{
                   background: "#1a1a2e",
@@ -313,13 +314,13 @@ export default function LoginSimulator() {
                   gap: "12px",
                 }}
               >
-                
+                {/* Traffic lights */}
                 <div style={{ display: "flex", gap: "6px" }}>
                   {["#ff5f56", "#ffbd2e", "#27c93f"].map((c) => (
                     <div key={c} style={{ width: "12px", height: "12px", borderRadius: "50%", background: c }} />
                   ))}
                 </div>
-                
+                {/* URL bar */}
                 <div
                   style={{
                     flex: 1,
@@ -339,6 +340,7 @@ export default function LoginSimulator() {
                 </div>
               </div>
 
+              {/* Login page content */}
               <div
                 style={{
                   padding: "48px 32px",
@@ -349,7 +351,7 @@ export default function LoginSimulator() {
                   background: "var(--bg-primary)",
                 }}
               >
-                
+                {/* Logo */}
                 <div
                   style={{
                     width: "56px",
@@ -372,6 +374,7 @@ export default function LoginSimulator() {
                 </h2>
                 <p style={{ fontSize: "13px", color: "var(--text-muted)", marginBottom: "28px" }}>{site.url}</p>
 
+                {/* Form */}
                 <div style={{ width: "100%", maxWidth: "340px", display: "flex", flexDirection: "column", gap: "14px" }}>
                   <input
                     className="cyber-input"
@@ -422,6 +425,7 @@ export default function LoginSimulator() {
               </div>
             </div>
 
+            {/* Answer buttons */}
             {!answered ? (
               <div style={{ display: "flex", gap: "12px", marginTop: "16px" }}>
                 <button
@@ -454,8 +458,9 @@ export default function LoginSimulator() {
             )}
           </div>
 
+          {/* Side panel */}
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            
+            {/* Checklist */}
             <div className="card" style={{ padding: "20px" }}>
               <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-muted)", marginBottom: "14px", textTransform: "uppercase", letterSpacing: "0.06em" }}>
                 O que verificar
@@ -479,6 +484,7 @@ export default function LoginSimulator() {
               ))}
             </div>
 
+            {/* Result explanation */}
             {showResult && answered && (
               <div
                 className="card animate-fade-in-up"

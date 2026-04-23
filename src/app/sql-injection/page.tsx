@@ -134,6 +134,7 @@ export default function SqlInjectionPage() {
           </p>
         </header>
 
+        {/* Stats Display */}
         <div style={{ display: "flex", justifyContent: "center", gap: "20px", marginBottom: "32px" }}>
           <div className="card" style={{ padding: "20px", textAlign: "center", minWidth: "120px" }}>
             <div style={{ fontSize: "24px", fontWeight: 900, color: "var(--accent-cyan)" }}>{score}</div>
@@ -150,7 +151,7 @@ export default function SqlInjectionPage() {
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "24px" }}>
-          
+          {/* Scenario List */}
           <div>
             <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-muted)", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "0.06em" }}>
               🎯 Cenários Vulneráveis
@@ -192,6 +193,7 @@ export default function SqlInjectionPage() {
             </div>
           </div>
 
+          {/* Injection Testing Area */}
           <div>
             {selectedScenario ? (
               <motion.div
@@ -199,7 +201,7 @@ export default function SqlInjectionPage() {
                 animate={{ opacity: 1, x: 0 }}
                 style={{ display: "flex", flexDirection: "column", gap: "20px" }}
               >
-                
+                {/* Scenario Details */}
                 <div className="card" style={{ padding: "24px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "16px" }}>
                     <div style={{
@@ -235,6 +237,7 @@ export default function SqlInjectionPage() {
                     {selectedScenario.description}
                   </p>
 
+                  {/* Vulnerable Query */}
                   <div>
                     <h4 style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-muted)", marginBottom: "12px", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                       📝 Query Vulnerável
@@ -257,6 +260,7 @@ export default function SqlInjectionPage() {
                     </div>
                   </div>
 
+                  {/* Hints */}
                   <div style={{ marginTop: "20px" }}>
                     <button
                       onClick={() => setShowHints(!showHints)}
@@ -309,6 +313,7 @@ export default function SqlInjectionPage() {
                   </div>
                 </div>
 
+                {/* Injection Input */}
                 <div className="card" style={{ padding: "24px" }}>
                   <h4 style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-muted)", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                     ⚡ Teste sua Injeção SQL
@@ -347,10 +352,11 @@ export default function SqlInjectionPage() {
                   </button>
                 </div>
 
+                {/* Results Section */}
                 <AnimatePresence>
                   {showResult && (
                     <div className="cyber-card" style={{ padding: "24px", marginTop: "24px" }}>
-                      
+                      {/* Feedback */}
                       {feedback && (
                         <div style={{
                           padding: "16px",
@@ -369,6 +375,7 @@ export default function SqlInjectionPage() {
                         </div>
                       )}
 
+                      {/* Simulated Results */}
                       {result && (
                         <div style={{ marginBottom: "24px" }}>
                           <h4 style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-muted)", marginBottom: "12px", textTransform: "uppercase", letterSpacing: "1px" }}>
@@ -391,6 +398,7 @@ export default function SqlInjectionPage() {
                         </div>
                       )}
 
+                      {/* Analysis */}
                       <div>
                         <h4 style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-muted)", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "1px" }}>
                           📚 Análise Técnica
@@ -431,6 +439,7 @@ export default function SqlInjectionPage() {
           </div>
         </div>
 
+        {/* Educational Section */}
         <div style={{ marginTop: "48px", borderTop: "1px solid var(--border-subtle)", paddingTop: "32px" }}>
           <h2 style={{ fontSize: "20px", fontWeight: 800, marginBottom: "24px", textAlign: "center" }}>Por que isso importa?</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "24px" }}>

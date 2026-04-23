@@ -3,7 +3,7 @@ import Sidebar from "@/components/Sidebar";
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "var(--black)" }}>
-      
+      {/* ═══ HEADER ═══ */}
       <header
         style={{
           height: "52px",

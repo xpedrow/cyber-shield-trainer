@@ -110,6 +110,7 @@ export default function Scenarios() {
         </p>
       </div>
 
+      {/* Filter bar */}
       <div style={{ display: "flex", gap: "8px", marginBottom: "24px", flexWrap: "wrap" }}>
         {["Todos", "Médio", "Alto", "Crítico"].map((f) => (
           <button
@@ -123,6 +124,7 @@ export default function Scenarios() {
         ))}
       </div>
 
+      {/* Scenarios grid */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "24px" }}>
         <AnimatePresence mode="popLayout">
           {filteredScenarios.map((sc) => (
@@ -135,7 +137,7 @@ export default function Scenarios() {
               className="card glass-hover"
               style={{ padding: "24px", display: "flex", flexDirection: "column" }}
             >
-              
+              {/* Header */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "14px" }}>
                 <div style={{ fontSize: "32px" }}>{sc.icon}</div>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "6px" }}>
@@ -156,6 +158,7 @@ export default function Scenarios() {
                 {sc.description}
               </p>
 
+              {/* Topics */}
               <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "20px" }}>
                 {sc.topics.map((t) => (
                   <span
@@ -175,6 +178,7 @@ export default function Scenarios() {
                 ))}
               </div>
 
+              {/* Footer */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "14px", borderTop: "1px solid var(--border-subtle)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                   <span style={{ fontSize: "16px" }}>⚡</span>

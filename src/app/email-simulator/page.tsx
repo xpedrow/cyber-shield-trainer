@@ -53,7 +53,7 @@ Key fingerprint: SHA256:...uXcKJh7Qp8...
 
 If you did not add this key, please remove it immediately from your account settings and change your password.
 
-Visit: https:
+Visit: https://github.com/settings/keys
 
 Thanks,
 The GitHub Team`,
@@ -142,7 +142,7 @@ Order number: #782-3341982-2219384
 
 You can track your package using the link below:
 
-https:
+https://www.amazon.com/your-orders
 
 Thank you for shopping with us.
 
@@ -205,7 +205,7 @@ If this was you, no action is required.
 
 If you don't recognize this activity, please secure your account immediately.
 
-https:
+https://myaccount.google.com/security
 
 Google Security Team`,
     safeActions: [
@@ -252,7 +252,7 @@ type EmailStatus = Record<number, "phishing" | "safe" | null>;
 
 export default function EmailSimulator() {
   const [selected, setSelected] = useState<number | null>(null);
-  const [answers, setAnswers] = useState<EmailStatus>();
+  const [answers, setAnswers] = useState<EmailStatus>({});
   const [showResult, setShowResult] = useState<number | null>(null);
   const [score, setScore] = useState(0);
 
@@ -285,7 +285,7 @@ export default function EmailSimulator() {
       setShowResult(emailId);
     } catch (error) {
       console.error("Error logging phishing action:", error);
-      
+      // Fallback for demo
       const correct = (answer === "phishing") === email.isPhishing;
       setAnswers((prev) => ({ ...prev, [emailId]: answer }));
       setScore((prev) => (correct ? prev + 100 : Math.max(0, prev - 30)));
@@ -331,7 +331,7 @@ export default function EmailSimulator() {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "340px 1fr", gap: "20px", alignItems: "start" }}>
-        
+        {/* Email list */}
         <div
           className="card"
           style={{ overflow: "hidden" }}
@@ -376,9 +376,10 @@ export default function EmailSimulator() {
           })}
         </div>
 
+        {/* Email body */}
         {selectedEmail ? (
           <div className="animate-fade-in-up card" style={{ overflow: "hidden" }}>
-            
+            {/* Email header */}
             <div style={{ padding: "20px 24px", borderBottom: "1px solid var(--border-subtle)" }}>
               <h2 style={{ fontSize: "18px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "12px" }}>
                 {selectedEmail.subject}
@@ -399,6 +400,7 @@ export default function EmailSimulator() {
               </div>
             </div>
 
+            {/* Body */}
             <div style={{ padding: "24px", borderBottom: "1px solid var(--border-subtle)" }}>
               <div
                 style={{
@@ -417,6 +419,7 @@ export default function EmailSimulator() {
               </div>
             </div>
 
+            {/* Action buttons */}
             {!answers[selectedEmail.id] ? (
               <div style={{ padding: "20px 24px", display: "flex", gap: "12px", alignItems: "center" }}>
                 <span style={{ fontSize: "14px", color: "var(--text-muted)", marginRight: "4px" }}>Este e-mail é:</span>
@@ -439,7 +442,7 @@ export default function EmailSimulator() {
               </div>
             ) : (
               <div style={{ padding: "20px 24px" }}>
-                
+                {/* Result panel */}
                 {showResult === selectedEmail.id && (
                   <div
                     className="animate-fade-in-up"

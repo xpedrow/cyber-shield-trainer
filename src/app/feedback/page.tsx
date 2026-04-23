@@ -14,6 +14,7 @@ export default function Feedback() {
       try {
         const token = localStorage.getItem("token");
 
+        // Fetch user stats
         const statsRes = await apiFetch("scores/me/stats", {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -22,6 +23,7 @@ export default function Feedback() {
           setUserData(stats);
         }
 
+        // Fetch progress data
         const progressRes = await apiFetch("reports/my-progress", {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -102,28 +104,28 @@ function RadarChart() {
 
   return (
     <svg width="240" height="240" viewBox="0 0 240 240">
-      
+      {/* Grid rings */}
       {bgRings.map((pts, i) => (
         <polygon key={i} points={pts} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
       ))}
-      
+      {/* Axis lines */}
       {skills.map((s) => {
         const end = toXY(s.angle, maxR);
         return <line key={s.name} x1={center} y1={center} x2={end.x} y2={end.y} stroke="rgba(255,255,255,0.06)" strokeWidth="1" />;
       })}
-      
+      {/* Skill polygon */}
       <polygon
         points={skillPoints.join(" ")}
         fill="rgba(0,212,255,0.15)"
         stroke="var(--accent-cyan)"
         strokeWidth="1.5"
       />
-      
+      {/* Points */}
       {skills.map((s) => {
         const { x, y } = toXY(s.angle, (s.value / 100) * maxR);
         return <circle key={s.name} cx={x} cy={y} r="4" fill="var(--accent-cyan)" />;
       })}
-      
+      {/* Labels */}
       {skills.map((s) => {
         const { x, y } = toXY(s.angle, maxR + 16);
         return (
@@ -147,7 +149,7 @@ function RadarChart() {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "24px" }}>
-        
+        {/* Radar chart */}
         <div className="card animate-fade-in-up" style={{ padding: "24px", display: "flex", flexDirection: "column", alignItems: "center" }}>
           <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-muted)", marginBottom: "20px", textTransform: "uppercase", letterSpacing: "0.06em", alignSelf: "flex-start" }}>
             Mapa de Habilidades
@@ -155,6 +157,7 @@ function RadarChart() {
           <RadarChart />
         </div>
 
+        {/* Metrics */}
         <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
           {metrics.map((m, i) => (
             <div
@@ -185,7 +188,7 @@ function RadarChart() {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-        
+        {/* Achievements */}
         <div className="card animate-fade-in-up" style={{ padding: "24px" }}>
           <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-muted)", marginBottom: "18px", textTransform: "uppercase", letterSpacing: "0.06em" }}>
             Conquistas
@@ -213,6 +216,7 @@ function RadarChart() {
           </div>
         </div>
 
+        {/* Weaknesses / Recommendations */}
         <div className="card animate-fade-in-up" style={{ padding: "24px" }}>
           <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-muted)", marginBottom: "18px", textTransform: "uppercase", letterSpacing: "0.06em" }}>
             Áreas para Melhorar

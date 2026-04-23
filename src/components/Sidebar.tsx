@@ -92,7 +92,7 @@ export default function Sidebar() {
         fontFamily: "var(--mono)"
       }}
     >
-      
+      {/* ═══ LOGO ═══ */}
       <div
         style={{
           padding: "20px",
@@ -128,6 +128,7 @@ export default function Sidebar() {
         </div>
       </div>
 
+      {/* ═══ NAVIGATION ═══ */}
       <div style={{ padding: "14px 0", flex: 1, overflowY: "auto" }}>
         <div style={{ padding: "0 16px 8px", fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--muted)" }}>
           Navegação Principal
@@ -166,6 +167,7 @@ export default function Sidebar() {
         })}
       </div>
 
+      {/* ═══ USER PROFILE ═══ */}
       <div
         style={{
           marginTop: "auto",
@@ -199,7 +201,7 @@ export default function Sidebar() {
             </div>
           </div>
         </div>
-        
+        {/* XP Bar */}
         <div style={{ marginTop: "8px", height: "3px", background: "var(--black4)", borderRadius: "2px", overflow: "hidden" }}>
           <div 
             style={{ 

@@ -26,6 +26,7 @@ export default function PasswordSimulator() {
     if (!password) return;
     setIsSimulating(true);
 
+    // Aesthetic delay to simulate "brute force testing"
     await new Promise(r => setTimeout(r, 1500));
 
     try {
@@ -41,7 +42,7 @@ export default function PasswordSimulator() {
       const data = await response.json();
       setAnalysis(data);
     } catch (_error) {
-      
+      // Fallback logic for offline/demo
       const mockResult = calculateMockAnalysis(password);
       setAnalysis(mockResult);
     } finally {
@@ -179,7 +180,7 @@ export default function PasswordSimulator() {
               animate={{ opacity: 1, y: 0 }}
               style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}
             >
-              
+              {/* Result Card */}
               <div className="card" style={{ padding: '24px', borderLeft: `4px solid ${getStrengthColor(analysis.strength)}` }}>
                 <h3 style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '20px', textTransform: 'uppercase' }}>
                   Resultado da Análise
@@ -211,6 +212,7 @@ export default function PasswordSimulator() {
                 </div>
               </div>
 
+              {/* Crack Time Card */}
               <div className="card" style={{ padding: '24px' }}>
                 <h3 style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '20px', textTransform: 'uppercase' }}>
                   Tempo Estimado para Quebrar
@@ -241,6 +243,7 @@ export default function PasswordSimulator() {
           )}
         </AnimatePresence>
 
+        {/* Educational Section */}
         <div style={{ marginTop: '48px', borderTop: '1px solid var(--border-subtle)', paddingTop: '32px' }}>
           <h2 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '24px', textAlign: 'center' }}>Por que isso importa?</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px' }}>
