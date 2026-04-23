@@ -1,7 +1,7 @@
 "use client";
 
 import AppLayout from "@/components/AppLayout";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
 import { ShieldAlert, ShieldCheck } from "lucide-react";
 
