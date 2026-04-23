@@ -214,6 +214,25 @@ export default function LoginPage() {
               required
               className="cyber-input"
             />
+            {isLogin && (
+              <div style={{ textAlign: "right", marginTop: "8px" }}>
+                <button
+                  type="button"
+                  onClick={() => router.push("/forgot-password")}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "var(--muted)",
+                    fontSize: "0.65rem",
+                    cursor: "pointer",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em"
+                  }}
+                >
+                  Esqueci minha senha
+                </button>
+              </div>
+            )}
           </div>
 
           {!isLogin && (

@@ -41,6 +41,12 @@ export class UsersService {
     return this.userRepo.findOne({ where: { email: email.toLowerCase() } });
   }
 
+  async findByResetToken(token: string): Promise<User | null> {
+    return this.userRepo.findOne({
+      where: { resetPasswordToken: token },
+    });
+  }
+
   async update(id: string, dto: UpdateUserDto): Promise<User> {
     const user = await this.findOne(id);
     if (dto.password) {

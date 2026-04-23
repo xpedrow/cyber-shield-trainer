@@ -59,6 +59,12 @@ export class User {
   @Column({ nullable: true })
   lastLoginAt: Date;
 
+  @Column({ nullable: true })
+  resetPasswordToken: string;
+
+  @Column({ nullable: true, type: 'timestamp' })
+  resetPasswordExpires: Date;
+
   @OneToMany(() => Score, (score) => score.user)
   scores: Score[];
 
