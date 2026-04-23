@@ -84,7 +84,7 @@ export default function Dashboard() {
 
   return (
     <AppLayout>
-      {/* ═══ DASHBOARD HERO ═══ */}
+      
       <section 
         className="dashboard-hero"
         style={{
@@ -106,7 +106,7 @@ export default function Dashboard() {
             BEM-VINDO, AGENTE
           </h1>
           <p style={{ fontSize: "0.72rem", color: "var(--muted)", marginTop: "6px", letterSpacing: "0.08em" }}>
-            CONEXÃO ESTABELECIDA // TERMINAL SEGURO // NÍVEL DE AMBIENTE: OPERACIONAL
+            CONEXÃO ESTABELECIDA 
           </p>
           <div style={{ marginTop: "15px", display: "flex", gap: "10px" }}>
             <div style={{ padding: "4px 10px", border: "1px solid var(--border)", fontSize: "0.6rem", color: "var(--green)" }}>IP: 192.168.1.104</div>
@@ -114,7 +114,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* RADAR SVG Animation */}
         <div style={{ position: "relative", width: "120px", height: "120px" }}>
           <svg viewBox="0 0 160 160" style={{ width: "100%", height: "100%" }}>
             <circle cx="80" cy="80" r="70" fill="none" stroke="var(--border)" strokeWidth="1" />
@@ -131,7 +130,6 @@ export default function Dashboard() {
         </div>
       </section>
 
-      {/* ═══ STATS GRID ═══ */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px", marginBottom: "20px" }}>
         {[
           { label: "AMEAÇAS NEUTRALIZADAS", value: userData?.scenariosCompleted || "14", color: "var(--green)" },
@@ -152,7 +150,7 @@ export default function Dashboard() {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "20px" }}>
-        {/* Scenarios List */}
+        
         <div className="panel" style={{ background: "var(--black2)", border: "1px solid var(--border)" }}>
           <div style={{ padding: "12px 16px", borderBottom: "1px solid var(--border2)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span style={{ fontFamily: "var(--display)", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.14em", color: "var(--green)" }}>TREINAMENTOS DISPONÍVEIS</span>
@@ -195,11 +193,10 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Sidebar Info */}
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-          {/* Mission */}
+          
           <div className="panel" style={{ background: "var(--black2)", border: "1px solid rgba(0,207,207,0.3)", padding: "18px", position: "relative" }}>
-             <div style={{ position: "absolute", top: "-1px", left: "16px", fontSize: "0.55rem", letterSpacing: "0.18em", color: "var(--cyan)", background: "var(--black2)", padding: "0 6px" }}>{"// MISSÃO DIÁRIA"}</div>
+             <div style={{ position: "absolute", top: "-1px", left: "16px", fontSize: "0.55rem", letterSpacing: "0.18em", color: "var(--cyan)", background: "var(--black2)", padding: "0 6px" }}>{"
              <p style={{ fontSize: "0.8rem", color: "var(--white)", lineHeight: "1.6", marginBottom: "14px", fontStyle: "italic" }}>
                "Analise logs do firewall e localize a origem do ataque DDoS iniciado às 02:40 AM."
              </p>
@@ -210,7 +207,6 @@ export default function Dashboard() {
              <button style={{ width: "100%", padding: "8px", background: "transparent", border: "1px solid var(--cyan)", color: "var(--cyan)", fontFamily: "var(--mono)", fontSize: "0.7rem", cursor: "pointer" }}>INICIAR MISSÃO</button>
           </div>
 
-          {/* Level Tracker */}
           <div className="panel" style={{ background: "var(--black2)", border: "1px solid var(--border)", padding: "18px" }}>
             <div style={{ fontSize: "0.6rem", letterSpacing: "0.2em", color: "var(--muted)", marginBottom: "12px" }}>PATENTE ATUAL</div>
             <div style={{ fontFamily: "var(--display)", fontSize: "1.4rem", fontWeight: 900, color: "var(--green)", letterSpacing: "0.12em", textShadow: "0 0 20px rgba(0,255,65,0.4)" }}>

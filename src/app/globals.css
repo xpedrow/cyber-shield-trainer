@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
-/* Background Patterns */
+
 .grid-bg {
   background-image: 
     linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
@@ -33,7 +33,6 @@
   --display: 'Orbitron', monospace;
   --body:    'Inter', sans-serif;
 
-  /* Compatibility with existing code */
   --bg-primary: var(--black);
   --bg-secondary: var(--black2);
   --bg-card: var(--black2);
@@ -67,7 +66,6 @@ body {
   position: relative;
 }
 
-/* ── SCANLINES ── */
 body::before {
   content: '';
   position: fixed;
@@ -80,7 +78,6 @@ body::before {
   );
 }
 
-/* CRT vignette */
 body::after {
   content: '';
   position: fixed;
@@ -90,7 +87,6 @@ body::after {
   background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%);
 }
 
-/* Glassmorphism Refined */
 .glass {
   background: rgba(16, 25, 40, 0.75);
   backdrop-filter: blur(16px);
@@ -110,7 +106,6 @@ body::after {
   transform: translateY(-2px);
 }
 
-/* ═══ COMMON COMPONENTS ═══ */
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
 .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
@@ -153,7 +148,6 @@ body::after {
   padding: 16px;
 }
 
-/* terminal block */
 .terminal {
   background: var(--black);
   border: 1px solid var(--border);
@@ -171,7 +165,6 @@ body::after {
 .t-line.amber { color: var(--amber); }
 .t-line.cyan { color: var(--cyan); }
 
-/* buttons */
 .btn-cyber {
   display: inline-flex;
   align-items: center;
@@ -207,7 +200,6 @@ body::after {
 .btn-cyber.cyan { border-color: var(--cyan); color: var(--cyan); }
 .btn-cyber.cyan:hover { background: var(--cyan); color: var(--black); box-shadow: 0 0 20px rgba(0,207,207,0.4); }
 
-/* Card styles overhaul */
 .cyber-card, .card {
   background: var(--black2);
   border: 1px solid var(--border);
@@ -232,7 +224,6 @@ body::after {
   box-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
 }
 
-/* Loading/Progress Bar */
 .pbar { height: 4px; background: var(--black4); overflow: hidden; }
 .pbar-fill {
   height: 100%;
@@ -241,7 +232,6 @@ body::after {
   transition: width 0.6s ease;
 }
 
-/* Input Styles */
 .cyber-input {
   width: 100%;
   background: transparent;

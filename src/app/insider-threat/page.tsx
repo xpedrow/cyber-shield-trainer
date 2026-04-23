@@ -15,7 +15,6 @@ interface InsiderThreat {
   explanation: string;
 }
 
-
 export default function InsiderThreatPage() {
   const [threats, setThreats] = useState<InsiderThreat[]>([]);
   const [selectedThreat, setSelectedThreat] = useState<InsiderThreat | null>(null);
@@ -138,7 +137,6 @@ export default function InsiderThreatPage() {
           </p>
         </header>
 
-        {/* Stats Display */}
         <div style={{ display: "flex", justifyContent: "center", gap: "20px", marginBottom: "32px" }}>
           <div className="card" style={{ padding: "20px", textAlign: "center", minWidth: "120px" }}>
             <div style={{ fontSize: "24px", fontWeight: 900, color: "var(--accent-cyan)" }}>{score}</div>
@@ -151,7 +149,7 @@ export default function InsiderThreatPage() {
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "24px" }}>
-          {/* Threat List */}
+          
           <div>
             <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-muted)", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "0.05em" }}>
               🎯 Cenários de Ameaça
@@ -194,7 +192,6 @@ export default function InsiderThreatPage() {
             </div>
           </div>
 
-          {/* Threat Response Area */}
           <div>
             {selectedThreat ? (
               <motion.div
@@ -202,7 +199,7 @@ export default function InsiderThreatPage() {
                 animate={{ opacity: 1, x: 0 }}
                 style={{ display: "flex", flexDirection: "column", gap: "20px" }}
               >
-                {/* Threat Details */}
+                
                 <div className="card" style={{ padding: "24px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "16px" }}>
                     <div style={{
@@ -238,7 +235,6 @@ export default function InsiderThreatPage() {
                     {selectedThreat.description}
                   </p>
 
-                  {/* Evidence */}
                   <div>
                     <h4 style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-muted)", marginBottom: "12px", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                       📋 Evidências Identificadas
@@ -261,7 +257,6 @@ export default function InsiderThreatPage() {
                   </div>
                 </div>
 
-                {/* Action Selection */}
                 <div className="card" style={{ padding: "24px" }}>
                   <h4 style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-muted)", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                     🛡️ Escolha sua Resposta
@@ -305,7 +300,6 @@ export default function InsiderThreatPage() {
                   </button>
                 </div>
 
-              {/* Feedback & Analysis */}
               <AnimatePresence>
                 {feedback && (
                   <div style={{
@@ -326,7 +320,6 @@ export default function InsiderThreatPage() {
                 )}
               </AnimatePresence>
 
-              {/* Analysis Section */}
               {showAnalysis && (
                 <div style={{
                   padding: "24px",
@@ -373,7 +366,6 @@ export default function InsiderThreatPage() {
         </div>
       </div>
 
-      {/* Educational Footer */}
       <div style={{ marginTop: "60px", padding: "32px", borderRadius: "16px", background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)" }}>
         <h3 style={{ fontSize: "18px", fontWeight: 800, color: "var(--text-primary)", marginBottom: "24px", display: "flex", alignItems: "center", gap: "10px" }}>
           <span>📚</span>

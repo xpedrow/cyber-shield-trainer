@@ -251,7 +251,6 @@ export default function SocialEngineeringPage() {
   const handleOptionSelect = async (optionId: string) => {
     const scenario = scenarios[currentScenarioIndex];
 
-    // Optimistic UI / Play locally if fetch fails
     const option = scenario.options.find(o => o.id === optionId);
     if (!option) return;
 
@@ -315,9 +314,9 @@ export default function SocialEngineeringPage() {
         </header>
 
         <div style={{ display: "grid", gap: "24px" }}>
-          {/* Simulation Card */}
+          
           <div className="card" style={{ overflow: 'hidden' }}>
-            {/* Header */}
+            
             <div style={{
               padding: '12px 20px',
               background: 'var(--bg-secondary)',
@@ -341,7 +340,6 @@ export default function SocialEngineeringPage() {
               <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>ID: {currentScenario.id}</span>
             </div>
 
-            {/* Content */}
             <div style={{ padding: '32px' }}>
               <div style={{
                 background: 'rgba(0,0,0,0.2)',
