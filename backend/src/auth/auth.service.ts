@@ -95,7 +95,7 @@ export class AuthService {
     await this.usersService.update(user.id, {
       resetPasswordToken: token,
       resetPasswordExpires: expires,
-    } as any);
+    });
 
     return {
       message: 'Token de redefinição gerado com sucesso',
