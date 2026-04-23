@@ -12,6 +12,29 @@ export class ScenariosService {
     private readonly scenarioRepo: Repository<Scenario>,
   ) {}
 
+  async onModuleInit() {
+    const count = await this.scenarioRepo.count();
+    if (count === 0) {
+      console.log('🌱 Semeando cenários padrão...');
+      await this.create({
+        title: 'Simulador de Login',
+        description: 'Identifique páginas de login falsas e proteja suas credenciais.',
+        type: 'fake_login' as any,
+        difficulty: 'medium' as any,
+        maxScore: 1000,
+        xpReward: 500,
+      });
+      await this.create({
+        title: 'Simulador de E-mail',
+        description: 'Analise e-mails suspeitos e detecte tentativas de phishing.',
+        type: 'phishing_email' as any,
+        difficulty: 'low' as any,
+        maxScore: 1000,
+        xpReward: 300,
+      });
+    }
+  }
+
   async create(dto: CreateScenarioDto): Promise<Scenario> {
     const scenario = this.scenarioRepo.create(dto);
     return this.scenarioRepo.save(scenario);

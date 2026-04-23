@@ -255,6 +255,24 @@ export default function EmailSimulator() {
   const [answers, setAnswers] = useState<EmailStatus>({});
   const [showResult, setShowResult] = useState<number | null>(null);
   const [score, setScore] = useState(0);
+  const [scenarioId, setScenarioId] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    const fetchScenarioId = async () => {
+      try {
+        const res = await apiFetch("scenarios");
+        if (res.ok) {
+          const data = await res.json();
+          const emailScenario = data.find((s: any) => s.title === "Simulador de E-mail");
+          if (emailScenario) setScenarioId(emailScenario.id);
+        }
+      } catch (e) {
+        console.error("Erro ao buscar cenário:", e);
+      }
+    };
+    fetchScenarioId();
+  }, []);
 
   const selectedEmail = emails.find((e) => e.id === selected);
 
@@ -283,13 +301,45 @@ export default function EmailSimulator() {
       setAnswers((prev) => ({ ...prev, [emailId]: answer }));
       setScore((prev) => (correct ? prev + 100 : Math.max(0, prev - 30)));
       setShowResult(emailId);
+
+      // Se for o último e-mail, salvar o score final
+      if (Object.keys(answers).length + 1 === emails.length) {
+        saveFinalScore(correct ? score + 100 : score);
+      }
     } catch (error) {
       console.error("Error logging phishing action:", error);
-      // Fallback for demo
       const correct = (answer === "phishing") === email.isPhishing;
       setAnswers((prev) => ({ ...prev, [emailId]: answer }));
       setScore((prev) => (correct ? prev + 100 : Math.max(0, prev - 30)));
       setShowResult(emailId);
+      
+      if (Object.keys(answers).length + 1 === emails.length) {
+        saveFinalScore(correct ? score + 100 : score);
+      }
+    }
+  };
+
+  const saveFinalScore = async (finalScore: number) => {
+    if (!scenarioId || isSaving) return;
+    setIsSaving(true);
+    try {
+      const token = localStorage.getItem("token");
+      await apiFetch("scores", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          scenarioId,
+          score: finalScore,
+          completionTimeSeconds: 120
+        }),
+      });
+    } catch (e) {
+      console.error("Erro ao salvar pontuação:", e);
+    } finally {
+      setIsSaving(false);
     }
   };
 

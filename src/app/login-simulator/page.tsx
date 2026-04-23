@@ -190,6 +190,24 @@ export default function LoginSimulator() {
   const [attemptedLogin, setAttemptedLogin] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [scenarioId, setScenarioId] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    const fetchScenarioId = async () => {
+      try {
+        const res = await apiFetch("scenarios");
+        if (res.ok) {
+          const data = await res.json();
+          const loginScenario = data.find((s: any) => s.title === "Simulador de Login");
+          if (loginScenario) setScenarioId(loginScenario.id);
+        }
+      } catch (e) {
+        console.error("Erro ao buscar cenário:", e);
+      }
+    };
+    fetchScenarioId();
+  }, []);
 
   const site = loginSites[current];
   const answered = answers[site.id];
@@ -204,6 +222,11 @@ export default function LoginSimulator() {
     setAttemptedLogin(false);
     setUsername("");
     setPassword("");
+
+    // Se for o último, salvar no banco
+    if (totalAnswered + 1 === loginSites.length) {
+      saveFinalScore(correct ? score + 100 : score);
+    }
   };
 
   const handleNext = () => {
@@ -211,6 +234,30 @@ export default function LoginSimulator() {
       setCurrent((c) => c + 1);
       setShowResult(false);
       setPhase("inspect");
+    }
+  };
+
+  const saveFinalScore = async (finalScore: number) => {
+    if (!scenarioId || isSaving) return;
+    setIsSaving(true);
+    try {
+      const token = localStorage.getItem("token");
+      await apiFetch("scores", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          scenarioId,
+          score: finalScore,
+          completionTimeSeconds: 60
+        }),
+      });
+    } catch (e) {
+      console.error("Erro ao salvar pontuação:", e);
+    } finally {
+      setIsSaving(false);
     }
   };
 
