@@ -5,31 +5,29 @@ import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
 
 export default function Feedback() {
-  const [userData, setUserData] = useState<any>(null);
-  const [_progressData, setProgressData] = useState<any>(null);
-  const [_loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<any>(null);
+  const [stats, setStats] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
 
-        // Fetch user stats
+        // Fetch User Profile
+        const userRes = await apiFetch("users/me", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (userRes.ok) {
+          setProfile(await userRes.json());
+        }
+
+        // Fetch User Stats
         const statsRes = await apiFetch("scores/me/stats", {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (statsRes.ok) {
-          const stats = await statsRes.json();
-          setUserData(stats);
-        }
-
-        // Fetch progress data
-        const progressRes = await apiFetch("reports/my-progress", {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        if (progressRes.ok) {
-          const progress = await progressRes.json();
-          setProgressData(progress);
+          setStats(await statsRes.json());
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -41,32 +39,27 @@ export default function Feedback() {
     fetchData();
   }, []);
 
-  const metrics = userData ? [
-    { label: "Score Total", value: userData.totalPoints || 0, max: 1000, color: "var(--accent-cyan)", unit: "pts" },
-    { label: "Cenários Completados", value: userData.scenariosCompleted || 0, max: 10, color: "var(--accent-green)", unit: "" },
-    { label: "Precisão Média", value: userData.avgAccuracy || 0, max: 100, color: "var(--accent-orange)", unit: "%" },
-    { label: "XP Ganho", value: userData.xp || 0, max: 1000, color: "var(--accent-purple)", unit: "xp" },
-  ] : [
-    { label: "Score Total", value: 742, max: 1000, color: "var(--accent-cyan)", unit: "pts" },
-    { label: "Cenários Completados", value: 5, max: 10, color: "var(--accent-green)", unit: "" },
-    { label: "Precisão Média", value: 78, max: 100, color: "var(--accent-orange)", unit: "%" },
-    { label: "XP Ganho", value: 450, max: 1000, color: "var(--accent-purple)", unit: "xp" },
+  const metrics = [
+    { label: "Score Total", value: profile?.totalScore || 0, max: 1000, color: "var(--accent-cyan)", unit: "pts" },
+    { label: "Cenários Completados", value: stats?.scenariosCompleted || 0, max: 10, color: "var(--accent-green)", unit: "" },
+    { label: "Precisão Média", value: stats?.avgAccuracy || 0, max: 100, color: "var(--accent-orange)", unit: "%" },
+    { label: "XP Ganho", value: profile?.xp || 0, max: 5000, color: "var(--accent-purple)", unit: "xp" },
   ];
 
-const achievements = [
-  { icon: "🎯", title: "Olho de Falcão", desc: "Detectou 10 e-mails de phishing", earned: true },
-  { icon: "🛡️", title: "Escudo de Ferro", desc: "Completou 5 cenários sem erros", earned: true },
-  { icon: "🕵️", title: "Detetive Digital", desc: "Identificou 3 sites falsos seguidos", earned: true },
-  { icon: "🔒", title: "Guardião de Senhas", desc: "Score de senha acima de 95%", earned: false },
-  { icon: "⚡", title: "Resposta Rápida", desc: "Respondeu a incidente em < 2 min", earned: false },
-  { icon: "🏆", title: "Especialista Elite", desc: "Alcance score 900+", earned: false },
-];
+  const achievements = [
+    { icon: "🎯", title: "Olho de Falcão", desc: "Detectou e-mails de phishing", earned: (stats?.scenariosCompleted || 0) > 0 },
+    { icon: "🛡️", title: "Escudo de Ferro", desc: "Completou cenários sem erros", earned: (stats?.avgAccuracy || 0) > 90 },
+    { icon: "🕵️", title: "Detetive Digital", desc: "Identificou sites falsos", earned: (profile?.xp || 0) > 100 },
+    { icon: "🔒", title: "Guardião de Senhas", desc: "Score de senha alto", earned: (profile?.xp || 0) > 500 },
+    { icon: "⚡", title: "Resposta Rápida", desc: "Agilidade em incidentes", earned: (stats?.scenariosCompleted || 0) > 3 },
+    { icon: "🏆", title: "Especialista Elite", desc: "Alcance nível avançado", earned: profile?.level === 'advanced' || profile?.level === 'expert' },
+  ];
 
-const weaknesses = [
-  { area: "Engenharia Social", level: 45, tip: "Pratique o cenário de Vishing e sempre verifique a identidade de quem liga." },
-  { area: "Segurança de Rede", level: 58, tip: "Estude sobre VPNs, firewalls e segmentação de rede." },
-  { area: "Análise de Logs", level: 62, tip: "Revise o cenário de Ameaça Interna — foco em monitoramento." },
-];
+  const weaknesses = [
+    { area: "Engenharia Social", level: Math.min(100, (stats?.avgAccuracy || 45)), tip: "Pratique o cenário de Phishing e verifique sempre o domínio da URL." },
+    { area: "Segurança de Rede", level: Math.min(100, ((profile?.xp || 0) / 50)), tip: "Estude sobre protocolos seguros e criptografia de ponta a ponta." },
+    { area: "Análise de Logs", level: Math.min(100, ((profile?.totalScore || 0) / 10)), tip: "Fique atento aos detalhes do Simulador de E-mail e Login." },
+  ];
 
 function RadarChart() {
   const skills = [
