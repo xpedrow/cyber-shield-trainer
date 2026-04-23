@@ -6,18 +6,24 @@ import helmet from 'helmet';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    cors: {
-      origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-      credentials: true,
-    },
-  });
+  const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
+  const frontendUrl = configService.get<string>('FRONTEND_URL');
+
+  app.enableCors({
+    origin: frontendUrl ? [frontendUrl, frontendUrl.replace(/\/$/, '')] : '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+    allowedHeaders: 'Content-Type, Accept, Authorization',
+  });
   const port = configService.get<number>('PORT', 3001);
 
   // Security
-  app.use(helmet());
+  app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    contentSecurityPolicy: false,
+  }));
 
   // API prefix and versioning
   app.setGlobalPrefix('api');
