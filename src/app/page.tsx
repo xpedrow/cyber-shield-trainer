@@ -102,8 +102,8 @@ export default function Dashboard() {
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, var(--green), var(--cyan), var(--green))", animation: "scan 3s linear infinite" }} />
         
         <div>
-          <h1 style={{ fontFamily: "var(--display)", fontSize: "1.6rem", fontWeight: 900, letterSpacing: "0.08em", color: "var(--green)", textShadow: "0 0 30px rgba(0,255,65,0.5)" }}>
-            BEM-VINDO, AGENTE
+          <h1 style={{ fontFamily: "var(--display)", fontSize: "1.6rem", fontWeight: 900, letterSpacing: "0.08em", color: "var(--green)", textShadow: "0 0 30px rgba(0,255,65,0.5)", textTransform: "uppercase" }}>
+            BEM-VINDO, AGENTE {userData?.name || "RECRUTA"}
           </h1>
           <p style={{ fontSize: "0.72rem", color: "var(--muted)", marginTop: "6px", letterSpacing: "0.08em" }}>
             CONEXÃO ESTABELECIDA // TERMINAL SEGURO // NÍVEL DE AMBIENTE: OPERACIONAL
