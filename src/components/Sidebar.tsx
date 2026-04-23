@@ -38,32 +38,10 @@ export default function Sidebar() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          setIsAuthenticated(false);
-          if (pathname !== "/login") {
-            router.push("/login");
-          }
-          return;
-        }
-
-        const res = await apiFetch("users/me", {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          setUserData(data);
-          setIsAuthenticated(true);
-        } else if (res.status === 401) {
-          localStorage.removeItem("token");
-          setIsAuthenticated(false);
-          if (pathname !== "/login") {
-            router.push("/login");
-          }
-        }
+        setUserData({ name: "Modo Admin (Sem Login)", level: "ACESSO TOTAL" });
+        setIsAuthenticated(true);
       } catch (e) {
-        console.error("Erro ao buscar dados do usuário:", e);
+        console.error("Erro no modo bypass:", e);
       }
     };
     fetchUser();
