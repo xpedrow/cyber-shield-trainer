@@ -448,12 +448,36 @@ export default function LoginSimulator() {
                 </button>
               </div>
             ) : (
-              <div style={{ marginTop: "16px", display: "flex", justifyContent: "flex-end" }}>
-                {current < loginSites.length - 1 && (
-                  <button className="btn-cyber btn-primary" onClick={handleNext} id="btn-next">
-                    Próximo Site →
-                  </button>
-                )}
+              <div style={{ marginTop: "16px" }}>
+                <div 
+                  className="animate-fade-in-up"
+                  style={{ 
+                    textAlign: "center", 
+                    padding: "12px", 
+                    borderRadius: "8px",
+                    marginBottom: "12px",
+                    background: (answered === "fake") === site.isFake ? "rgba(0,255,136,0.1)" : "rgba(255,68,68,0.1)",
+                    border: `1px solid ${(answered === "fake") === site.isFake ? "var(--accent-green)" : "var(--accent-red)"}`,
+                    color: (answered === "fake") === site.isFake ? "var(--accent-green)" : "var(--accent-red)",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.1em",
+                    boxShadow: (answered === "fake") === site.isFake ? "0 0 15px rgba(0,255,136,0.2)" : "0 0 15px rgba(255,68,68,0.2)"
+                  }}
+                >
+                  {(answered === "fake") === site.isFake 
+                    ? "✓ Resposta Correta! Você identificou os sinais corretamente." 
+                    : "✗ Resposta Incorreta! Você caiu em uma armadilha cibernética."}
+                </div>
+                
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  {current < loginSites.length - 1 && (
+                    <button className="btn-cyber btn-primary" onClick={handleNext} id="btn-next">
+                      Próximo Site →
+                    </button>
+                  )}
+                </div>
               </div>
             )}
           </div>
