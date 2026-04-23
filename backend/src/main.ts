@@ -8,31 +8,15 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const expressApp = app.getHttpAdapter().getInstance();
-  expressApp.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'https://cyber-shield-trainer.vercel.app');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    
-    if (req.method === 'OPTIONS') {
-      return res.status(204).end();
-    }
-    next();
+  app.enableCors({
+    origin: true, // Isso refletirá a origem da requisição, resolvendo o CORS dinamicamente
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
   });
 
   const configService = app.get(ConfigService);
-  const frontendUrl = configService.get<string>('FRONTEND_URL');
-
-  app.enableCors({
-    origin: frontendUrl ? [frontendUrl, frontendUrl.replace(/\/$/, '')] : '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    credentials: true,
-    allowedHeaders: 'Content-Type, Accept, Authorization',
-  });
   const port = configService.get<number>('PORT', 3001);
 
-  // Security
   app.use(helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" },
     contentSecurityPolicy: false,
