@@ -2,7 +2,7 @@
 
 import AppLayout from "@/components/AppLayout";
 import { useState, useEffect } from "react";
-import { ShieldAlert, ShieldCheck } from "lucide-react";
+import { Shield, ShieldCheck } from "@phosphor-icons/react";
 import { apiFetch } from "@/lib/api";
 
 type LoginSite = {
@@ -487,7 +487,7 @@ export default function LoginSimulator() {
                   onClick={() => handleAnswer("fake")}
                   id="btn-fake"
                 >
-                  <ShieldAlert size={18} />
+                  <Shield size={18} />
                   Site Falso (Phishing)
                 </button>
                 <button

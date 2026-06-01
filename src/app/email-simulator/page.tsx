@@ -3,7 +3,7 @@
 import AppLayout from "@/components/AppLayout";
 import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
-import { ShieldAlert, ShieldCheck } from "lucide-react";
+import { Shield, ShieldCheck } from "@phosphor-icons/react";
 
 const emails = [
   {
@@ -483,7 +483,7 @@ export default function EmailSimulator() {
                   style={{ padding: "12px 24px", fontSize: "14px" }}
                   onClick={() => handleAnswer(selectedEmail.id, "phishing")}
                 >
-                  <ShieldAlert size={18} />
+                  <Shield size={18} />
                   Phishing!
                 </button>
                 <button

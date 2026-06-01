@@ -2,7 +2,7 @@
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { apiFetch } from "@/lib/api";
-import { ShieldCheck, Lock, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { ShieldCheck, Key, ArrowLeft, CheckCircle } from "@phosphor-icons/react";
 
 function ResetPasswordForm() {
   const searchParams = useSearchParams();
@@ -105,7 +105,7 @@ function ResetPasswordForm() {
       {success ? (
         <div className="animate-fade-in-up">
           <div style={{ color: "var(--green)", marginBottom: "20px" }}>
-            <CheckCircle2 size={48} style={{ margin: "0 auto 16px" }} />
+            <CheckCircle size={48} style={{ margin: "0 auto 16px" }} />
             <p style={{ fontSize: "1rem", fontWeight: 700 }}>Senha alterada com sucesso!</p>
           </div>
           <p style={{ color: "var(--muted)", fontSize: "0.75rem" }}>
@@ -119,7 +119,7 @@ function ResetPasswordForm() {
           </p>
 
           <div style={{ marginBottom: "16px", position: "relative" }}>
-            <Lock size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--green)", zIndex: 10 }} />
+            <Key size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--green)", zIndex: 10 }} />
             <input
               type="password"
               placeholder="Nova Senha"
@@ -132,7 +132,7 @@ function ResetPasswordForm() {
           </div>
 
           <div style={{ marginBottom: "24px", position: "relative" }}>
-            <Lock size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--green)", zIndex: 10 }} />
+            <Key size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--green)", zIndex: 10 }} />
             <input
               type="password"
               placeholder="Confirmar Nova Senha"

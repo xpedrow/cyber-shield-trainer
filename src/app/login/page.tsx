@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
-import { ShieldCheck, Mail, Lock, User, ArrowRight } from "lucide-react";
+import { ShieldCheck, Envelope, Key, User, ArrowRight } from "@phosphor-icons/react";
 
 export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -191,7 +191,7 @@ export default function LoginPage() {
           )}
 
           <div style={{ marginBottom: "16px", position: "relative" }}>
-            <Mail size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--green)", zIndex: 10 }} />
+            <Envelope size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--green)", zIndex: 10 }} />
             <input
               type="email"
               name="email"
@@ -204,7 +204,7 @@ export default function LoginPage() {
           </div>
 
           <div style={{ marginBottom: "20px", position: "relative" }}>
-            <Lock size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--green)", zIndex: 10 }} />
+            <Key size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--green)", zIndex: 10 }} />
             <input
               type="password"
               name="password"
@@ -237,7 +237,7 @@ export default function LoginPage() {
 
           {!isLogin && (
             <div style={{ marginBottom: "24px", position: "relative" }}>
-              <Lock size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--green)", zIndex: 10 }} />
+              <Key size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--green)", zIndex: 10 }} />
               <input
                 type="password"
                 name="confirmPassword"

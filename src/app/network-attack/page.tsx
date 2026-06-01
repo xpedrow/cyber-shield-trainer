@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import AppLayout from "@/components/AppLayout";
 import { motion, AnimatePresence } from "framer-motion";
 import { apiFetch } from "@/lib/api";
-import { ShieldAlert, ShieldCheck, Info } from "lucide-react";
+import { ShieldWarning, ShieldCheck, Info } from "@phosphor-icons/react";
 
 interface NetworkAttack {
   id: string;
@@ -227,7 +227,7 @@ export default function NetworkAttackPage() {
                   className="btn-cyber btn-danger"
                   style={{ flex: 1, padding: '16px', fontSize: '15px' }}
                 >
-                  <ShieldAlert size={18} />
+                  <ShieldWarning size={18} />
                   BLOQUEAR IP
                 </button>
                 <button

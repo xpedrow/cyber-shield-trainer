@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
-import { ShieldCheck, Mail, ArrowLeft, Send } from "lucide-react";
+import { ShieldCheck, Envelope, ArrowLeft, PaperPlane } from "@phosphor-icons/react";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -129,7 +129,7 @@ export default function ForgotPasswordPage() {
         ) : (
           <form onSubmit={handleSubmit}>
             <div style={{ marginBottom: "24px", position: "relative" }}>
-              <Mail size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--cyan)", zIndex: 10 }} />
+              <Envelope size={16} style={{ position: "absolute", left: "12px", top: "14px", color: "var(--cyan)", zIndex: 10 }} />
               <input
                 type="email"
                 placeholder="Digite seu e-mail"
@@ -172,7 +172,7 @@ export default function ForgotPasswordPage() {
                 boxShadow: "0 0 15px rgba(0,212,255,0.3)"
               }}
             >
-              <Send size={16} style={{ marginRight: "8px" }} />
+              <PaperPlane size={16} style={{ marginRight: "8px" }} />
               {loading ? "ENVIANDO..." : "SOLICITAR RESET"}
             </button>
           </form>
