@@ -197,7 +197,12 @@ export default function LoginSimulator() {
   useEffect(() => {
     const fetchScenarioId = async () => {
       try {
-        const res = await apiFetch("scenarios");
+        const token = localStorage.getItem("token");
+        const res = await apiFetch("scenarios", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
         if (res.ok) {
           const data = await res.json();
           const loginScenario = data.find((s: any) => s.title === "Simulador de Login");

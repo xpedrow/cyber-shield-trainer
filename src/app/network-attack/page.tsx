@@ -59,7 +59,7 @@ export default function NetworkAttackPage() {
       try {
         const token = localStorage.getItem("token");
 
-        const response = await apiFetch("simulations/network", {
+        const response = await apiFetch("simulations/network/attacks", {
           headers: {
             "Content-Type": "application/json",
             ...(token && { Authorization: `Bearer ${token}` }),
