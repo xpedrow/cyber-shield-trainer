@@ -1,9 +1,14 @@
+"use client";
+
+import { useState } from "react";
+import { List } from "@phosphor-icons/react";
 import Sidebar from "@/components/Sidebar";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "var(--black)" }}>
-      {/* ═══ HEADER ═══ */}
       <header
         style={{
           height: "52px",
@@ -18,13 +23,32 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           flexShrink: 0
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "10px", fontFamily: "var(--display)", fontSize: "0.85rem", fontWeight: 700, letterSpacing: "0.12em", color: "var(--green)" }}>
-          <div style={{ width: "30px", height: "30px", border: "1.5px solid var(--green)", display: "flex", alignItems: "center", justifyContent: "center" }}>⬢</div>
-          CYBER<span style={{ color: "var(--cyan)" }}>SHIELD</span>
-          <span style={{ fontSize: "0.55rem", color: "var(--muted)", letterSpacing: "0.15em", marginLeft: "4px", alignSelf: "flex-end", marginBottom: "2px" }}>TRAINER v2.0</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <button
+            onClick={() => setIsSidebarOpen(true)}
+            className="mobile-only"
+            style={{
+              background: "transparent",
+              border: "none",
+              color: "var(--green)",
+              cursor: "pointer",
+              display: "none",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "4px"
+            }}
+          >
+            <List size={24} />
+          </button>
+          
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", fontFamily: "var(--display)", fontSize: "0.85rem", fontWeight: 700, letterSpacing: "0.12em", color: "var(--green)" }}>
+            <div style={{ width: "30px", height: "30px", border: "1.5px solid var(--green)", display: "flex", alignItems: "center", justifyContent: "center" }}>⬢</div>
+            CYBER<span style={{ color: "var(--cyan)" }}>SHIELD</span>
+            <span style={{ fontSize: "0.55rem", color: "var(--muted)", letterSpacing: "0.15em", marginLeft: "4px", alignSelf: "flex-end", marginBottom: "2px" }}>TRAINER v2.0</span>
+          </div>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "20px", fontSize: "0.68rem", letterSpacing: "0.1em", color: "var(--muted)", fontFamily: "var(--mono)" }}>
+        <div className="desktop-only" style={{ display: "flex", alignItems: "center", gap: "20px", fontSize: "0.68rem", letterSpacing: "0.1em", color: "var(--muted)", fontFamily: "var(--mono)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
             <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "var(--green)", boxShadow: "0 0 5px var(--green)" }}></div>
             SISTEMA OPERACIONAL
@@ -41,7 +65,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       </header>
 
       <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
-        <Sidebar />
+        <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
         <main
           style={{
             flex: 1,
@@ -57,6 +81,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
         </main>
       </div>
+
+      <style jsx global>{`
+        @media (max-width: 768px) {
+          .desktop-only {
+            display: none !important;
+          }
+          .mobile-only {
+            display: flex !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }

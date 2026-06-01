@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 export interface PasswordAnalysis {
   password: string;
   entropy: number;
-  score: number; // 0 to 100
+  score: number; 
   strength: 'MUITO FRACA' | 'FRACA' | 'MODERADA' | 'FORTE' | 'MUITO FORTE';
   crackTime: {
     bruteForce: string;
@@ -19,7 +19,7 @@ export class PasswordSecurityService {
     const entropy = this.calculateEntropy(password);
     const hasDictMatch = this.checkDictionary(password);
 
-    // Dynamic scoring
+    
     let score = Math.min(100, (entropy / 90) * 100);
     
     // Penalties
@@ -85,7 +85,7 @@ export class PasswordSecurityService {
 
     return {
       bruteForce: this.formatTime(seconds),
-      dictionary: this.formatTime(seconds / 1000), // Dict attacks are faster
+      dictionary: this.formatTime(seconds / 1000), 
       botnet: this.formatTime(seconds / 50000) // Botnets are massive
     };
   }

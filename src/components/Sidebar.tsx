@@ -5,31 +5,36 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
-
 import { 
-  LayoutDashboard, 
-  ShieldAlert, 
-  Mail, 
+  Layout, 
+  Shield, 
+  Envelope, 
   Lock, 
   Users, 
-  Network, 
-  KeyRound, 
-  BarChart3,
-  LogOut
-} from "lucide-react";
+  Globe, 
+  Key, 
+  ChartBar,
+  SignOut,
+  X
+} from "@phosphor-icons/react";
 
 const navItems = [
-  { href: "/", label: "Dashboard", icon: <LayoutDashboard size={18} /> },
-  { href: "/scenarios", label: "Cenários", icon: <ShieldAlert size={18} /> },
-  { href: "/email-simulator", label: "Simulador de E-mail", icon: <Mail size={18} /> },
+  { href: "/", label: "Dashboard", icon: <Layout size={18} /> },
+  { href: "/scenarios", label: "Cenários", icon: <Shield size={18} /> },
+  { href: "/email-simulator", label: "Simulador de E-mail", icon: <Envelope size={18} /> },
   { href: "/login-simulator", label: "Simulador de Login", icon: <Lock size={18} /> },
   { href: "/social-engineering", label: "Engenharia Social", icon: <Users size={18} /> },
-  { href: "/network-attack", label: "Ataque de Rede", icon: <Network size={18} /> },
-  { href: "/password-simulator", label: "Simulador de Senha", icon: <KeyRound size={18} /> },
-  { href: "/feedback", label: "Feedback & Score", icon: <BarChart3 size={18} /> },
+  { href: "/network-attack", label: "Ataque de Rede", icon: <Globe size={18} /> },
+  { href: "/password-simulator", label: "Simulador de Senha", icon: <Key size={18} /> },
+  { href: "/feedback", label: "Feedback & Score", icon: <ChartBar size={18} /> },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [userData, setUserData] = useState<any>(null);
@@ -63,7 +68,7 @@ export default function Sidebar() {
           }
         }
       } catch (e) {
-        console.error("Erro ao buscar dados do usuário:", e);
+        console.error(e);
       }
     };
     fetchUser();
@@ -76,183 +81,233 @@ export default function Sidebar() {
   };
 
   return (
-    <aside
-      className="sidebar"
-      style={{
-        width: "220px",
-        height: "100vh",
-        background: "var(--black2)",
-        borderRight: "1px solid var(--border)",
-        display: "flex",
-        flexDirection: "column",
-        flexShrink: 0,
-        position: "sticky",
-        top: 0,
-        zIndex: 100,
-        fontFamily: "var(--mono)"
-      }}
-    >
-      {/* ═══ LOGO ═══ */}
-      <div
+    <>
+      {isOpen && (
+        <div
+          onClick={onClose}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.6)",
+            zIndex: 140,
+          }}
+          className="mobile-only"
+        />
+      )}
+      
+      <aside
+        className={`sidebar ${isOpen ? "open" : ""}`}
         style={{
-          padding: "20px",
-          borderBottom: "1px solid var(--border)",
+          width: "220px",
+          height: "100vh",
+          background: "var(--black2)",
+          borderRight: "1px solid var(--border)",
           display: "flex",
-          alignItems: "center",
-          gap: "10px",
+          flexDirection: "column",
+          flexShrink: 0,
+          position: "sticky",
+          top: 0,
+          zIndex: 150,
+          fontFamily: "var(--mono)"
         }}
       >
         <div
           style={{
-            width: "30px",
-            height: "30px",
-            border: "1.5px solid var(--green)",
+            padding: "20px",
+            borderBottom: "1px solid var(--border)",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0,
-            color: "var(--green)",
-            fontFamily: "var(--display)",
-            fontSize: "0.9rem"
+            justifyContent: "space-between",
+            gap: "10px",
           }}
         >
-          ⬢
-        </div>
-        <div>
-          <div style={{ fontFamily: "var(--display)", fontWeight: 700, fontSize: "0.85rem", color: "var(--green)", letterSpacing: "0.12em" }}>
-            CYBER<span>SHIELD</span>
-          </div>
-          <div style={{ fontSize: "0.55rem", color: "var(--muted)", letterSpacing: "0.15em", textTransform: "uppercase" }}>
-            Trainer v2.0
-          </div>
-        </div>
-      </div>
-
-      {/* ═══ NAVIGATION ═══ */}
-      <div style={{ padding: "14px 0", flex: 1, overflowY: "auto" }}>
-        <div style={{ padding: "0 16px 8px", fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--muted)" }}>
-          Navegação Principal
-        </div>
-        {navItems.map((item) => {
-          const isActive = pathname === item.href;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <div
               style={{
+                width: "30px",
+                height: "30px",
+                border: "1.5px solid var(--green)",
                 display: "flex",
                 alignItems: "center",
-                gap: "10px",
-                padding: "9px 16px",
-                fontSize: "0.73rem",
-                letterSpacing: "0.06em",
-                color: isActive ? "var(--green)" : "var(--muted)",
-                background: isActive ? "var(--gdim)" : "transparent",
-                borderLeft: `2px solid ${isActive ? "var(--green)" : "transparent"}`,
-                transition: "all 0.2s",
-                textDecoration: "none",
-                position: "relative"
+                justifyContent: "center",
+                flexShrink: 0,
+                color: "var(--green)",
+                fontFamily: "var(--display)",
+                fontSize: "0.9rem"
               }}
-              className={isActive ? "active" : ""}
             >
-              <span style={{ fontSize: "0.85rem", width: "20px", textAlign: "center" }}>
-                {item.icon}
-              </span>
-              <span>{item.label}</span>
-              {isActive && (
-                <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "1px", background: "linear-gradient(180deg, transparent, var(--green), transparent)" }} />
-              )}
-            </Link>
-          );
-        })}
-      </div>
-
-      {/* ═══ USER PROFILE ═══ */}
-      <div
-        style={{
-          marginTop: "auto",
-          padding: "14px 16px",
-          borderTop: "1px solid var(--border)",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <div
-            style={{
-              width: "36px",
-              height: "36px",
-              border: "1.5px solid var(--green)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "1rem",
-              background: "var(--gdim)",
-              fontFamily: "var(--display)",
-              flexShrink: 0
-            }}
-          >
-            {userData?.name ? userData.name[0].toUpperCase() : "A"}
-          </div>
-          <div style={{ overflow: "hidden" }}>
-            <div style={{ fontSize: "0.73rem", color: "var(--white)", letterSpacing: "0.06em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-              {userData?.name || "Agente Trainee"}
+              ⬢
             </div>
-            <div style={{ fontSize: "0.62rem", color: "var(--muted)", marginTop: "2px" }}>
-              Level: {userData?.level || "RECRUTA"}
+            <div>
+              <div style={{ fontFamily: "var(--display)", fontWeight: 700, fontSize: "0.85rem", color: "var(--green)", letterSpacing: "0.12em" }}>
+                CYBER<span>SHIELD</span>
+              </div>
+              <div style={{ fontSize: "0.55rem", color: "var(--muted)", letterSpacing: "0.15em", textTransform: "uppercase" }}>
+                Trainer v2.0
+              </div>
             </div>
           </div>
-        </div>
-        {/* XP Bar */}
-        <div style={{ marginTop: "8px", height: "3px", background: "var(--black4)", borderRadius: "2px", overflow: "hidden" }}>
-          <div 
-            style={{ 
-              height: "100%", 
-              width: "35%", 
-              background: "var(--green)", 
-              boxShadow: "0 0 8px var(--green)",
-              animation: "fill-glow 2s ease-in-out infinite alternate" 
-            }} 
-          />
+
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="mobile-only"
+              style={{
+                background: "transparent",
+                border: "none",
+                color: "var(--red)",
+                cursor: "pointer",
+                padding: "4px",
+                display: "none",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              <X size={20} />
+            </button>
+          )}
         </div>
 
-        <button
-          onClick={handleLogout}
+        <div style={{ padding: "14px 0", flex: 1, overflowY: "auto" }}>
+          <div style={{ padding: "0 16px 8px", fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--muted)" }}>
+            Navegação Principal
+          </div>
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={onClose}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  padding: "9px 16px",
+                  fontSize: "0.73rem",
+                  letterSpacing: "0.06em",
+                  color: isActive ? "var(--green)" : "var(--muted)",
+                  background: isActive ? "var(--gdim)" : "transparent",
+                  borderLeft: `2px solid ${isActive ? "var(--green)" : "transparent"}`,
+                  transition: "all 0.2s",
+                  textDecoration: "none",
+                  position: "relative"
+                }}
+                className={isActive ? "active" : ""}
+              >
+                <span style={{ fontSize: "0.85rem", width: "20px", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {item.icon}
+                </span>
+                <span>{item.label}</span>
+                {isActive && (
+                  <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "1px", background: "linear-gradient(180deg, transparent, var(--green), transparent)" }} />
+                )}
+              </Link>
+            );
+          })}
+        </div>
+
+        <div
           style={{
-            marginTop: "16px",
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            padding: "8px 0",
-            fontSize: "0.7rem",
-            color: "var(--red)",
-            background: "transparent",
-            border: "1px solid rgba(255, 0, 0, 0.2)",
-            cursor: "pointer",
-            fontFamily: "var(--mono)",
-            justifyContent: "center",
-            transition: "all 0.3s ease",
-            letterSpacing: "0.1em"
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "var(--reddim)";
-            e.currentTarget.style.borderColor = "var(--red)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "transparent";
-            e.currentTarget.style.borderColor = "rgba(255, 0, 0, 0.2)";
+            marginTop: "auto",
+            padding: "14px 16px",
+            borderTop: "1px solid var(--border)",
           }}
         >
-          <LogOut size={14} />
-          <span>DESCONECTAR</span>
-        </button>
-      </div>
-      <style jsx>{`
-        span span { color: var(--cyan); }
-        @keyframes fill-glow {
-          from { opacity: 0.6; }
-          to { opacity: 1; }
-        }
-      `}</style>
-    </aside>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <div
+              style={{
+                width: "36px",
+                height: "36px",
+                border: "1.5px solid var(--green)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "1rem",
+                background: "var(--gdim)",
+                fontFamily: "var(--display)",
+                flexShrink: 0
+              }}
+            >
+              {userData?.name ? userData.name[0].toUpperCase() : "A"}
+            </div>
+            <div style={{ overflow: "hidden" }}>
+              <div style={{ fontSize: "0.73rem", color: "var(--white)", letterSpacing: "0.06em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {userData?.name || "Agente Trainee"}
+              </div>
+              <div style={{ fontSize: "0.62rem", color: "var(--muted)", marginTop: "2px" }}>
+                Level: {userData?.level || "RECRUTA"}
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop: "8px", height: "3px", background: "var(--black4)", borderRadius: "2px", overflow: "hidden" }}>
+            <div 
+              style={{ 
+                height: "100%", 
+                width: "35%", 
+                background: "var(--green)", 
+                boxShadow: "0 0 8px var(--green)",
+                animation: "fill-glow 2s ease-in-out infinite alternate" 
+              }} 
+            />
+          </div>
+
+          <button
+            onClick={handleLogout}
+            style={{
+              marginTop: "16px",
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              padding: "8px 0",
+              fontSize: "0.7rem",
+              color: "var(--red)",
+              background: "transparent",
+              border: "1px solid rgba(255, 0, 0, 0.2)",
+              cursor: "pointer",
+              fontFamily: "var(--mono)",
+              justifyContent: "center",
+              transition: "all 0.3s ease",
+              letterSpacing: "0.1em"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "var(--reddim)";
+              e.currentTarget.style.borderColor = "var(--red)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.borderColor = "rgba(255, 0, 0, 0.2)";
+            }}
+          >
+            <SignOut size={14} />
+            <span>DESCONECTAR</span>
+          </button>
+        </div>
+        <style jsx global>{`
+          span span { color: var(--cyan); }
+          @keyframes fill-glow {
+            from { opacity: 0.6; }
+            to { opacity: 1; }
+          }
+          @media (max-width: 768px) {
+            .sidebar {
+              position: fixed !important;
+              top: 0;
+              bottom: 0;
+              left: -220px;
+              transition: left 0.3s ease-in-out !important;
+              height: 100% !important;
+            }
+            .sidebar.open {
+              left: 0 !important;
+            }
+            .mobile-only {
+              display: flex !important;
+            }
+          }
+        `}</style>
+      </aside>
+    </>
   );
 }

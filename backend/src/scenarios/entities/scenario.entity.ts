@@ -49,7 +49,7 @@ export class Scenario {
   @Column({ type: 'integer', default: 0 })
   durationSeconds: number;
 
-  /** JSON blob of scenario-specific simulation data */
+  
   @Column({ type: 'simple-json', nullable: true })
   config: Record<string, any>;
 

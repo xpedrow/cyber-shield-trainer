@@ -21,7 +21,7 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  @Throttle({ short: { limit: 5, ttl: 60000 } }) // 5 login attempts per minute
+  @Throttle({ short: { limit: 5, ttl: 60000 } }) 
   @ApiOperation({ summary: 'Login and receive JWT tokens' })
   login(@Body() dto: LoginDto) {
     return this.authService.login(dto);

@@ -116,7 +116,7 @@ export class SocialEngineeringService {
     const option = scenario.options.find(o => o.id === optionId);
     if (!option) throw new NotFoundException('Option not found');
 
-    // Log the user action
+    
     await this.eventsService.logAction(userId, {
       scenarioId: null,
       actionType: ActionType.GENERAL_INTERACTION,
@@ -126,7 +126,7 @@ export class SocialEngineeringService {
       pointsDelta: option.isCorrect ? 100 : -50,
     });
 
-    // Log attack event if incorrect
+    
     if (!option.isCorrect) {
       await this.eventsService.logAttack(userId, {
         eventType: AttackEventType.SOCIAL_ENGINEERING,

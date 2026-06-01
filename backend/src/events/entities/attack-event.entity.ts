@@ -51,15 +51,15 @@ export class AttackEvent {
   @Column({ type: 'text', nullable: true })
   description: string;
 
-  /** IP address of simulated attacker */
+  
   @Column({ nullable: true })
   sourceIp: string;
 
-  /** Whether the user successfully identified/blocked the attack */
+  
   @Column({ nullable: true })
   wasDetected: boolean;
 
-  /** Time to detect in ms — null if not detected */
+  
   @Column({ type: 'integer', nullable: true })
   detectionTimeMs: number;
 

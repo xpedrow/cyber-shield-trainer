@@ -7,7 +7,7 @@ import { CacheModule as NestCacheModule } from '@nestjs/cache-manager';
   imports: [
     NestCacheModule.register({
       isGlobal: true,
-      ttl: 600, // 10 minutes
+      ttl: 600, 
     }),
   ],
   exports: [NestCacheModule],

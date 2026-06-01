@@ -70,17 +70,17 @@ export class NetworkAttackService {
 
     const isCorrect = action === attack.correctAction;
 
-    // Log the user action
+    
     await this.eventsService.logAction(userId, {
       scenarioId: null,
-      actionType: ActionType.WAF_RULE_CREATED, // Closest type
+      actionType: ActionType.WAF_RULE_CREATED, 
       risk: isCorrect ? ActionRisk.SAFE : ActionRisk.DANGEROUS,
       isCorrect,
       metadata: { attackId, action, attackType: attack.type },
       pointsDelta: isCorrect ? 150 : -75,
     });
 
-    // Log attack event
+    
     await this.eventsService.logAttack(userId, {
       eventType: this.mapAttackType(attack.type),
       severity: attack.severity,

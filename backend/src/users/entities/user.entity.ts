@@ -48,7 +48,7 @@ export class User {
   xp: number;
 
   @Column({ type: 'integer', default: 0 })
-  streak: number; // consecutive days trained
+  streak: number; 
 
   @Column({ nullable: true })
   avatarUrl: string;

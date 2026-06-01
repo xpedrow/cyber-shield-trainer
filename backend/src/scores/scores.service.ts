@@ -18,12 +18,12 @@ export class ScoresService {
   async submitScore(userId: string, dto: CreateScoreDto): Promise<Score> {
     const scenario = await this.scenariosService.findOne(dto.scenarioId);
     
-    // Safety check
+    
     if (dto.score > scenario.maxScore) {
       throw new BadRequestException('Score cannot exceed max score for this scenario');
     }
 
-    // Logic for best attempt
+    
     const existingBest = await this.scoreRepo.findOne({
       where: { userId, scenarioId: dto.scenarioId, isBest: true },
     });
@@ -51,7 +51,7 @@ export class ScoresService {
 
     const savedScore = await this.scoreRepo.save(score);
     
-    // Update user totals and XP
+    
     await this.usersService.addXp(userId, xpEarned);
     await this.scenariosService.incrementPlayCount(dto.scenarioId);
 

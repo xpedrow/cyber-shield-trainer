@@ -9,7 +9,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: true, // Isso refletirá a origem da requisição, resolvendo o CORS dinamicamente
+    origin: true, 
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
@@ -22,11 +22,11 @@ async function bootstrap() {
     contentSecurityPolicy: false,
   }));
 
-  // API prefix and versioning
+  
   app.setGlobalPrefix('api');
   app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
 
-  // Global validation
+  
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -36,7 +36,7 @@ async function bootstrap() {
     }),
   );
 
-  // Swagger docs
+  
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Cyber Shield Trainer API')
     .setDescription('Interactive cybersecurity training platform API')

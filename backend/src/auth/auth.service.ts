@@ -90,7 +90,7 @@ export class AuthService {
 
     const token = uuidv4();
     const expires = new Date();
-    expires.setHours(expires.getHours() + 1); // Token válido por 1 hora
+    expires.setHours(expires.getHours() + 1); 
 
     await this.usersService.update(user.id, {
       resetPasswordToken: token,
@@ -99,7 +99,7 @@ export class AuthService {
 
     return {
       message: 'Token de redefinição gerado com sucesso',
-      token, // Retornamos o token aqui para fins de desenvolvimento
+      token, 
     };
   }
 

@@ -26,7 +26,7 @@ export default function PasswordSimulator() {
     if (!password) return;
     setIsSimulating(true);
 
-    // Aesthetic delay to simulate "brute force testing"
+    
     await new Promise(r => setTimeout(r, 1500));
 
     try {
@@ -42,7 +42,7 @@ export default function PasswordSimulator() {
       const data = await response.json();
       setAnalysis(data);
     } catch (_error) {
-      // Fallback logic for offline/demo
+      
       const mockResult = calculateMockAnalysis(password);
       setAnalysis(mockResult);
     } finally {
@@ -180,7 +180,7 @@ export default function PasswordSimulator() {
               animate={{ opacity: 1, y: 0 }}
               style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}
             >
-              {/* Result Card */}
+              
               <div className="card" style={{ padding: '24px', borderLeft: `4px solid ${getStrengthColor(analysis.strength)}` }}>
                 <h3 style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '20px', textTransform: 'uppercase' }}>
                   Resultado da Análise

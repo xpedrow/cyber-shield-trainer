@@ -26,14 +26,14 @@ export default function ForgotPasswordPage() {
 
       if (response.ok) {
         const data = await response.json();
-        // Em um sistema real, o token seria enviado por e-mail.
-        // Aqui, para fins de demonstração, vamos simular que o usuário recebeu o token.
+        
+        
         setMessage("Se o e-mail existir, você receberá um link de redefinição.");
         
-        // Simulação para o usuário do Cyber Shield Trainer
+        
         console.log("Token de recuperação (Simulação):", data.token);
         
-        // Redirecionar após 3 segundos para a página de reset (ou deixar o usuário ler a mensagem)
+        
         setTimeout(() => {
           if (data.token) {
             router.push(`/reset-password?token=${data.token}`);

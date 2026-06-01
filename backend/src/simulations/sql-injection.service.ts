@@ -72,10 +72,10 @@ export class SqlInjectionService {
   testInjection(userId: string, scenarioId: string, injection: string): any {
     const scenario = this.getScenarioById(scenarioId);
 
-    // Simulate SQL execution (simplified)
+    
     const isSuccessful = this.simulateInjection(scenario, injection);
 
-    // Log the action
+    
     this.eventsService.logAction(userId, {
       actionType: ActionType.SECURITY_TEST,
       risk: isSuccessful ? ActionRisk.HIGH : ActionRisk.LOW,
@@ -88,7 +88,7 @@ export class SqlInjectionService {
       }
     });
 
-    // Create attack event if successful
+    
     if (isSuccessful) {
       this.eventsService.logAttack(userId, {
         eventType: AttackEventType.SQL_INJECTION,
@@ -115,11 +115,11 @@ export class SqlInjectionService {
   }
 
   private simulateInjection(scenario: SqlInjectionScenario, injection: string): boolean {
-    // Simplified simulation - in real scenario, this would execute against a test database
+    
     const normalizedInjection = injection.toLowerCase().trim();
     const normalizedCorrect = scenario.correctInjection.toLowerCase().trim();
 
-    // Basic pattern matching for demonstration
+    
     if (scenario.id === 'login-bypass') {
       return normalizedInjection.includes("' or '1'='1") || normalizedInjection.includes("or 1=1");
     }

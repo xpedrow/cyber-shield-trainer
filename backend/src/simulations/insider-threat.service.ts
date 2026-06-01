@@ -75,7 +75,7 @@ export class InsiderThreatService {
   handleThreat(userId: string, threatId: string, action: 'investigate' | 'block-access' | 'report' | 'monitor'): any {
     const threat = this.getThreatById(threatId);
 
-    // Log the action
+    
     this.eventsService.logAction(userId, {
       actionType: ActionType.SECURITY_DECISION,
       risk: action === threat.correctAction ? ActionRisk.LOW : ActionRisk.HIGH,
@@ -88,7 +88,7 @@ export class InsiderThreatService {
       }
     });
 
-    // Create attack event
+    
     this.eventsService.logAttack(userId, {
       eventType: AttackEventType.INSIDER_THREAT,
       severity: threat.severity,

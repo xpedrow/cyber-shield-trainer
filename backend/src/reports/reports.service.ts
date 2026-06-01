@@ -18,7 +18,7 @@ export class ReportsService {
     const totalSimulations = await this.scoreRepo.count();
     const avgScore = await this.scoreRepo.average('score');
     
-    // Critical attacks in last 30 days
+    
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
     
@@ -44,7 +44,7 @@ export class ReportsService {
       select: ['score', 'createdAt', 'accuracy'],
     });
 
-    // Group by week or just return last 10 for chart
+    
     return {
       history: scores.slice(-20),
       currentLevel: (await this.userRepo.findOne({ where: { id: userId }, select: ['level'] }))?.level,

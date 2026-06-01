@@ -4,12 +4,7 @@ import AppLayout from "@/components/AppLayout";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
-
-import { 
-  Mail, 
-  Lock, 
-  Network
-} from "lucide-react";
+import { Envelope, Lock, Globe } from "@phosphor-icons/react";
 
 export default function Dashboard() {
   const [userData, setUserData] = useState<any>(null);
@@ -43,7 +38,7 @@ export default function Dashboard() {
           setActivities(progressData.history || []);
         }
       } catch (e) {
-        console.log("Fetch error", e);
+        console.error(e);
       }
     };
     fetchData();
@@ -55,7 +50,7 @@ export default function Dashboard() {
       title: "Ataque de Phishing",
       description: "Identifique e-mails fraudulentos tentando roubar suas credenciais.",
       difficulty: "Médio",
-      icon: <Mail size={22} />,
+      icon: <Envelope size={22} />,
       href: "/email-simulator",
       progress: 45,
       xp: "+250 XP"
@@ -75,7 +70,7 @@ export default function Dashboard() {
       title: "Ataque de Rede",
       description: "Analise logs e tome decisões contra invasões em tempo real.",
       difficulty: "Crítico",
-      icon: <Network size={22} />,
+      icon: <Globe size={22} />,
       href: "/network-attack",
       progress: 10,
       xp: "+600 XP"
@@ -84,7 +79,6 @@ export default function Dashboard() {
 
   return (
     <AppLayout>
-      {/* ═══ DASHBOARD HERO ═══ */}
       <section 
         className="dashboard-hero"
         style={{
@@ -99,14 +93,14 @@ export default function Dashboard() {
           alignItems: "center"
         }}
       >
-        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, var(--green), var(--cyan), var(--green))", animation: "scan 3s linear infinite" }} />
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, var(--green), transparent)", animation: "scan 3s linear infinite" }} />
         
         <div>
           <h1 style={{ fontFamily: "var(--display)", fontSize: "1.6rem", fontWeight: 900, letterSpacing: "0.08em", color: "var(--green)", textShadow: "0 0 30px rgba(0,255,65,0.5)", textTransform: "uppercase" }}>
             BEM-VINDO, AGENTE {userData?.name || "RECRUTA"}
           </h1>
           <p style={{ fontSize: "0.72rem", color: "var(--muted)", marginTop: "6px", letterSpacing: "0.08em" }}>
-            CONEXÃO ESTABELECIDA // TERMINAL SEGURO // NÍVEL DE AMBIENTE: OPERACIONAL
+            CONEXÃO ESTABELECIDA 
           </p>
           <div style={{ marginTop: "15px", display: "flex", gap: "10px" }}>
             <div style={{ padding: "4px 10px", border: "1px solid var(--border)", fontSize: "0.6rem", color: "var(--green)" }}>IP: 192.168.1.104</div>
@@ -114,8 +108,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* RADAR SVG Animation */}
-        <div style={{ position: "relative", width: "120px", height: "120px" }}>
+        <div className="desktop-only" style={{ position: "relative", width: "120px", height: "120px" }}>
           <svg viewBox="0 0 160 160" style={{ width: "100%", height: "100%" }}>
             <circle cx="80" cy="80" r="70" fill="none" stroke="var(--border)" strokeWidth="1" />
             <circle cx="80" cy="80" r="45" fill="none" stroke="var(--border)" strokeWidth="1" />
@@ -131,8 +124,7 @@ export default function Dashboard() {
         </div>
       </section>
 
-      {/* ═══ STATS GRID ═══ */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px", marginBottom: "20px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginBottom: "20px" }}>
         {[
           { label: "AMEAÇAS NEUTRALIZADAS", value: userData?.scenariosCompleted || "14", color: "var(--green)" },
           { label: "PONTOS DE AGENTE", value: userData?.totalPoints || "742", color: "var(--cyan)" },
@@ -151,8 +143,7 @@ export default function Dashboard() {
         ))}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "20px" }}>
-        {/* Scenarios List */}
+      <div className="main-layout-grid" style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "20px" }}>
         <div className="panel" style={{ background: "var(--black2)", border: "1px solid var(--border)" }}>
           <div style={{ padding: "12px 16px", borderBottom: "1px solid var(--border2)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span style={{ fontFamily: "var(--display)", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.14em", color: "var(--green)" }}>TREINAMENTOS DISPONÍVEIS</span>
@@ -195,14 +186,12 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Sidebar Info */}
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-          {/* Mission */}
           <div className="panel" style={{ background: "var(--black2)", border: "1px solid rgba(0,207,207,0.3)", padding: "18px", position: "relative" }}>
-             <div style={{ position: "absolute", top: "-1px", left: "16px", fontSize: "0.55rem", letterSpacing: "0.18em", color: "var(--cyan)", background: "var(--black2)", padding: "0 6px" }}>{"// MISSÃO DIÁRIA"}</div>
+             <div style={{ position: "absolute", top: "-1px", left: "16px", fontSize: "0.55rem", letterSpacing: "0.18em", color: "var(--cyan)", background: "var(--black2)", padding: "0 6px" }}>{"MISSÃO DIÁRIA"}</div>
              <p style={{ fontSize: "0.8rem", color: "var(--white)", lineHeight: "1.6", marginBottom: "14px", fontStyle: "italic" }}>
-               "Analise logs do firewall e localize a origem do ataque DDoS iniciado às 02:40 AM."
-             </p>
+                "Analise logs do firewall e localize a origem do ataque DDoS iniciado às 02:40 AM."
+              </p>
              <div style={{ display: "flex", gap: "8px", marginBottom: "14px" }}>
                 <span style={{ padding: "4px 10px", border: "1px solid var(--amber)", background: "var(--ambdim)", color: "var(--amber)", fontSize: "0.62rem" }}>+500 XP</span>
                 <span style={{ padding: "4px 10px", border: "1px solid var(--cyan)", background: "var(--cyandim)", color: "var(--cyan)", fontSize: "0.62rem" }}>+10 PONTOS</span>
@@ -210,7 +199,6 @@ export default function Dashboard() {
              <button style={{ width: "100%", padding: "8px", background: "transparent", border: "1px solid var(--cyan)", color: "var(--cyan)", fontFamily: "var(--mono)", fontSize: "0.7rem", cursor: "pointer" }}>INICIAR MISSÃO</button>
           </div>
 
-          {/* Level Tracker */}
           <div className="panel" style={{ background: "var(--black2)", border: "1px solid var(--border)", padding: "18px" }}>
             <div style={{ fontSize: "0.6rem", letterSpacing: "0.2em", color: "var(--muted)", marginBottom: "12px" }}>PATENTE ATUAL</div>
             <div style={{ fontFamily: "var(--display)", fontSize: "1.4rem", fontWeight: 900, color: "var(--green)", letterSpacing: "0.12em", textShadow: "0 0 20px rgba(0,255,65,0.4)" }}>
@@ -247,6 +235,11 @@ export default function Dashboard() {
         .scenario-card:hover {
           border-color: var(--green) !important;
           background: var(--gdim) !important;
+        }
+        @media (max-width: 1024px) {
+          .main-layout-grid {
+            grid-template-columns: 1fr !important;
+          }
         }
       `}</style>
     </AppLayout>

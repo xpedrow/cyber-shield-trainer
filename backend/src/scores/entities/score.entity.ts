@@ -32,20 +32,20 @@ export class Score {
   maxScore: number;
 
   @Column({ type: 'float' })
-  accuracy: number; // 0-100%
+  accuracy: number; 
 
   @Column({ type: 'integer' })
   xpEarned: number;
 
-  /** Number of hints used */
+  
   @Column({ type: 'integer', default: 0 })
   hintsUsed: number;
 
-  /** Total time in seconds to complete */
+  
   @Column({ type: 'integer', nullable: true })
   completionTimeSeconds: number;
 
-  /** Breakdown by category */
+  
   @Column({ type: 'simple-json', nullable: true })
   breakdown: {
     phishingDetection?: number;
@@ -54,7 +54,7 @@ export class Score {
     bonusPoints?: number;
   };
 
-  /** Whether this is the user's best attempt */
+  
   @Column({ default: false })
   isBest: boolean;
 

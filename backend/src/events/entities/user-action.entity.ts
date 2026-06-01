@@ -6,7 +6,7 @@ import { User } from '../../users/entities/user.entity';
 import { Scenario } from '../../scenarios/entities/scenario.entity';
 
 export enum ActionType {
-  // Email simulator
+  
   EMAIL_OPENED = 'email_opened',
   LINK_CLICKED = 'link_clicked',
   ATTACHMENT_OPENED = 'attachment_opened',
@@ -14,20 +14,20 @@ export enum ActionType {
   EMAIL_DELETED = 'email_deleted',
   PHISHING_IDENTIFIED = 'phishing_identified',
 
-  // Login simulator
+  
   LOGIN_ATTEMPTED = 'login_attempted',
   FAKE_SITE_IDENTIFIED = 'fake_site_identified',
   CREDENTIALS_ENTERED = 'credentials_entered',
   SITE_REPORTED = 'site_reported',
 
-  // General
+  
   SCENARIO_STARTED = 'scenario_started',
   SCENARIO_COMPLETED = 'scenario_completed',
   SCENARIO_ABANDONED = 'scenario_abandoned',
   HINT_REQUESTED = 'hint_requested',
   GENERAL_INTERACTION = 'general_interaction',
 
-  // Network
+  
   WAF_RULE_CREATED = 'waf_rule_created',
   SECURITY_DECISION = 'security_decision',
   SECURITY_TEST = 'security_test',
@@ -68,22 +68,22 @@ export class UserAction {
   @Column({ enum: ActionRisk, default: ActionRisk.SAFE })
   risk: ActionRisk;
 
-  /** Points gained or lost from this specific action */
+  
   @Column({ type: 'integer', default: 0 })
   pointsDelta: number;
 
-  /** Extra context: e.g. which email ID, which URL was clicked */
+  
   @Column({ type: 'simple-json', nullable: true })
   metadata: Record<string, any>;
 
-  /** Time user took to make decision (ms) */
+  
   @Column({ type: 'integer', nullable: true })
   responseTimeMs: number;
 
   @Column({ type: 'boolean', default: false })
   isCorrect: boolean;
 
-  /** Human-readable session identifier */
+  
   @Column({ nullable: true })
   sessionId: string;
 

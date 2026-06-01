@@ -13,18 +13,18 @@ import { SimulationsModule } from './simulations/simulations.module';
 
 @Module({
   imports: [
-    // Config
+    
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
 
-    // Database (PostgreSQL via TypeORM)
+    
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (cfg: ConfigService): TypeOrmModuleOptions => {
-        // 1. Tenta DATABASE_URL ou POSTGRES_URL (Padrão Railway/Vercel)
+        
         const databaseUrl = cfg.get<string>('DATABASE_URL') || cfg.get<string>('POSTGRES_URL');
         
         if (databaseUrl) {
@@ -38,7 +38,7 @@ import { SimulationsModule } from './simulations/simulations.module';
           };
         }
 
-        // 2. Tenta variáveis individuais (Padrão Railway: PGHOST, PGUSER, etc.)
+        
         const host = cfg.get<string>('PGHOST') || cfg.get<string>('DB_HOST');
         const username = cfg.get<string>('PGUSER') || cfg.get<string>('DB_USER');
         const password = cfg.get<string>('PGPASSWORD') || cfg.get<string>('DB_PASSWORD');
@@ -60,7 +60,7 @@ import { SimulationsModule } from './simulations/simulations.module';
           };
         }
 
-        // 3. Fallback para SQLite se nada for encontrado
+        
         return {
           type: 'sqlite',
           database: cfg.get<string>('DATABASE_PATH') || 'database.sqlite',
@@ -70,13 +70,13 @@ import { SimulationsModule } from './simulations/simulations.module';
       },
     }),
 
-    // Rate limiting
+    
     ThrottlerModule.forRoot([
       { name: 'short', ttl: 1000, limit: 20 },
       { name: 'long', ttl: 60000, limit: 200 },
     ]),
 
-    // Feature modules
+    
     CacheModule,
     AuthModule,
     UsersModule,

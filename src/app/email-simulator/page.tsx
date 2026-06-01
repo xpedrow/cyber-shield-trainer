@@ -302,7 +302,7 @@ export default function EmailSimulator() {
       setScore((prev) => (correct ? prev + 100 : Math.max(0, prev - 30)));
       setShowResult(emailId);
 
-      // Se for o último e-mail, salvar o score final
+      
       if (Object.keys(answers).length + 1 === emails.length) {
         saveFinalScore(correct ? score + 100 : score);
       }
@@ -381,7 +381,7 @@ export default function EmailSimulator() {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "340px 1fr", gap: "20px", alignItems: "start" }}>
-        {/* Email list */}
+        
         <div
           className="card"
           style={{ overflow: "hidden" }}
@@ -426,10 +426,10 @@ export default function EmailSimulator() {
           })}
         </div>
 
-        {/* Email body */}
+        
         {selectedEmail ? (
           <div className="animate-fade-in-up card" style={{ overflow: "hidden" }}>
-            {/* Email header */}
+            
             <div style={{ padding: "20px 24px", borderBottom: "1px solid var(--border-subtle)" }}>
               <h2 style={{ fontSize: "18px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "12px" }}>
                 {selectedEmail.subject}
@@ -469,7 +469,7 @@ export default function EmailSimulator() {
               </div>
             </div>
 
-            {/* Action buttons */}
+            
             {!answers[selectedEmail.id] ? (
               <div style={{ padding: "20px 24px", display: "flex", gap: "12px", alignItems: "center" }}>
                 <span style={{ fontSize: "14px", color: "var(--text-muted)", marginRight: "4px" }}>Este e-mail é:</span>
@@ -492,7 +492,7 @@ export default function EmailSimulator() {
               </div>
             ) : (
               <div style={{ padding: "20px 24px" }}>
-                {/* Result panel */}
+                
                 {showResult === selectedEmail.id && (
                   <div
                     className="animate-fade-in-up"

@@ -224,7 +224,7 @@ export default function LoginSimulator() {
     setUsername("");
     setPassword("");
 
-    // Se for o último, salvar no banco
+    
     if (totalAnswered + 1 === loginSites.length) {
       saveFinalScore(correct ? score + 100 : score);
     }
@@ -323,7 +323,7 @@ export default function LoginSimulator() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: "24px", alignItems: "start" }}>
           {/* Main login panel */}
           <div>
-            {/* Progress */}
+            
             <div
               style={{ display: "flex", gap: "8px", marginBottom: "20px" }}
             >
@@ -346,12 +346,12 @@ export default function LoginSimulator() {
               ))}
             </div>
 
-            {/* Simulated browser */}
+            
             <div
               className="cyber-card"
               style={{ overflow: "hidden", border: "1px solid var(--border-subtle)" }}
             >
-              {/* Browser chrome */}
+              
               <div
                 style={{
                   background: "#1a1a2e",
@@ -362,13 +362,13 @@ export default function LoginSimulator() {
                   gap: "12px",
                 }}
               >
-                {/* Traffic lights */}
+                
                 <div style={{ display: "flex", gap: "6px" }}>
                   {["#ff5f56", "#ffbd2e", "#27c93f"].map((c) => (
                     <div key={c} style={{ width: "12px", height: "12px", borderRadius: "50%", background: c }} />
                   ))}
                 </div>
-                {/* URL bar */}
+                
                 <div
                   style={{
                     flex: 1,
@@ -388,7 +388,7 @@ export default function LoginSimulator() {
                 </div>
               </div>
 
-              {/* Login page content */}
+              
               <div
                 style={{
                   padding: "48px 32px",
@@ -399,7 +399,7 @@ export default function LoginSimulator() {
                   background: "var(--bg-primary)",
                 }}
               >
-                {/* Logo */}
+                
                 <div
                   style={{
                     width: "56px",
@@ -530,9 +530,9 @@ export default function LoginSimulator() {
             )}
           </div>
 
-          {/* Side panel */}
+          
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            {/* Checklist */}
+            
             <div className="card" style={{ padding: "20px" }}>
               <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-muted)", marginBottom: "14px", textTransform: "uppercase", letterSpacing: "0.06em" }}>
                 O que verificar
@@ -556,7 +556,7 @@ export default function LoginSimulator() {
               ))}
             </div>
 
-            {/* Result explanation */}
+            
             {showResult && answered && (
               <div
                 className="card animate-fade-in-up"

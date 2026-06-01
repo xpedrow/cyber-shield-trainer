@@ -23,6 +23,7 @@ export class ScenariosService {
         difficulty: 'medium' as any,
         maxScore: 1000,
         xpReward: 500,
+        durationSeconds: 300,
       });
       await this.create({
         title: 'Simulador de E-mail',
@@ -31,6 +32,7 @@ export class ScenariosService {
         difficulty: 'low' as any,
         maxScore: 1000,
         xpReward: 300,
+        durationSeconds: 300,
       });
     }
   }

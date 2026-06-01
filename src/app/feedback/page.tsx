@@ -14,7 +14,7 @@ export default function Feedback() {
       try {
         const token = localStorage.getItem("token");
 
-        // Fetch User Profile
+        
         const userRes = await apiFetch("users/me", {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -22,7 +22,7 @@ export default function Feedback() {
           setProfile(await userRes.json());
         }
 
-        // Fetch User Stats
+        
         const statsRes = await apiFetch("scores/me/stats", {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -118,7 +118,7 @@ function RadarChart() {
         const { x, y } = toXY(s.angle, (s.value / 100) * maxR);
         return <circle key={s.name} cx={x} cy={y} r="4" fill="var(--accent-cyan)" />;
       })}
-      {/* Labels */}
+      
       {skills.map((s) => {
         const { x, y } = toXY(s.angle, maxR + 16);
         return (

@@ -85,13 +85,13 @@ export class PhishingService {
       actionType = ActionType.EMAIL_REPORTED;
       isCorrect = email.isPhishing;
     } else {
-      actionType = ActionType.EMAIL_DELETED; // simplified for ignore
+      actionType = ActionType.EMAIL_DELETED; 
       isCorrect = email.isPhishing;
     }
 
-    // Log the user action
+    
     await this.eventsService.logAction(userId, {
-      scenarioId: null, // Global phishing exercise
+      scenarioId: null, 
       actionType,
       risk,
       isCorrect,
@@ -99,7 +99,7 @@ export class PhishingService {
       pointsDelta: isCorrect ? 50 : -30,
     });
 
-    // If it was a dangerous click on a phishing email, log a security event
+    
     if (action === 'click' && email.isPhishing) {
       await this.eventsService.logAttack(userId, {
         eventType: AttackEventType.PHISHING_ATTEMPT,
