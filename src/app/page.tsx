@@ -20,6 +20,9 @@ export default function Dashboard() {
         if (userRes.ok) {
           const data = await userRes.json();
           setUserData(data);
+          if (typeof window !== 'undefined') {
+            (window as any)._userScore = data.totalScore;
+          }
         }
 
         const statsRes = await apiFetch("scores/me/stats", {

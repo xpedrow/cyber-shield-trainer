@@ -58,7 +58,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             FIREWALL ATIVO
           </div>
           <div style={{ fontFamily: "var(--display)", fontSize: "0.75rem", color: "var(--cyan)" }}>
-            SCORE: <span style={{ color: "var(--green)", fontWeight: 700 }}>742</span>
+            SCORE: <span style={{ color: "var(--green)", fontWeight: 700 }}>{typeof window !== 'undefined' && localStorage.getItem('token') ? (window as any)._userScore || '...' : '0'}</span>
           </div>
         </div>
         <div style={{ position: "absolute", bottom: "-1px", left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, var(--green), transparent)" }}></div>
